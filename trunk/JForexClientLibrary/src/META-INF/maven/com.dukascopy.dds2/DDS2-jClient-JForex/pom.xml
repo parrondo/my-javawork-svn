@@ -1,0 +1,874 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.dukascopy.dds2</groupId>
+    <artifactId>DDS2-jClient-JForex</artifactId>
+    <version>2.14.21</version>
+    <name>DDS2-JClient-JForex</name>
+    <description>DUKASCOPY client application</description>
+    <organization>
+        <name>DUKASCOPY (Suisse) SA</name>
+        <url>http://www.dukascopy.com</url>
+    </organization>
+    <scm>
+        <connection>
+            scm:svn:https://repo.site.dukascopy.com/JAVA_APPS/DDS2-jClient/trunk
+        </connection>
+    </scm>
+    <properties>
+        <project.build.sourceEncoding>UTF-8
+        </project.build.sourceEncoding>
+    </properties>
+    <build>
+        <sourceDirectory>src</sourceDirectory>
+        <testSourceDirectory>no_test</testSourceDirectory>
+        <resources>
+            <resource>
+                <targetPath>rc</targetPath>
+                <directory>rc</directory>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <inherited>true</inherited>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                    <fork>true</fork>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <inherited>true</inherited>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true
+                            </addDefaultImplementationEntries>
+                            <mainClass>com.dukascopy.dds2.greed.GreedClient
+                            </mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <distributionManagement>
+        <repository>
+            <id>dukascopy</id>
+            <name>Dukascopy releases</name>
+            <url>https://repo.site.dukascopy.com:8081/artifactory/dukascopy@repo
+            </url>
+        </repository>
+        <snapshotRepository>
+            <id>develop-snapshots</id>
+            <name>Dukascopy snapshots</name>
+            <url>http://alabama.rix:8090/artifactory/dukascopy-snapshots
+            </url>
+        </snapshotRepository>
+    </distributionManagement>
+    <dependencies>
+        <dependency>
+            <groupId>com.dukascopy.dds2</groupId>
+            <artifactId>DDS2-Charts</artifactId>
+            <version>5.48</version>
+        </dependency>
+        <dependency>
+            <groupId>org.fife</groupId>
+            <artifactId>DDS2-TextEditor</artifactId>
+            <version>1.5</version>
+        </dependency>
+        <dependency>
+            <groupId>jcalendar</groupId>
+            <artifactId>jcalendar</artifactId>
+            <version>1.3.3</version>
+        </dependency>
+        <dependency>
+            <groupId>eclipse</groupId>
+            <artifactId>ecj</artifactId>
+            <version>3.5.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+            <version>1.5.8</version>
+        </dependency>
+        <dependency>
+            <groupId>ta-lib</groupId>
+            <artifactId>ta-lib</artifactId>
+            <version>0.4.4dc</version>
+        </dependency>
+        <dependency>
+            <groupId>7zip</groupId>
+            <artifactId>7zip</artifactId>
+            <version>4.65</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun</groupId>
+            <artifactId>javaws</artifactId>
+            <version>1.6</version>
+            <scope>system</scope>
+            <systemPath>${java.home}/lib/javaws.jar</systemPath>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.5</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.dspace.dependencies.jmockit</groupId>
+            <artifactId>dspace-jmockit</artifactId>
+            <version>0.999.4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency><!-- used by jmockit -->
+            <groupId>com.sun</groupId>
+            <artifactId>tools</artifactId>
+            <version>1.6</version>
+            <scope>system</scope>
+            <systemPath>${java.home}/../lib/tools.jar</systemPath>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <!-- Run with maven -Pjforex-webstart parameter to activate this 
+                profile -->
+            <id>jforex-webstart</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo.webstart</groupId>
+                        <artifactId>webstart-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>test</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jnlp-inline</goal>
+                                </goals>
+                                <configuration>
+                                    <resourcesDirectory>
+                                        ${project.basedir}/resources/webstart
+                                    </resourcesDirectory>
+                                    <jnlp>
+                                        <inputTemplateResourcePath>
+                                            ${project.basedir}
+                                        </inputTemplateResourcePath>
+                                        <inputTemplate>
+                                            resources/templates/test.vm
+                                        </inputTemplate>
+                                        <outputFile>
+                                            jforex-test.jnlp
+                                        </outputFile>
+                                        <mainClass>
+                                            com.dukascopy.dds2.greed.GreedClient
+                                        </mainClass>
+                                    </jnlp>
+                                    <sign>
+                                        <keystore>
+                                            ${project.basedir}/security/mainKeystore
+                                        </keystore>
+                                        <keypass>dukascopy</keypass>
+                                        <storepass>dukascopy</storepass>
+                                        <alias>dukascopy</alias>
+                                    </sign>
+                                    <pack200>false</pack200>
+                                    <gzip>false</gzip>
+                                    <outputJarVersions>false
+                                    </outputJarVersions>
+                                    <verbose>false</verbose>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>predemo</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jnlp-single</goal>
+                                </goals>
+                                <configuration>
+                                    <resourcesDirectory>
+                                        ${project.basedir}/resources/webstart
+                                    </resourcesDirectory>
+                                    <jnlp>
+                                        <inputTemplateResourcePath>
+                                            ${project.basedir}
+                                        </inputTemplateResourcePath>
+                                        <inputTemplate>
+                                            resources/templates/predemo.vm
+                                        </inputTemplate>
+                                        <outputFile>
+                                            jforex-predemo.jnlp
+                                        </outputFile>
+                                        <mainClass>
+                                            com.dukascopy.dds2.greed.GreedClient
+                                        </mainClass>
+                                    </jnlp>
+                                    <verbose>false</verbose>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>demo</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jnlp-single</goal>
+                                </goals>
+                                <configuration>
+                                    <resourcesDirectory>
+                                        ${project.basedir}/resources/webstart
+                                    </resourcesDirectory>
+                                    <jnlp>
+                                        <inputTemplateResourcePath>
+                                            ${project.basedir}
+                                        </inputTemplateResourcePath>
+                                        <inputTemplate>
+                                            resources/templates/demo.vm
+                                        </inputTemplate>
+                                        <outputFile>
+                                            jforex-demo.jnlp
+                                        </outputFile>
+                                        <mainClass>
+                                            com.dukascopy.dds2.greed.GreedClient
+                                        </mainClass>
+                                    </jnlp>
+                                    <verbose>false</verbose>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>live</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jnlp-single</goal>
+                                </goals>
+                                <configuration>
+                                    <resourcesDirectory>
+                                        ${project.basedir}/resources/webstart
+                                    </resourcesDirectory>
+                                    <jnlp>
+                                        <inputTemplateResourcePath>
+                                            ${project.basedir}
+                                        </inputTemplateResourcePath>
+                                        <inputTemplate>
+                                            resources/templates/live.vm
+                                        </inputTemplate>
+                                        <outputFile>
+                                            jforex-live.jnlp
+                                        </outputFile>
+                                        <mainClass>
+                                            com.dukascopy.dds2.greed.GreedClient
+                                        </mainClass>
+                                    </jnlp>
+                                    <verbose>false</verbose>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>ftp</id>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <tasks>
+                                        <property
+                                            file="${basedir}/../ftp.properties" />
+                                        <ftp action="del"
+                                            server="develop.site.dukascopy.com"
+                                            remotedir="/opt/csw/apache2/share/htdocs/jforex-all/snapshot/"
+                                            userid="${user}" password="${password}"
+                                            verbose="yes">
+                                            <fileset>
+                                                <include name="**/*" />
+                                            </fileset>
+                                        </ftp>
+                                        <ftp action="send"
+                                            server="develop.site.dukascopy.com"
+                                            remotedir="/opt/csw/apache2/share/htdocs/jforex-all/snapshot/"
+                                            userid="${user}" password="${password}"
+                                            verbose="yes">
+                                            <fileset dir="./target/jnlp/">
+                                            </fileset>
+                                        </ftp>
+                                    </tasks>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>ant</groupId>
+                                <artifactId>ant-commons-net</artifactId>
+                                <version>1.6.5</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>commons-net</groupId>
+                                <artifactId>commons-net</artifactId>
+                                <version>1.4.1</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <!-- Run with maven -Pjforex-webstart parameter to activate this 
+                profile -->
+            <!-- demo differs with obfuscation -->
+            <id>jforex-webstart-demo</id>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.pyx4me</groupId>
+                        <artifactId>proguard-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>proguard</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <proguardVersion>4.3</proguardVersion>
+                            <assembly>
+                                <inclusions>
+                                    <inclusion>
+                                        <groupId>com.dukascopy.dds2
+                                        </groupId>
+                                        <artifactId>greed-common
+                                        </artifactId>
+                                    </inclusion>
+                                    <inclusion>
+                                        <groupId>com.dukascopy.dds2
+                                        </groupId>
+                                        <artifactId>dds2-common
+                                        </artifactId>
+                                    </inclusion>
+                                    <inclusion>
+                                        <groupId>com.dukascopy.dds2.transport
+                                        </groupId>
+                                        <artifactId>transport-client
+                                        </artifactId>
+                                    </inclusion>
+                                    <inclusion>
+                                        <groupId>com.dukascopy.dds2
+                                        </groupId>
+                                        <artifactId>DDS2-Charts
+                                        </artifactId>
+                                    </inclusion>
+                                </inclusions>
+                            </assembly>
+                            <options>
+                                <!-- Optimization fails in current version -->
+                                <option>
+                                    -dontoptimize
+                                </option>
+                                <!-- Needed for setLength(int) in StringBuilder, 
+                                    because it's in package visible abstract class -->
+                                <option>
+                                    -dontskipnonpubliclibraryclasses
+                                </option>
+                                <option>
+                                    -useuniqueclassmembernames
+                                </option>
+                                <option>
+                                    -dontusemixedcaseclassnames
+                                </option>
+                                <!-- Prevalidate for Java 1.6 -->
+                                <option>
+                                    -target 1.6
+                                </option>
+                                <!-- MBeans -->
+                                <option>
+                                    -keep class **MBean
+                                </option>
+                                <!-- MBean implementations -->
+                                <option>
+                                    -keep class * extends **MBean
+                                </option>
+                                <!-- DDSAgent -->
+                                <option>
+                                    -keepclassmembers class *
+                                    extends
+                                    com.dukascopy.dds2.greed.agent.IDDSAgent
+                                    {
+                                    public &lt;methods&gt;;
+                                    }
+                                </option>
+                                <option>
+                                    -keepclassmembers class
+                                    com.dukascopy.dds2.greed.agent.strategy.tester.TesterCustodian
+                                    {
+                                    *** submitOrderImpl(...);
+                                    ***
+                                    addOrderSubmittedReportData(...);
+                                    *** closeOrderImpl(...);
+                                    ***
+                                    addOrderClosedReportData(...);
+                                    ***
+                                    cancelOrderImpl(...);
+                                    ***
+                                    addOrderCanceledReportData(...);
+                                    ***
+                                    mergeOrdersImpl(...);
+                                    ***
+                                    addOrderChangedReportData(...);
+                                    ***
+                                    setStopLossImpl(...);
+                                    ***
+                                    changeAmountImpl(...);
+                                    ***
+                                    changeOpenPriceImpl(...);
+                                    ***
+                                    setTakeProfitImpl(...);
+                                    ***
+                                    setGoodTillTimeImpl(...);
+                                    }
+                                </option>
+                                <!-- macos handlers -->
+                                <option>
+                                    -keepclassmembers class
+                                    com.dukascopy.dds2.greed.gui.component.menu.MainMenu
+                                    {
+                                    *** quit(...);
+                                    *** about(...);
+                                    ***
+                                    openPreferences(...);
+                                    }
+                                </option>
+                                <option>
+                                    -keepclass class
+                                    com.dukascopy.dds2.greed.gui.component.menu.OSXAdapter
+                                    {
+                                    &lt;fields&gt;;
+                                    &lt;methods&gt;;
+                                    }
+                                </option>
+                                <option>
+                                    -keep public class
+                                    com.dukascopy.dds2.greed.gui.LoginForm
+                                    {
+                                    public void loginRequest(...);
+                                    }
+                                </option>
+                                <option>
+                                    -keep public class
+                                    com.dukascopy.dds2.greed.GreedContext
+                                    {
+                                    public static java.lang.Object
+                                    get(java.lang.String);
+                                    }   
+                                </option>
+                                <option>
+                                    -keep class * extends
+                                    javax.swing.plaf.ComponentUI {
+                                    public static
+                                    javax.swing.plaf.ComponentUI
+                                    createUI(javax.swing.JComponent);
+                                    }
+                                </option>
+                                <!-- Main class -->
+                                <option>
+                                    -keepclasseswithmembers public
+                                    class
+                                    com.dukascopy.dds2.greed.GreedClient
+                                    {
+                                    public static void
+                                    main(java.lang.String[]);
+                                    }
+                                </option>
+				<!-- MultiSplitLayout -->
+				<option>
+                                    -keep class
+					com.dukascopy.dds2.greed.gui.component.splitPane.*
+				</option>
+				<option>
+                                    -keep class 
+					com.dukascopy.dds2.greed.gui.component.splitPane.MultiSplitLayout$Leaf									
+				</option>
+				<option>
+                                    -keep class 
+					com.dukascopy.dds2.greed.gui.component.splitPane.MultiSplitLayout$Divider									
+				</option>
+				<option>
+                                    -keep class 
+					com.dukascopy.dds2.greed.gui.component.splitPane.MultiSplitLayout$Node								
+				</option>
+				<option>
+                                    -keep class 
+					com.dukascopy.dds2.greed.gui.component.splitPane.MultiSplitLayout$Split
+				</option>
+				
+				<option>
+                                    -keep class 
+					com.dukascopy.dds2.greed.gui.component.splitPane.MultiSplitLayout$Split
+				</option>
+				<option>
+                                    -keepclassmembers class	
+					com.dukascopy.dds2.greed.gui.component.splitPane.MultiSplitLayout$Node {
+						*** setParent(com.dukascopy.dds2.greed.gui.component.splitPane.MultiSplitLayout$Split);
+					}
+				    -keepclassmembers class	
+					com.dukascopy.dds2.greed.gui.component.splitPane.MultiSplitLayout$Split{
+						void setChildren(java.util.List);
+						void setRowLayout(boolean);
+					}									
+                                </option>
+				<option>
+									 -keepclassmembers class
+                                    com.dukascopy.dds2.greed.gui.component.chart.ServiceSourceEditorPanel
+									{
+										*** createBackButton();
+										*** createSrchButton();
+										*** createJDocSrchPanel();
+										*** createSplitPanes();
+									}
+								</option>
+								
+								<!-- Needed for using API classes for compiling -->
+                                <option>
+                                    -keepattributes
+                                    Exceptions,InnerClasses,Signature,*Annotation*
+                                </option>
+                                <!-- enum static methods -->
+                                <option>
+                                    -keepclassmembers enum * {
+                                    public static **[] values();
+                                    public
+                                    static ** valueOf(java.lang.String);
+                                    public static ** getValue(...);
+                                    }
+                                </option>
+                                <!-- indicators with drawOutput methods -->
+                                <option>
+                                    -keepclassmembers class *
+                                    extends
+                                    com.dukascopy.api.indicators.IIndicator
+                                    {
+                                    *** drawOutput(...);
+                                    ***
+                                    getMinMax(...);
+                                    }
+                                </option>
+                                <!-- # Also keep - Serialization code. Keep 
+                                    all fields and methods that are used for serialization -->
+                                <option>
+                                    -keep class * extends
+                                    java.io.Serializable
+                                    -keepclassmembers class * extends
+                                    java.io.Serializable {
+                                    static final
+                                    long serialVersionUID;
+                                    static final
+                                    java.io.ObjectStreamField[]
+                                    serialPersistentFields;
+                                    !static
+                                    !transient &lt;fields&gt;;
+                                    private
+                                    void
+                                    writeObject(java.io.ObjectOutputStream);
+                                    private void
+                                    readObject(java.io.ObjectInputStream);
+                                    java.lang.Object writeReplace();
+                                    java.lang.Object readResolve();
+                                    }
+                                </option>
+                                <!-- DCClientImpl -->
+                                <option>
+                                    -keep class
+                                    com.dukascopy.api.impl.connect.DCClientImpl
+                                </option>
+                                <!-- TesterClientImpl -->
+                                <option>
+                                    -keep class
+                                    com.dukascopy.api.impl.connect.TesterClientImpl
+                                </option>
+
+                                <!-- Arturs dds agent must be NOT obfuscated -->
+                                <option>
+                                    -keep class
+                                    com.dukascopy.dds2.greed.mt.Agent {
+                                    &lt;fields&gt;;
+                                    &lt;methods&gt;;
+                                    }
+                                </option>
+                                <option>
+                                    -keep class
+                                    com.dukascopy.dds2.greed.mt.common.*
+                                </option>
+                                <option>
+                                    -keep class
+                                    com.dukascopy.dds2.greed.mt.helpers.*
+                                </option>
+                                <option>
+                                    -keep class
+                                    com.dukascopy.dds2.greed.mt.func.*
+                                </option>
+                                <option>
+                                    -keep class
+                                    com.dukascopy.dds2.greed.mt.exceptions.*
+                                </option>
+                                <!-- -->
+
+                                <option>
+                                    -keep class
+                                    com.dukascopy.charts.drawings.*ChartObject
+                                </option>
+                                <option>
+                                    -keep class
+                                    com.dukascopy.dds2.greed.gui.settings.JForexPreferencesFactory
+                                </option>
+                                <option>
+                                    -keep class
+                                    com.dukascopy.api.MQLConnector
+                                </option>
+                                <option>
+                                    -keep class
+                                    com.dukascopy.api.connector.*
+                                </option>
+                                <option>
+                                    -keep class
+                                    com.dukascopy.charts.main.DDSChartsControllerImpl
+                                    {
+                                    public static
+                                    com.dukascopy.charts.main.interfaces.DDSChartsController
+                                    getInstance();
+                                    }
+                                </option>
+                                
+                                <!-- use reflection -->
+                                <option>
+                                    -keep class
+                                    com.dukascopy.charts.persistence.IndicatorBean                                    
+                                </option>
+
+                                <!-- serialized class -->
+                                <option>
+                                    -keep class
+                                    com.dukascopy.charts.data.datacache.OrderHistoricalData
+                                </option>
+                            </options>
+                            <libs>
+                                <lib>${java.home}/lib/rt.jar</lib>
+                                <lib>${java.home}/lib/jsse.jar</lib>
+                                <lib>${java.home}/lib/jce.jar</lib>
+                            </libs>
+                            <!-- TODO add automatic switching to mac os x 
+                                dependencies <libs> <lib>${java.home}/../Classes/classes.jar</lib> <lib>${java.home}/../Classes/jsse.jar</lib> 
+                                <lib>${java.home}/../Classes/jce.jar</lib> </libs> -->
+                            <maxMemory>512m</maxMemory>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>net.sf.proguard</groupId>
+                                <artifactId>proguard</artifactId>
+                                <version>4.5.1</version>
+                                <scope>runtime</scope>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <configuration>
+                            <finalName>jforex-webstart</finalName>
+                            <descriptors>
+                                <descriptor>
+                                    resources/jforex-assembly.xml
+                                </descriptor>
+                            </descriptors>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo.webstart</groupId>
+                        <artifactId>webstart-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>test</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jnlp-inline</goal>
+                                </goals>
+                                <configuration>
+                                    <resourcesDirectory>
+                                        ${project.basedir}/resources/webstart
+                                    </resourcesDirectory>
+                                    <jnlp>
+                                        <inputTemplateResourcePath>
+                                            ${project.basedir}
+                                        </inputTemplateResourcePath>
+                                        <inputTemplate>
+                                            resources/templates/test.vm
+                                        </inputTemplate>
+                                        <outputFile>
+                                            jforex-test.jnlp
+                                        </outputFile>
+                                        <mainClass>
+                                            com.dukascopy.dds2.greed.GreedClient
+                                        </mainClass>
+                                    </jnlp>
+                                    <sign>
+                                        <keystore>
+                                            ${project.basedir}/security/mainKeystore
+                                        </keystore>
+                                        <keypass>dukascopy</keypass>
+                                        <storepass>dukascopy</storepass>
+                                        <alias>dukascopy</alias>
+                                    </sign>
+                                    <pack200>true</pack200>
+                                    <gzip>true</gzip>
+                                    <outputJarVersions>false
+                                    </outputJarVersions>
+                                    <verbose>false</verbose>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>predemo</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jnlp-single</goal>
+                                </goals>
+                                <configuration>
+                                    <resourcesDirectory>
+                                        ${project.basedir}/resources/webstart
+                                    </resourcesDirectory>
+                                    <jnlp>
+                                        <inputTemplateResourcePath>
+                                            ${project.basedir}
+                                        </inputTemplateResourcePath>
+                                        <inputTemplate>
+                                            resources/templates/predemo.vm
+                                        </inputTemplate>
+                                        <outputFile>
+                                            jforex-predemo.jnlp
+                                        </outputFile>
+                                        <mainClass>
+                                            com.dukascopy.dds2.greed.GreedClient
+                                        </mainClass>
+                                    </jnlp>
+                                    <verbose>false</verbose>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>demo</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jnlp-single</goal>
+                                </goals>
+                                <configuration>
+                                    <resourcesDirectory>
+                                        ${project.basedir}/resources/webstart
+                                    </resourcesDirectory>
+                                    <jnlp>
+                                        <inputTemplateResourcePath>
+                                            ${project.basedir}
+                                        </inputTemplateResourcePath>
+                                        <inputTemplate>
+                                            resources/templates/demo.vm
+                                        </inputTemplate>
+                                        <outputFile>
+                                            jforex-demo.jnlp
+                                        </outputFile>
+                                        <mainClass>
+                                            com.dukascopy.dds2.greed.GreedClient
+                                        </mainClass>
+                                    </jnlp>
+                                    <verbose>false</verbose>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>live</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jnlp-single</goal>
+                                </goals>
+                                <configuration>
+                                    <resourcesDirectory>
+                                        ${project.basedir}/resources/webstart
+                                    </resourcesDirectory>
+                                    <jnlp>
+                                        <inputTemplateResourcePath>
+                                            ${project.basedir}
+                                        </inputTemplateResourcePath>
+                                        <inputTemplate>
+                                            resources/templates/live.vm
+                                        </inputTemplate>
+                                        <outputFile>
+                                            jforex-live.jnlp
+                                        </outputFile>
+                                        <mainClass>
+                                            com.dukascopy.dds2.greed.GreedClient
+                                        </mainClass>
+                                    </jnlp>
+                                    <verbose>false</verbose>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>ftp</id>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <tasks>
+                                        <!-- ftp.properties must contains 
+                                            user&password properties -->
+                                        <property
+                                            file="${basedir}/../ftp.properties" />
+                                        <ftp action="del"
+                                            server="develop.site.dukascopy.com"
+                                            remotedir="/opt/csw/apache2/share/htdocs/jforex-all/demo-snapshot-obfuscated/"
+                                            userid="${user}" password="${password}"
+                                            verbose="yes">
+                                            <fileset>
+                                                <include name="**/*" />
+                                            </fileset>
+                                        </ftp>
+                                        <ftp action="send"
+                                            server="develop.site.dukascopy.com"
+                                            remotedir="/opt/csw/apache2/share/htdocs/jforex-all/demo-snapshot-obfuscated/"
+                                            userid="${user}" password="${password}"
+                                            verbose="yes">
+                                            <fileset dir="./target/jnlp/">
+                                                <exclude name="**/*.jar" />
+                                            </fileset>
+                                        </ftp>
+                                    </tasks>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>ant</groupId>
+                                <artifactId>ant-commons-net</artifactId>
+                                <version>1.6.5</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>commons-net</groupId>
+                                <artifactId>commons-net</artifactId>
+                                <version>1.4.1</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project> 

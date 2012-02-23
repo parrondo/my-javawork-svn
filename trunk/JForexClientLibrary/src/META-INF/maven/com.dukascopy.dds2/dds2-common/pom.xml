@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.dukascopy.dds2</groupId>
+	<artifactId>dds2-common</artifactId>
+	<name>DDS2 Common</name>
+	<version>2.3.77</version>
+	<scm>
+		<connection>scm:svn:https://repo.site.dukascopy.com/JAVA_APPS/DDS2-Common/trunk</connection>
+	</scm>
+	<contributors>
+		<contributor>
+			<name>Karl Tiller</name>
+		</contributor>
+	</contributors>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+	<distributionManagement>
+		<repository>
+			<id>dukascopy</id>
+			<name>Dukascopy releases</name>
+			<url>https://repo.site.dukascopy.com:8081/artifactory/dukascopy@repo</url>
+		</repository>
+		<snapshotRepository>
+			<id>dukascopy</id>
+			<name>Dukascopy snapshots</name>
+			<url>https://repo.site.dukascopy.com:8081/artifactory/dukascopy-snapshots@repo</url>
+		</snapshotRepository>
+	</distributionManagement>
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+		<testSourceDirectory>test/events</testSourceDirectory>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<inherited>true</inherited>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+                    <fork>true</fork>
+                    <encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.6.2</version>
+        </dependency>
+		<dependency>
+			<groupId>org.apache.mina</groupId>
+			<artifactId>mina-core</artifactId>
+			<version>1.1.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.mina</groupId>
+			<artifactId>mina-filter-ssl</artifactId>
+			<version>1.1.7dc.1</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.5.8</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>
