@@ -14035,3 +14035,162 @@ com.dukascopy.charts.data.datacache.DataCacheException: Time interval[2011-10-28
 2012-03-04 10:08:59.156 INFO  singlejartest.GUIModePlBalanceEquity - Running, Mon 2011.12.20 00:14 Eq: 50,025.99 UoL: .00%
 2012-03-04 10:08:59.156 INFO  singlejartest.GUIModePlBalanceEquity - Executing onStop
 2012-03-04 10:08:59.156 INFO  singlejartest.GUIModePlBalanceEquity - Strategy stopped: 1
+2012-03-04 10:21:41.968 INFO  singlejartest.GUIModeChartControls - Connecting...
+2012-03-04 10:21:45.796 INFO  com.dukascopy.api.impl.connect.AuthorizationClient - >> [https://www1.dukascopy.com/authorization/demo/auth?typus=0&munus=stngs&appello=DEMO2FZnlc&licentio=fb04b9a24d86dee14504b92e57db9d57ed6190d9b40742666506df0a87dd6c9f&sermo=f1eae444-0d44-4d33-a629-c12eadaf3dd9&stngs=1]
+2012-03-04 10:21:48.015 WARN  com.dukascopy.api.impl.connect.AuthorizationClient - << [{news.host.url=https://external.dukascopy.com, jss.logserver.url=https://demo-login.dukascopy.com/jss-log/, userTypes=MANAGE_STOP_LIMIT,REGULAR,MINI_FX,, wlabel.logo=[B@18622f3, news.source=api, contest.chart.url=https://demo-login.dukascopy.com/aDDS/export/contestChart.php, menu.item.dayly.hl=/marketwatch/daily_hl_interbank/, menu.item.margin.level.calculator=/marketwatch/forexcalc/margin_level/, wlabel.shortLabel=Dukascopy, encryptionKey=48ED3CDA634C448CBECDC9F915192560, reports.url=/Reports, base.calendar.url=http://www.dukascopy.com/swiss/{0}, menu.item.economic.calendar=/marketwatch/calendars/eccalendar/, additionalUserTypes=[], feed.commission.history=[], brokerChat.url=https://www.dukascopy.com/chat/login.php?channel=3, wlabel.url=http://www.dukascopy.com, platformFaq.url=http://www.dukascopy.com/swiss/english/forex/faq/, menu.item.holidays.calendar=/marketwatch/calendars/NationalHolidaysCalendar/, menu.item.report.issue=/about/issues/, reports=portfolio_client,intraday_client,position_client,annual_report,deposit_receipt,trader_sll,self_traded_volume,activity_log,merge_log,trade_log,trader_sll_action_log, tradelog_sfx.url=/aDDS/export/tradeLog.php, platformManual.url=http://www.dukascopy.com/wiki/, instruments=[CAD/HKD, EUR/SGD, EUR/NOK, EUR/NZD, AUD/NZD, USD/TRY, GBP/USD, NZD/CHF, USD/MXN, USD/HKD, SGD/JPY, EUR/HKD, AUD/CAD, USD/PLN, EUR/PLN, USD/NOK, USD/CHF, GBP/CHF, EUR/CHF, USD/JPY, GBP/CAD, HKD/JPY, GBP/JPY, EUR/CAD, USD/SEK, CHF/SGD, USD/DKK, EUR/SEK, NZD/JPY, AUD/SGD, NZD/USD, CAD/JPY, EUR/GBP, CHF/JPY, XAG/USD, GBP/AUD, AUD/JPY, XAU/USD, EUR/USD, AUD/USD, USD/CAD, USD/ZAR, EUR/JPY, USD/SGD, AUD/CHF, GBP/NZD, USD/RUB, NZD/CAD, CAD/CHF, EUR/AUD, EUR/DKK, EUR/TRY], menu.item.forex.calculator=/marketwatch/forexcalc/forex_calculator/, debug=false, client.mode=DEMO, loginId=360919, get.help.url=http://www.dukascopy.com/swiss/english/forex/jforex/forum/, menu.item.interest.rates.calendar=/marketwatch/calendars/InterestRatesCalendar/, wlabel.foUrl=https://demo-login.dukascopy.com, history.server.url=http://www.dukascopy.com/datafeed/, external_ip=98.126.165.146, wlabel.longLabel=Dukascopy Bank SA, services1.url=https://demo-login.dukascopy.com, wlabel.skype=dukascopy, wlabel.phone=+41 (0) 22 799 4888}]
+2012-03-04 10:21:48.546 INFO  singlejartest.GUIModeChartControls - Connected
+2012-03-04 10:21:48.562 INFO  singlejartest.GUIModeChartControls - Subscribing instruments...
+2012-03-04 10:21:48.562 INFO  singlejartest.GUIModeChartControls - Downloading data
+2012-03-04 10:21:56.562 INFO  singlejartest.GUIModeChartControls - Starting strategy
+2012-03-04 10:21:57.218 INFO  singlejartest.GUIModeChartControls - Strategy started: 1
+2012-03-04 10:21:57.234 INFO  singlejartest.GUIModeChartControls - Getting prices before start time
+2012-03-04 10:21:57.328 INFO  singlejartest.GUIModeChartControls - Creating data loading threads
+2012-03-04 10:21:57.343 INFO  singlejartest.GUIModeChartControls - Getting prices before start time
+2012-03-04 10:21:57.390 INFO  singlejartest.GUIModeChartControls - Filling in-progress candles
+2012-03-04 10:22:01.781 INFO  singlejartest.GUIModeChartControls - Executing onStart
+2012-03-04 10:22:01.781 INFO  singlejartest.GUIModeChartControls - Running
+2012-03-04 10:22:02.296 INFO  singlejartest.GUIModeChartControls - Running, Wed 2012.03.01 00:30 Eq: 50,000.00 UoL: .00%
+2012-03-04 10:22:02.500 INFO  singlejartest.GUIModeChartControls - Running, Wed 2012.03.01 01:00 Eq: 50,000.00 UoL: .00%
+2012-03-04 10:22:02.734 INFO  singlejartest.GUIModeChartControls - Running, Wed 2012.03.01 01:30 Eq: 50,000.00 UoL: .00%
+2012-03-04 10:22:03.046 INFO  singlejartest.GUIModeChartControls - Running, Wed 2012.03.01 02:00 Eq: 50,000.00 UoL: .00%
+2012-03-04 10:22:03.187 INFO  singlejartest.GUIModeChartControls - Running, Wed 2012.03.01 02:30 Eq: 50,000.00 UoL: .00%
+2012-03-04 10:22:03.406 INFO  singlejartest.GUIModeChartControls - Running, Wed 2012.03.01 03:00 Eq: 50,000.00 UoL: .00%
+2012-03-04 10:22:03.578 INFO  singlejartest.GUIModeChartControls - Running, Wed 2012.03.01 03:30 Eq: 50,000.00 UoL: .00%
+2012-03-04 10:22:03.843 INFO  singlejartest.GUIModeChartControls - Running, Wed 2012.03.01 04:00 Eq: 50,000.00 UoL: .00%
+2012-03-04 10:22:04.000 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 04:30 Eq: 50,000.00 UoL: .00%
+2012-03-04 10:22:04.140 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 05:00 Eq: 50,000.00 UoL: .00%
+2012-03-04 10:22:04.312 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 05:30 Eq: 50,000.00 UoL: .00%
+2012-03-04 10:22:04.468 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 06:00 Eq: 50,000.00 UoL: .00%
+2012-03-04 10:22:04.656 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 06:30 Eq: 50,000.00 UoL: .00%
+2012-03-04 10:22:04.968 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 07:00 Eq: 50,000.00 UoL: .00%
+2012-03-04 10:22:05.328 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 07:30 Eq: 49,999.81 UoL: .03%
+2012-03-04 10:22:05.828 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 08:00 Eq: 49,998.85 UoL: .00%
+2012-03-04 10:22:06.281 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 08:30 Eq: 49,998.85 UoL: .00%
+2012-03-04 10:22:06.859 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 09:00 Eq: 50,000.24 UoL: .00%
+2012-03-04 10:22:07.265 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 09:30 Eq: 50,000.24 UoL: .00%
+2012-03-04 10:22:07.734 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 10:00 Eq: 50,000.24 UoL: .00%
+2012-03-04 10:22:08.078 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 10:30 Eq: 50,000.24 UoL: .00%
+2012-03-04 10:22:08.468 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 11:00 Eq: 49,999.94 UoL: .03%
+2012-03-04 10:22:08.921 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 11:30 Eq: 49,999.67 UoL: .03%
+2012-03-04 10:22:09.296 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 12:00 Eq: 49,999.09 UoL: .00%
+2012-03-04 10:22:09.609 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 12:30 Eq: 49,999.09 UoL: .00%
+2012-03-04 10:22:10.203 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 13:00 Eq: 49,999.09 UoL: .00%
+2012-03-04 10:22:10.578 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 13:30 Eq: 49,999.09 UoL: .00%
+2012-03-04 10:22:11.171 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 14:00 Eq: 49,999.09 UoL: .00%
+2012-03-04 10:22:11.546 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 14:30 Eq: 49,999.09 UoL: .00%
+2012-03-04 10:22:12.109 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 15:00 Eq: 49,999.09 UoL: .00%
+2012-03-04 10:22:12.656 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 15:30 Eq: 49,999.35 UoL: .00%
+2012-03-04 10:23:59.484 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 16:00 Eq: 49,999.30 UoL: .03%
+2012-03-04 10:23:59.812 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 16:30 Eq: 49,997.09 UoL: .00%
+2012-03-04 10:24:00.218 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 17:00 Eq: 49,995.95 UoL: .00%
+2012-03-04 10:24:00.437 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 17:30 Eq: 49,995.95 UoL: .00%
+2012-03-04 10:24:00.609 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 18:00 Eq: 49,995.95 UoL: .00%
+2012-03-04 10:24:00.796 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 18:30 Eq: 49,995.95 UoL: .00%
+2012-03-04 10:24:00.937 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 19:00 Eq: 49,995.95 UoL: .00%
+2012-03-04 10:24:01.078 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 19:30 Eq: 49,995.95 UoL: .00%
+2012-03-04 10:24:01.234 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 20:00 Eq: 49,995.95 UoL: .00%
+2012-03-04 10:24:01.468 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 20:30 Eq: 49,995.95 UoL: .00%
+2012-03-04 10:24:01.796 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 21:00 Eq: 49,995.95 UoL: .00%
+2012-03-04 10:24:01.906 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 21:30 Eq: 49,995.95 UoL: .00%
+2012-03-04 10:24:02.046 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 22:00 Eq: 49,995.95 UoL: .00%
+2012-03-04 10:24:02.156 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 22:30 Eq: 49,995.95 UoL: .00%
+2012-03-04 10:24:02.265 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 23:00 Eq: 49,995.95 UoL: .00%
+2012-03-04 10:24:02.359 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.01 23:30 Eq: 49,995.95 UoL: .00%
+2012-03-04 10:24:02.578 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.02 00:00 Eq: 49,995.95 UoL: .00%
+2012-03-04 10:24:02.812 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.02 00:30 Eq: 49,995.95 UoL: .00%
+2012-03-04 10:24:02.984 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.02 01:00 Eq: 49,995.95 UoL: .00%
+2012-03-04 10:24:03.125 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.02 01:30 Eq: 49,995.95 UoL: .00%
+2012-03-04 10:24:03.234 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.02 02:00 Eq: 49,995.95 UoL: .00%
+2012-03-04 10:24:03.343 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.02 02:30 Eq: 49,995.95 UoL: .00%
+2012-03-04 10:24:03.468 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.02 03:00 Eq: 49,995.95 UoL: .00%
+2012-03-04 10:24:03.593 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.02 03:30 Eq: 49,995.95 UoL: .00%
+2012-03-04 10:24:03.843 INFO  singlejartest.GUIModeChartControls - Running, Thu 2012.03.02 04:00 Eq: 49,995.95 UoL: .00%
+2012-03-04 10:24:03.953 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 04:30 Eq: 49,995.95 UoL: .00%
+2012-03-04 10:24:04.093 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 05:00 Eq: 49,995.95 UoL: .00%
+2012-03-04 10:24:04.218 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 05:30 Eq: 49,995.95 UoL: .00%
+2012-03-04 10:24:04.343 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 06:00 Eq: 49,995.95 UoL: .00%
+2012-03-04 10:24:04.500 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 06:30 Eq: 49,995.95 UoL: .00%
+2012-03-04 10:24:04.640 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 07:00 Eq: 49,995.95 UoL: .00%
+2012-03-04 10:24:05.093 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 07:30 Eq: 49,995.65 UoL: .03%
+2012-03-04 10:24:05.421 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 08:00 Eq: 49,994.71 UoL: .00%
+2012-03-04 10:24:05.750 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 08:30 Eq: 49,994.71 UoL: .00%
+2012-03-04 10:24:06.218 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 09:00 Eq: 49,994.71 UoL: .00%
+2012-03-04 10:24:06.531 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 09:30 Eq: 49,994.71 UoL: .00%
+2012-03-04 10:24:06.843 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 10:00 Eq: 49,994.71 UoL: .00%
+2012-03-04 10:24:07.125 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 10:30 Eq: 49,994.71 UoL: .00%
+2012-03-04 10:24:07.531 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 11:00 Eq: 49,994.71 UoL: .00%
+2012-03-04 10:24:07.781 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 11:30 Eq: 49,994.71 UoL: .00%
+2012-03-04 10:24:08.031 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 12:00 Eq: 49,994.71 UoL: .00%
+2012-03-04 10:24:08.468 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 12:30 Eq: 49,995.00 UoL: .03%
+2012-03-04 10:24:08.906 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 13:00 Eq: 49,995.27 UoL: .03%
+2012-03-04 10:24:09.234 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 13:30 Eq: 49,994.83 UoL: .00%
+2012-03-04 10:24:09.453 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 14:00 Eq: 49,994.83 UoL: .00%
+2012-03-04 10:24:09.656 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 14:30 Eq: 49,994.83 UoL: .00%
+2012-03-04 10:24:09.968 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 15:00 Eq: 49,994.83 UoL: .00%
+2012-03-04 10:24:10.281 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 15:30 Eq: 49,994.15 UoL: .03%
+2012-03-04 10:24:10.640 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 16:00 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:10.859 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 16:30 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:11.046 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 17:00 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:11.234 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 17:30 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:11.390 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 18:00 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:11.531 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 18:30 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:11.656 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 19:00 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:11.812 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 19:30 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:11.937 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 20:00 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.062 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 20:30 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.312 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 21:00 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.390 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 21:30 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.546 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 22:00 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.546 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 22:30 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.546 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 23:00 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.546 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.02 23:30 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.546 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.03 00:00 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.562 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.03 00:30 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.562 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.03 01:00 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.562 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.03 01:30 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.562 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.03 02:00 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.562 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.03 02:30 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.562 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.03 03:00 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.562 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.03 03:30 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.578 INFO  singlejartest.GUIModeChartControls - Running, Fri 2012.03.03 04:00 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.578 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 04:30 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.578 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 05:00 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.578 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 05:30 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.593 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 06:00 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.593 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 06:30 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.593 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 07:00 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.593 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 07:30 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.593 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 08:00 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.593 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 08:30 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.593 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 09:00 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.609 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 09:30 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.609 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 10:00 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.609 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 10:30 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.609 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 11:00 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.609 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 11:30 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.625 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 12:00 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.625 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 12:30 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.625 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 13:00 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.625 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 13:30 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.625 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 14:00 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.640 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 14:30 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.640 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 15:00 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.640 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 15:30 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.640 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 16:00 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.640 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 16:30 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.640 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 17:00 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.656 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 17:30 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.656 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 18:00 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.656 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 18:30 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.656 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 19:00 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.671 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 19:30 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.671 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 20:00 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.671 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 20:30 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.671 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 21:00 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.671 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 21:30 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.687 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 22:00 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.687 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 22:30 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.687 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 23:00 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.687 INFO  singlejartest.GUIModeChartControls - Running, Sat 2012.03.03 23:30 Eq: 49,993.70 UoL: .00%
+2012-03-04 10:24:12.687 INFO  singlejartest.GUIModeChartControls - Executing onStop
+2012-03-04 10:24:12.703 INFO  singlejartest.GUIModeChartControls - Strategy stopped: 1
