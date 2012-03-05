@@ -203,7 +203,7 @@ public class GUIModePlBalanceEquity extends JFrame implements ITesterUserInterfa
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 
         Date dateFrom = dateFormat.parse("12/01/2011 00:00:00");
-        Date dateTo = dateFormat.parse("12/20/2011 00:00:00");
+        Date dateTo = dateFormat.parse("03/04/2012 00:00:00");
   //      client.setDataInterval(DataLoadingMethod.ALL_TICKS, dateFrom.getTime(), dateTo.getTime());
         client.setDataInterval(Period.FIFTEEN_MINS,OfferSide.BID,InterpolationMethod.FOUR_TICKS ,  dateFrom.getTime(), dateTo.getTime());     
         //load data

@@ -6,15 +6,6 @@ import com.dukascopy.api.IIndicators.AppliedPrice;
 import java.io.*;
 import java.util.*;
 import java.text.*;
-import java.util.GregorianCalendar;
-import java.util.Date;
-
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
-
-@RequiresFullAccess
-@Library("log4j-over-slf4j-1.6.4.jar;slf4j-api-1.6.4.jar")
-//;slf4j-log4j12-1.5.8.jar;log4j-1.2.14.jar
 
 public class SMAStrategy implements IStrategy {
     private IEngine engine;
@@ -26,13 +17,6 @@ public class SMAStrategy implements IStrategy {
     private double [] filteredSma90;
     private double [] filteredSma10;
     private IOrder order = null;
-    private GregorianCalendar cal;
-    private Date currBarTime; 
-    private Date prevBarTime;
-    private Date stopDate ;
-    private SimpleDateFormat sdf;
-    private DateFormat fmt;
-//    private static final Logger LOGGER = LoggerFactory.getLogger(SMAStrategy.class);
 
     @Configurable("Instrument")
     public Instrument selectedInstrument = Instrument.EURUSD;
@@ -41,8 +25,6 @@ public class SMAStrategy implements IStrategy {
     @Configurable("SMA filter")
     public Filter indicatorFilter = Filter.WEEKENDS;
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(SMAStrategy.class);
-    
 
     public void onStart(IContext context) throws JFException {
         this.context = context;
@@ -50,38 +32,30 @@ public class SMAStrategy implements IStrategy {
         this.console = context.getConsole();
         this.history = context.getHistory();
         this.indicators = context.getIndicators();
-        this.cal = new GregorianCalendar();
-        
-       prevBarTime=new Date();
-       currBarTime=new Date();
-       sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
-       sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-       fmt=DateFormat.getDateTimeInstance();
-
     }
 
     public void onAccount(IAccount account) throws JFException {
     }
 
     public void onMessage(IMessage message) throws JFException {
-    	 switch(message.getType()){
-         case ORDER_SUBMIT_OK : 
-             print("Order opened: " + message.getOrder());
-             break;
-         case ORDER_SUBMIT_REJECTED : 
-             print("Order open failed: " + message.getOrder());
-             break;
-         case ORDER_FILL_OK : 
-             print("Order filled: " + message.getOrder());
-             break;
-         case ORDER_FILL_REJECTED : 
-             print("Order cancelled: " + message.getOrder());
-             break;
-//         case ORDER_SUBMIT_REJECTED:
-//               print(
-     }
-    print("<html><font color=\"red\">"+message+"</font>");
-}
+         switch(message.getType()){
+            case ORDER_SUBMIT_OK : 
+                print("Order opened: " + message.getOrder());
+                break;
+            case ORDER_SUBMIT_REJECTED : 
+                print("Order open failed: " + message.getOrder());
+                break;
+            case ORDER_FILL_OK : 
+                print("Order filled: " + message.getOrder());
+                break;
+            case ORDER_FILL_REJECTED : 
+                print("Order cancelled: " + message.getOrder());
+                break;
+//            case ORDER_SUBMIT_REJECTED:
+ //               print(
+        }
+        print("<html><font color=\"red\">"+message+"</font>");
+    }
 
     public void onStop() throws JFException {
         for (IOrder order : engine.getOrders()) {
@@ -94,25 +68,18 @@ public class SMAStrategy implements IStrategy {
     }    
 
     public void onBar(Instrument instrument, Period period, IBar askBar, IBar bidBar) throws JFException {
-          if (!instrument.equals(selectedInstrument)||!period.equals(Period.FIFTEEN_MINS)) {
+          if (!instrument.equals(selectedInstrument)) {
             return;
-        }      
-        IBar currBar= history.getBar(instrument, selectedPeriod, OfferSide.BID, 0);
- //       if(isFilter(currBar.getTime()) ){return;}
-        try{
- //       	stopDate= sdf.parse("2011-12-02 00:55:00");
-//        	currBarTime.setTime(currBar.getTime());
- //       	if(currBarTime.compareTo(stopDate)>=0)
-        	{
-  //      		print("Stop");;
-        	}
         }
-        catch(Exception e)
-        {
-        }
-              
+        Date prevBarTime=new Date();
+        Date currBarTime=new Date();
+         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        DateFormat fmt=DateFormat.getDateTimeInstance();
+
         IBar prevBar = history.getBar(instrument, selectedPeriod, OfferSide.BID, 1);
-        
+        IBar currBar= history.getBar(instrument, selectedPeriod, OfferSide.BID, 0);
+        if(isFilterhey(currBar.getTime()) ){return;}
        filteredSma90 = indicators.smma(instrument, selectedPeriod, OfferSide.BID, AppliedPrice.CLOSE, 30,
                 indicatorFilter, 2, prevBar.getTime(), 0);
         filteredSma10 = indicators.smma(instrument, selectedPeriod, OfferSide.BID, AppliedPrice.CLOSE, 10,
@@ -162,7 +129,6 @@ public class SMAStrategy implements IStrategy {
                     }
                 }
             }
-            LOGGER.error(" "+order.getState()+" ");
             if ((order == null) || (order.isLong() && order.getState().equals(IOrder.State.CLOSED)) ) {
                   print("Create Sell");
                 order = engine.submitOrder(getLabel(instrument), instrument, OrderCommand.SELL, 0.001);
@@ -185,6 +151,9 @@ public class SMAStrategy implements IStrategy {
     protected boolean isFilterhey(long time)
     {
         int hour;
+        GregorianCalendar cal=new GregorianCalendar();
+        Date currBarTime=new Date();
+        SimpleDateFormat sdf =new  SimpleDateFormat();
         cal.setTimeInMillis(time);
         cal.setTimeZone(TimeZone.getTimeZone("GMT"));
         currBarTime.setTime(time); 
@@ -221,4 +190,6 @@ public class SMAStrategy implements IStrategy {
         
     }
 
+
 }
+
