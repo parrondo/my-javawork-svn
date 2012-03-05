@@ -41,6 +41,8 @@ public class SMAStrategy implements IStrategy {
     @Configurable("SMA filter")
     public Filter indicatorFilter = Filter.WEEKENDS;
     
+    private static final Logger LOGGER = LoggerFactory.getLogger(SMAStrategy.class);
+    
 
     public void onStart(IContext context) throws JFException {
         this.context = context;
@@ -62,7 +64,24 @@ public class SMAStrategy implements IStrategy {
     }
 
     public void onMessage(IMessage message) throws JFException {
-    }
+    	 switch(message.getType()){
+         case ORDER_SUBMIT_OK : 
+             print("Order opened: " + message.getOrder());
+             break;
+         case ORDER_SUBMIT_REJECTED : 
+             print("Order open failed: " + message.getOrder());
+             break;
+         case ORDER_FILL_OK : 
+             print("Order filled: " + message.getOrder());
+             break;
+         case ORDER_FILL_REJECTED : 
+             print("Order cancelled: " + message.getOrder());
+             break;
+//         case ORDER_SUBMIT_REJECTED:
+//               print(
+     }
+    print("<html><font color=\"red\">"+message+"</font>");
+}
 
     public void onStop() throws JFException {
         for (IOrder order : engine.getOrders()) {
@@ -79,13 +98,13 @@ public class SMAStrategy implements IStrategy {
             return;
         }      
         IBar currBar= history.getBar(instrument, selectedPeriod, OfferSide.BID, 0);
-        if(isFilter(currBar.getTime()) ){return;}
+ //       if(isFilter(currBar.getTime()) ){return;}
         try{
-        	stopDate= sdf.parse("2011-12-02 00:55:00");
-        	currBarTime.setTime(currBar.getTime());
-        	if(currBarTime.compareTo(stopDate)>=0)
+ //       	stopDate= sdf.parse("2011-12-02 00:55:00");
+//        	currBarTime.setTime(currBar.getTime());
+ //       	if(currBarTime.compareTo(stopDate)>=0)
         	{
-        		print("Stop");;
+  //      		print("Stop");;
         	}
         }
         catch(Exception e)
@@ -143,6 +162,7 @@ public class SMAStrategy implements IStrategy {
                     }
                 }
             }
+            LOGGER.error(" "+order.getState()+" ");
             if ((order == null) || (order.isLong() && order.getState().equals(IOrder.State.CLOSED)) ) {
                   print("Create Sell");
                 order = engine.submitOrder(getLabel(instrument), instrument, OrderCommand.SELL, 0.001);
@@ -162,7 +182,7 @@ public class SMAStrategy implements IStrategy {
         console.getOut().println(message);
     }
     
-    protected boolean isFilter(long time)
+    protected boolean isFilterhey(long time)
     {
         int hour;
         cal.setTimeInMillis(time);
