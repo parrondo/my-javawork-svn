@@ -99,17 +99,17 @@ public class SMAStrategy implements IStrategy {
         }      
         IBar currBar= history.getBar(instrument, selectedPeriod, OfferSide.BID, 0);
  //       if(isFilter(currBar.getTime()) ){return;}
-        try{
+ //       try{
  //       	stopDate= sdf.parse("2011-12-02 00:55:00");
 //        	currBarTime.setTime(currBar.getTime());
  //       	if(currBarTime.compareTo(stopDate)>=0)
-        	{
+ //       	{
   //      		print("Stop");;
-        	}
-        }
-        catch(Exception e)
-        {
-        }
+  //      	}
+ //       }
+//        catch(Exception e)
+//        {
+//        }
               
         IBar prevBar = history.getBar(instrument, selectedPeriod, OfferSide.BID, 1);
         
