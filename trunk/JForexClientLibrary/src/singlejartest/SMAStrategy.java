@@ -152,15 +152,14 @@ public class SMAStrategy implements IStrategy {
     
     protected boolean isFilter(long time)
     {
-        int day,hour;
+        int hour;
         cal.setTimeInMillis(time);
         cal.setTimeZone(TimeZone.getTimeZone("GMT"));
-        day=cal.get(GregorianCalendar.DAY_OF_WEEK);
-        
+        currBarTime.setTime(time); 
         if(cal.get(GregorianCalendar.DAY_OF_WEEK)==GregorianCalendar.FRIDAY)
         {
            hour=cal.get(GregorianCalendar.HOUR_OF_DAY );
- //          currBarTime.setTime(time);
+           
            if(hour>=22)
            {
         	   print(sdf.format(currBarTime)+" filterd OK");
@@ -168,11 +167,25 @@ public class SMAStrategy implements IStrategy {
            }
            else
         	   return false;
-           
-           
+                  
         }
-        else
-            return false;
+        else if(cal.get(GregorianCalendar.DAY_OF_WEEK)==GregorianCalendar.SATURDAY)
+        {
+        	print(sdf.format(currBarTime)+" filterd OK");
+        	return true;
+        }
+        else if(cal.get(GregorianCalendar.DAY_OF_WEEK)==GregorianCalendar.SUNDAY)
+        {
+        	hour=cal.get(GregorianCalendar.HOUR_OF_DAY );
+        	           if(hour<22)
+        	           {
+        	        	   print(sdf.format(currBarTime)+" filterd OK");
+        	        	   return true;
+        	           }
+        	           else
+        	        	   return false;
+        }
+        else{return false;}          
         
     }
 
