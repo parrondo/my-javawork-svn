@@ -29,6 +29,7 @@ public class SMAStrategy implements IStrategy {
     private GregorianCalendar cal;
     private Date currBarTime; 
     private Date prevBarTime;
+    private Date stopDate ;
     private SimpleDateFormat sdf;
     private DateFormat fmt;
 //    private static final Logger LOGGER = LoggerFactory.getLogger(SMAStrategy.class);
@@ -79,7 +80,18 @@ public class SMAStrategy implements IStrategy {
         }      
         IBar currBar= history.getBar(instrument, selectedPeriod, OfferSide.BID, 0);
         if(isFilter(currBar.getTime()) ){return;}
-        
+        try{
+        	stopDate= sdf.parse("2011-12-02 00:55:00");
+        	currBarTime.setTime(currBar.getTime());
+        	if(currBarTime.compareTo(stopDate)>=0)
+        	{
+        		print("Stop");;
+        	}
+        }
+        catch(Exception e)
+        {
+        }
+              
         IBar prevBar = history.getBar(instrument, selectedPeriod, OfferSide.BID, 1);
         
        filteredSma90 = indicators.smma(instrument, selectedPeriod, OfferSide.BID, AppliedPrice.CLOSE, 30,
