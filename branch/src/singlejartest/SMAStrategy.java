@@ -7,6 +7,9 @@ import java.io.*;
 import java.util.*;
 import java.text.*;
 
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+
 public class SMAStrategy implements IStrategy {
     private IEngine engine;
     private IConsole console;
@@ -38,23 +41,13 @@ public class SMAStrategy implements IStrategy {
     }
 
     public void onMessage(IMessage message) throws JFException {
-         switch(message.getType()){
-            case ORDER_SUBMIT_OK : 
-                print("Order opened: " + message.getOrder());
-                break;
-            case ORDER_SUBMIT_REJECTED : 
-                print("Order open failed: " + message.getOrder());
-                break;
-            case ORDER_FILL_OK : 
-                print("Order filled: " + message.getOrder());
-                break;
-            case ORDER_FILL_REJECTED : 
-                print("Order cancelled: " + message.getOrder());
-                break;
-//            case ORDER_SUBMIT_REJECTED:
- //               print(
-        }
-        print("<html><font color=\"red\">"+message+"</font>");
+          SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+          sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+    	 print(sdf.format(new Date(message.getCreationTime()))+" "+message.getType()+
+    			 message.getContent()+" "+message.getOrder());
+       
+    
+ //       print("<html><font color=\"red\">"+message+"</font>");
     }
 
     public void onStop() throws JFException {
