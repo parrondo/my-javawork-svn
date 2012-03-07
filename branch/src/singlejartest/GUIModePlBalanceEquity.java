@@ -202,8 +202,8 @@ public class GUIModePlBalanceEquity extends JFrame implements ITesterUserInterfa
         final SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 
-        Date dateFrom = dateFormat.parse("12/01/2011 00:00:00");
-        Date dateTo = dateFormat.parse("12/20/2011 00:00:00");
+        Date dateFrom = dateFormat.parse("06/00/2010 00:00:00");
+        Date dateTo = dateFormat.parse("12/20/2010 00:00:00");
   //      client.setDataInterval(DataLoadingMethod.ALL_TICKS, dateFrom.getTime(), dateTo.getTime());
         client.setDataInterval(Period.FIFTEEN_MINS,OfferSide.BID,InterpolationMethod.FOUR_TICKS ,  dateFrom.getTime(), dateTo.getTime());     
         //load data
