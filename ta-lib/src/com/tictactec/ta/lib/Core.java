@@ -106,8 +106,8 @@ public class Core {
       * average of the 10 previous candles' high-low range
       */
       new CandleSetting(CandleSettingType.BodyDoji,
-         RangeType.HighLow, 10, 0.1),
-      /* shadow is long when it's longer than the real body */
+         RangeType.HighLow, 1, 0.1),
+      /* shadow is long when it's longer than the real body ,by simon*/
       new CandleSetting(CandleSettingType.ShadowLong,
          RangeType.RealBody, 0, 1.0),
       /* shadow is very long when it's longer than 2 times the real body */
