@@ -3,6 +3,10 @@ package singlejartest;
 import com.dukascopy.api.*;
 import com.dukascopy.api.IEngine.OrderCommand;
 import com.dukascopy.api.IIndicators.AppliedPrice;
+import com.dukascopy.api.drawings.IChartObjectFactory;
+import com.dukascopy.api.drawings.IHorizontalLineChartObject;
+import com.dukascopy.api.drawings.*;
+
 import java.io.*;
 import java.util.*;
 import java.text.*;
@@ -15,11 +19,15 @@ public class SMAStrategy implements IStrategy {
     private IConsole console;
     private IContext context;
     private IHistory history;
+    private IChart chart;
     private IIndicators indicators;
     private int counter =0;
     private double [] filteredSma90;
     private double [] filteredSma10;
     private IOrder order = null;
+    private IVerticalLineChartObject VLine;
+    private  IChartObjectFactory factory;
+    private   int linecount=0;
 
     @Configurable("Instrument")
     public Instrument selectedInstrument = Instrument.EURUSD;
@@ -35,6 +43,7 @@ public class SMAStrategy implements IStrategy {
         this.console = context.getConsole();
         this.history = context.getHistory();
         this.indicators = context.getIndicators();
+        this.chart = context.getChart(Instrument.EURUSD);
     }
 
     public void onAccount(IAccount account) throws JFException {
@@ -73,6 +82,13 @@ public class SMAStrategy implements IStrategy {
         IBar prevBar = history.getBar(instrument, selectedPeriod, OfferSide.BID, 1);
         IBar currBar= history.getBar(instrument, selectedPeriod, OfferSide.BID, 0);
         if(isFilterhey(currBar.getTime()) ){return;}
+        
+         factory = chart.getChartObjectFactory();
+         VLine = factory.createVerticalLine("VerticalLine"+linecount);  
+         linecount++;
+         VLine.setTime(0,currBar.getTime());
+         chart.addToMainChart(VLine);
+         
        filteredSma90 = indicators.smma(instrument, selectedPeriod, OfferSide.BID, AppliedPrice.CLOSE, 30,
                 indicatorFilter, 2, prevBar.getTime(), 0);
         filteredSma10 = indicators.smma(instrument, selectedPeriod, OfferSide.BID, AppliedPrice.CLOSE, 10,

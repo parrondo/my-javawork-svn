@@ -197,7 +197,7 @@ public class TesterMainGUIMode extends JFrame implements ITesterUserInterface, I
         final SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 
-        Date dateFrom = dateFormat.parse("12/01/2011 00:00:00");
+        Date dateFrom = dateFormat.parse("12/19/2011 00:00:00");
         Date dateTo = dateFormat.parse("12/20/2011 00:00:00");
         
        
@@ -217,7 +217,7 @@ public class TesterMainGUIMode extends JFrame implements ITesterUserInterface, I
         		*/
         		   
         client.startStrategy(
-    		new SMAStrategy(),
+    		new HLineKeyRemove(),
     		new LoadingProgressListener() {
     			@Override
     			public void dataLoaded(long startTime, long endTime, long currentTime, String information) {

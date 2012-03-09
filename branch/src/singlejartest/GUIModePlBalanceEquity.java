@@ -75,6 +75,7 @@ import com.dukascopy.api.feed.FeedDescriptor;
 import com.dukascopy.api.feed.IFeedDescriptor;
 import com.dukascopy.api.system.ITesterClient.DataLoadingMethod;
 import com.dukascopy.api.system.ITesterClient.InterpolationMethod;
+import com.dukascopy.api.drawings.*;
 
 /**
  * This small program demonstrates how to initialize Dukascopy tester and start a strategy in GUI mode
@@ -113,8 +114,9 @@ public class GUIModePlBalanceEquity extends JFrame implements ITesterUserInterfa
 		if(chartPanels != null && chartPanels.size() > 0){
 			
 			IChart chart = chartPanels.keySet().iterator().next();
-			Instrument instrument = chart.getInstrument();
 			
+			Instrument instrument = chart.getInstrument();
+					
 			 IFeedDescriptor feedDescriptor = new FeedDescriptor();
 			 feedDescriptor.setDataType(DataType.TIME_PERIOD_AGGREGATION);
              feedDescriptor.setOfferSide(OfferSide.BID);
@@ -128,6 +130,7 @@ public class GUIModePlBalanceEquity extends JFrame implements ITesterUserInterfa
 			chartController = chartPanels.get(chart).getTesterChartController();
 			JPanel chartPanel = chartPanels.get(chart).getChartPanel();
 			addChartPanel(chartPanel);
+			
 		}
 	}
 
@@ -202,8 +205,8 @@ public class GUIModePlBalanceEquity extends JFrame implements ITesterUserInterfa
         final SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 
-        Date dateFrom = dateFormat.parse("06/00/2010 00:00:00");
-        Date dateTo = dateFormat.parse("12/20/2010 00:00:00");
+        Date dateFrom = dateFormat.parse("03/05/2012 00:00:00");
+        Date dateTo = dateFormat.parse("03/07/2012 00:00:00");
   //      client.setDataInterval(DataLoadingMethod.ALL_TICKS, dateFrom.getTime(), dateTo.getTime());
         client.setDataInterval(Period.FIFTEEN_MINS,OfferSide.BID,InterpolationMethod.FOUR_TICKS ,  dateFrom.getTime(), dateTo.getTime());     
         //load data
