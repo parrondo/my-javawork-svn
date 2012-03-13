@@ -18,5 +18,6 @@
 	<classpathentry kind="lib" path="libs/ecj-3.5.2.jar"/>
 	<classpathentry kind="lib" path="libs"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="libs/DDS2-jClient-JForex-2.14.26.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
