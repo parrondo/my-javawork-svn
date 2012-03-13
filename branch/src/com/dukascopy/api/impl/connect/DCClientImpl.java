@@ -567,7 +567,7 @@
 /*      */   }
 /*      */ 
 /*      */   public synchronized void setSystemListener(ISystemListener userSystemListener) {
-/*  554 */     this.systemListener = new Object(userSystemListener)
+/*  554 */     this.systemListener = new Object (userSystemListener)
 /*      */     {
 /*      */       public void onStart(long processId) {
 /*  557 */         this.val$userSystemListener.onStart(processId);
