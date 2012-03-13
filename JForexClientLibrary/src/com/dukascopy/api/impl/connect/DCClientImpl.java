@@ -48,7 +48,6 @@
 /*      */ import com.dukascopy.transport.common.msg.news.GeoRegion;
 /*      */ import com.dukascopy.transport.common.msg.news.MarketSector;
 /*      */ import com.dukascopy.transport.common.msg.news.NewsRequestType;
-/*      */ import com.dukascopy.transport.common.msg.news.NewsSource;
 /*      */ import com.dukascopy.transport.common.msg.news.NewsStoryMessage;
 /*      */ import com.dukascopy.transport.common.msg.news.NewsSubscribeRequest;
 /*      */ import com.dukascopy.transport.common.msg.news.StockIndex;
@@ -373,7 +372,7 @@
 /*  353 */     if ((!(encodePassword)) && (pin != null))
 /*  354 */       throw new Exception("(EncodePassword == false && pin != null) == NOT SUPPORTED");
 /*      */     String authResponse;
-/*      */     String authResponse;
+/*      */ //    String authResponse;
 /*  357 */     if ((!(encodePassword)) || (pin == null))
 /*  358 */       authResponse = authorizationClient.getUrlAndTicket(username, password, session, encodePassword);
 /*      */     else {
@@ -411,10 +410,10 @@
 /*  393 */     int semicolonIndex = url.indexOf(58);
 /*      */     int port;
 /*      */     String host;
-/*      */     int port;
+/*      */ 
 /*  394 */     if (semicolonIndex != -1) {
-/*  395 */       String host = url.substring(0, semicolonIndex);
-/*      */       int port;
+/*  395 */       host = url.substring(0, semicolonIndex);
+/*      */      
 /*  396 */       if (semicolonIndex + 1 >= url.length()) {
 /*  397 */         LOGGER.warn("port not set, using default 443");
 /*  398 */         port = 443;
@@ -834,7 +833,7 @@
 /*  829 */         throw new NullPointerException("Strategy is null");
 /*      */       }
 /*  831 */       if (exceptionHandler == null) {
-/*  832 */         exceptionHandler = new DefaultStrategyExceptionHandler(null);
+/*  832 */         exceptionHandler = new DefaultStrategyExceptionHandler();
 /*      */       }
 /*      */ 
 /*  836 */       taskManager = new JForexTaskManager(taskManagerEnvironment, this.live, this.accountName, this.console, this.transportClient, null, new FacelessUserInterface(), exceptionHandler, this.lastAccountInfoMessage, this.serverProperties.getProperty("external_ip"), this.internalIP, this.sessionID);
@@ -883,9 +882,10 @@
 /*  893 */       if (is != null)
 /*      */       {
 /*  895 */         byte[] buff = new byte[16384];
+					int i;
 /*  896 */         while ((i = is.read(buff)) != -1)
 /*      */         {
-/*      */           int i;
+/*      */          
 /*  897 */           md.update(buff, 0, i);
 /*      */         }
 /*  899 */         return Hex.encodeHexString(md.digest()).toUpperCase();
