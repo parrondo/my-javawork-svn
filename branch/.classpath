@@ -19,6 +19,5 @@
 	<classpathentry kind="lib" path="libs/ecj-3.5.2.jar"/>
 	<classpathentry kind="lib" path="libs"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="J:/javaworksvn/JForexClientLibrary_branch/libs/myjar.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
