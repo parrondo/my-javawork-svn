@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="libs/DDS2-jClient-JForex-2.14.26.jar"/>
 	<classpathentry kind="lib" path="libs/JForex-API-2.6.60.jar" sourcepath="libs/JForex-API-2.6.60-sources.jar"/>
 	<classpathentry kind="lib" path="libs/DDS2-Connector-1.1.53.jar"/>
 	<classpathentry kind="lib" path="libs/DDS2-Charts-5.52.jar"/>

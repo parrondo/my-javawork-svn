@@ -51,9 +51,9 @@ public class TesterMain {
     //url of the DEMO jnlp
     private static String jnlpUrl = "https://www.dukascopy.com/client/demo/jclient/jforex.jnlp";
     //user name
-    private static String userName = "username";
+    private static String userName = "DEMO2RziVl";
     //password
-    private static String password = "password";
+    private static String password = "RziVl";
 
     public static void main(String[] args) throws Exception {
         //get the instance of the IClient interface
