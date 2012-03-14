@@ -182,6 +182,7 @@ public class GUIModePlBalanceEquity extends JFrame implements ITesterUserInterfa
         //connection is needed for data downloading
         client.connect(jnlpUrl, userName, password);
         {};
+        LOGGER.info("Connecting...");
 
         //wait for it to connect
         {};
