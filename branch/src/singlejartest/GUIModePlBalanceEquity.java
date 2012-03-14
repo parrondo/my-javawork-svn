@@ -184,6 +184,7 @@ public class GUIModePlBalanceEquity extends JFrame implements ITesterUserInterfa
         {};
 
         //wait for it to connect
+        {};
         int i = 10; //wait max ten seconds
         while (i > 0 && !client.isConnected()) {
             Thread.sleep(1000);
