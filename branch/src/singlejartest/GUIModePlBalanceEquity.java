@@ -191,7 +191,7 @@ public class GUIModePlBalanceEquity extends JFrame implements ITesterUserInterfa
         if (!client.isConnected()) {
             LOGGER.error("Failed to connect Dukascopy servers");
             System.exit(1);
-        }
+        }      
 
         //set instruments that will be used in testing
         final Set<Instrument> instruments = new HashSet<Instrument>();
