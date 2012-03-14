@@ -3,8 +3,6 @@ package singlejartest;
 import com.dukascopy.api.*;
 import com.dukascopy.api.IEngine.OrderCommand;
 import com.dukascopy.api.IIndicators.AppliedPrice;
-import com.dukascopy.api.drawings.IChartObjectFactory;
-import com.dukascopy.api.drawings.IHorizontalLineChartObject;
 import com.dukascopy.api.drawings.*;
 
 import java.io.*;
@@ -13,6 +11,8 @@ import java.text.*;
 
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+
+import com.tictactec.ta.lib.*;
 
 public class SMAStrategy implements IStrategy {
     private IEngine engine;
@@ -28,6 +28,7 @@ public class SMAStrategy implements IStrategy {
     private IVerticalLineChartObject VLine;
     private  IChartObjectFactory factory;
     private   int linecount=0;
+    private Core lib=new Core();
 
     @Configurable("Instrument")
     public Instrument selectedInstrument = Instrument.EURUSD;
