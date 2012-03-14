@@ -31,15 +31,22 @@ package singlejartest;
 
 import com.dukascopy.api.Instrument;
 import com.dukascopy.api.LoadingProgressListener;
+import com.dukascopy.api.OfferSide;
+import com.dukascopy.api.Period;
 import com.dukascopy.api.system.ISystemListener;
 import com.dukascopy.api.system.ITesterClient;
 import com.dukascopy.api.system.TesterFactory;
+import com.dukascopy.api.system.ITesterClient.InterpolationMethod;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.concurrent.Future;
 
 /**
@@ -51,9 +58,9 @@ public class TesterMain {
     //url of the DEMO jnlp
     private static String jnlpUrl = "https://www.dukascopy.com/client/demo/jclient/jforex.jnlp";
     //user name
-    private static String userName = "username";
+    private static String userName = "DEMO2FZnlc";
     //password
-    private static String password = "password";
+    private static String password = "FZnlc";
 
     public static void main(String[] args) throws Exception {
         //get the instance of the IClient interface
@@ -94,6 +101,7 @@ public class TesterMain {
         //connect to the server using jnlp, user name and password
         //connection is needed for data downloading
         client.connect(jnlpUrl, userName, password);
+        
 
         //wait for it to connect
         int i = 10; //wait max ten seconds
@@ -113,6 +121,15 @@ public class TesterMain {
         client.setSubscribedInstruments(instruments);
         //setting initial deposit
         client.setInitialDeposit(Instrument.EURUSD.getSecondaryCurrency(), 50000);
+        
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+
+        Date dateFrom = dateFormat.parse("03/06/2012 00:00:00");
+        Date dateTo = dateFormat.parse("03/07/2012 00:00:00");
+  //      client.setDataInterval(DataLoadingMethod.ALL_TICKS, dateFrom.getTime(), dateTo.getTime());
+        client.setDataInterval(Period.FIVE_MINS,OfferSide.BID,InterpolationMethod.FOUR_TICKS ,  dateFrom.getTime(), dateTo.getTime());     
+        
         //load data
         LOGGER.info("Downloading data");
         Future<?> future = client.downloadData(null);
@@ -120,7 +137,7 @@ public class TesterMain {
         future.get();
         //start the strategy
         LOGGER.info("Starting strategy");
-        client.startStrategy(new MA_Play(), new LoadingProgressListener() {
+        client.startStrategy(new GetBar(), new LoadingProgressListener() {
             @Override
             public void dataLoaded(long startTime, long endTime, long currentTime, String information) {
                 LOGGER.info(information);
