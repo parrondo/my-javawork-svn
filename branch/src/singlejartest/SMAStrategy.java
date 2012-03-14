@@ -81,7 +81,7 @@ public class SMAStrategy implements IStrategy {
 
         IBar prevBar = history.getBar(instrument, selectedPeriod, OfferSide.BID, 1);
         IBar currBar= history.getBar(instrument, selectedPeriod, OfferSide.BID, 0);
-        if(isFilterhey(currBar.getTime()) ){return;}
+        if(isFilterhey(currBar.getTime()) ){return;}  
         
          factory = chart.getChartObjectFactory();
          VLine = factory.createVerticalLine("VerticalLine"+linecount);  
