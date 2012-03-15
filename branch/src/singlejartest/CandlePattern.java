@@ -1,7 +1,9 @@
 package singlejartest;
 
+import com.tictactec.ta.lib.CandleSettingType;
 import com.tictactec.ta.lib.Core;
 import com.tictactec.ta.lib.MInteger;
+import com.tictactec.ta.lib.RangeType;
 import com.tictactec.ta.lib.RetCode;
 
 public class CandlePattern {
@@ -26,7 +28,12 @@ public class CandlePattern {
         outNbElement = new MInteger();
     }
     
-    public boolean is
+    public boolean isMarubozu()
+    {
+    	lib.SetCandleSettings(CandleSettingType.BodyLong,RangeType.RealBody, 10, 2.0);
+        lib.cdlBeltHoldLookback();
+        return true;
+    }
     
 
 }

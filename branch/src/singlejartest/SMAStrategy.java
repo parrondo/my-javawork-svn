@@ -94,8 +94,7 @@ public class SMAStrategy implements IStrategy {
          MInteger outNbElement = new MInteger();
          int[] output = new int[100];
          
-         lib.SetCandleSettings(CandleSettingType.BodyLong,RangeType.RealBody, 10, 2.0);
-         lib.cdlBeltHoldLookback();
+         
          
        filteredSma90 = indicators.smma(instrument, selectedPeriod, OfferSide.BID, AppliedPrice.CLOSE, 30,
                 indicatorFilter, 2, prevBar.getTime(), 0);
