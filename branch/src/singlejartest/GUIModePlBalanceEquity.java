@@ -101,9 +101,9 @@ public class GUIModePlBalanceEquity extends JFrame implements ITesterUserInterfa
 	//url of the DEMO jnlp
     private static String jnlpUrl = "https://www.dukascopy.com/client/demo/jclient/jforex.jnlp";
     //user name
-    private static String userName = "DEMO2FZnlc";
+    private static String userName = "DEMO2uTbuN";
     //password
-    private static String password = "FZnlc";
+    private static String password = "uTbuN";
     public GUIModePlBalanceEquity(){
     	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
@@ -206,10 +206,10 @@ public class GUIModePlBalanceEquity extends JFrame implements ITesterUserInterfa
         final SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 
-        Date dateFrom = dateFormat.parse("03/05/2012 00:00:00");
-        Date dateTo = dateFormat.parse("03/014/2012 00:00:00");
-  //      client.setDataInterval(DataLoadingMethod.ALL_TICKS, dateFrom.getTime(), dateTo.getTime());
-        client.setDataInterval(Period.FIFTEEN_MINS,OfferSide.BID,InterpolationMethod.FOUR_TICKS ,  dateFrom.getTime(), dateTo.getTime());     
+        Date dateFrom = dateFormat.parse("12/14/2011 00:00:00");
+        Date dateTo = dateFormat.parse("02/14/2012 00:00:00");
+        client.setDataInterval(DataLoadingMethod.ALL_TICKS, dateFrom.getTime(), dateTo.getTime());
+        client.setDataInterval(Period.TICK,OfferSide.BID,InterpolationMethod.OPEN_TICK ,  dateFrom.getTime(), dateTo.getTime());     
         //load data
         LOGGER.info("Downloading data");
         Future<?> future = client.downloadData(null);

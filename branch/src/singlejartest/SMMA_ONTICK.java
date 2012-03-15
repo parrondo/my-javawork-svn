@@ -3,6 +3,8 @@ package singlejartest;
 import com.dukascopy.api.*;
 import com.dukascopy.api.IEngine.OrderCommand;
 import com.dukascopy.api.IIndicators.AppliedPrice;
+import java.io.*;
+import java.util.*;
 
 public class SMMA_ONTICK implements IStrategy {
 	private IEngine engine;
@@ -13,6 +15,7 @@ public class SMMA_ONTICK implements IStrategy {
 	private double [] filteredSma90;
 	private double [] filteredSma10;
 	private IOrder order = null;
+	  private IContext context;
 
 	@Configurable("Instrument")
 	public Instrument selectedInstrument = Instrument.EURUSD;
@@ -27,6 +30,7 @@ public class SMMA_ONTICK implements IStrategy {
 		this.console = context.getConsole();
 		this.history = context.getHistory();
 		this.indicators = context.getIndicators();
+		 this.context = context;
 	}
 
 	public void onAccount(IAccount account) throws JFException {
@@ -45,6 +49,25 @@ public class SMMA_ONTICK implements IStrategy {
 		if (!instrument.equals(selectedInstrument)) {
 			return;
 		}
+		/*
+		 File dirFile = context.getFilesDir();
+		   if (!dirFile.exists()) {
+	            console.getErr().println("Please create files directory in My Strategies");
+	            context.stop();
+	        }
+	        File file = new File(dirFile, "last10bars.txt");
+	        console.getOut().println("Writing to file " + file);
+	        try {
+	            PrintWriter pw = new PrintWriter(new FileOutputStream(file.toString(),true));
+	           
+	            pw.println(tick.getTime() + "," + tick.getAsk() + "," + tick.getBid() + "," + tick.getAskVolume());
+	          
+	            pw.close();
+	        } catch (IOException e) {
+	            e.printStackTrace(console.getErr());
+	            
+	        }
+	        */
 		IBar prevBar = history.getBar(instrument, selectedPeriod, OfferSide.BID, 1);
 		filteredSma90 = indicators.sma(instrument, selectedPeriod, OfferSide.BID, AppliedPrice.CLOSE, 90,
 				indicatorFilter, 2, prevBar.getTime(), 0);
