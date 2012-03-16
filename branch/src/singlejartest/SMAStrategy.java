@@ -33,7 +33,7 @@ public class SMAStrategy implements IStrategy {
     @Configurable("Instrument")
     public Instrument selectedInstrument = Instrument.EURUSD;
     @Configurable("Period")
-    public Period selectedPeriod = Period.FIFTEEN_MINS;
+    public Period selectedPeriod = Period.ONE_HOUR;
     @Configurable("SMA filter")
     public Filter indicatorFilter = Filter.WEEKENDS;
     
@@ -83,7 +83,7 @@ public class SMAStrategy implements IStrategy {
         IBar prevBar = history.getBar(instrument, selectedPeriod, OfferSide.BID, 1);
         IBar currBar= history.getBar(instrument, selectedPeriod, OfferSide.BID, 0);
         if(isFilterhey(currBar.getTime()) ){return;}  
-        
+    /*    
          factory = chart.getChartObjectFactory();
          VLine = factory.createVerticalLine("VerticalLine"+linecount);  
          linecount++;
@@ -92,7 +92,7 @@ public class SMAStrategy implements IStrategy {
          
          MInteger outBegIdx = new MInteger();
          MInteger outNbElement = new MInteger();
-         int[] output = new int[100];
+         int[] output = new int[100];*/
          
          
          

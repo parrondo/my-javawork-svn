@@ -20,7 +20,7 @@ public class SMMA_ONTICK implements IStrategy {
 	@Configurable("Instrument")
 	public Instrument selectedInstrument = Instrument.EURUSD;
 	@Configurable("Period")
-	public Period selectedPeriod = Period.FIFTEEN_MINS;
+	public Period selectedPeriod = Period.ONE_MIN;
 	@Configurable("SMA filter")
 	public Filter indicatorFilter = Filter.WEEKENDS;
 	
@@ -69,9 +69,9 @@ public class SMMA_ONTICK implements IStrategy {
 	        }
 	        */
 		IBar prevBar = history.getBar(instrument, selectedPeriod, OfferSide.BID, 1);
-		filteredSma90 = indicators.sma(instrument, selectedPeriod, OfferSide.BID, AppliedPrice.CLOSE, 90,
+		filteredSma90 = indicators.smma(instrument, selectedPeriod, OfferSide.BID, AppliedPrice.CLOSE, 30,
 				indicatorFilter, 2, prevBar.getTime(), 0);
-		filteredSma10 = indicators.sma(instrument, selectedPeriod, OfferSide.BID, AppliedPrice.CLOSE, 10,
+		filteredSma10 = indicators.smma(instrument, selectedPeriod, OfferSide.BID, AppliedPrice.CLOSE, 10,
 				indicatorFilter, 2, prevBar.getTime(), 0);
 
 		// SMA10 crossover SMA90 from UP to DOWN

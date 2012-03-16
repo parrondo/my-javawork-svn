@@ -121,7 +121,7 @@ public class GUIModePlBalanceEquity extends JFrame implements ITesterUserInterfa
 			 feedDescriptor.setDataType(DataType.TIME_PERIOD_AGGREGATION);
              feedDescriptor.setOfferSide(OfferSide.BID);
              feedDescriptor.setInstrument(Instrument.EURUSD); 
-		     feedDescriptor.setPeriod(Period.FIFTEEN_MINS);
+		     feedDescriptor.setPeriod(Period.ONE_HOUR);
 		     feedDescriptor.setFilter(Filter.WEEKENDS) ;
 		     chartPanels.get(chart).getTesterChartController().setFeedDescriptor(feedDescriptor);
 		     
@@ -206,8 +206,8 @@ public class GUIModePlBalanceEquity extends JFrame implements ITesterUserInterfa
         final SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 
-        Date dateFrom = dateFormat.parse("12/14/2011 00:00:00");
-        Date dateTo = dateFormat.parse("02/14/2012 00:00:00");
+        Date dateFrom = dateFormat.parse("01/5/2012 00:00:00");
+        Date dateTo = dateFormat.parse("03/14/2012 00:00:00");
         client.setDataInterval(DataLoadingMethod.ALL_TICKS, dateFrom.getTime(), dateTo.getTime());
         client.setDataInterval(Period.TICK,OfferSide.BID,InterpolationMethod.OPEN_TICK ,  dateFrom.getTime(), dateTo.getTime());     
         //load data
@@ -254,7 +254,7 @@ public class GUIModePlBalanceEquity extends JFrame implements ITesterUserInterfa
         		    */
       		
         client.startStrategy(
-            new SMMA_ONTICK(),
+            new SMAStrategy(),
             new LoadingProgressListener() {
                 @Override
                 public void dataLoaded(long startTime, long endTime, long currentTime, String information) {
