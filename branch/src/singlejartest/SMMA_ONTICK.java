@@ -67,7 +67,7 @@ public class SMMA_ONTICK implements IStrategy {
 	            e.printStackTrace(console.getErr());
 	            
 	        }
-	        */
+	        */ 
 		IBar prevBar = history.getBar(instrument, selectedPeriod, OfferSide.BID, 1);
 		filteredSma90 = indicators.smma(instrument, selectedPeriod, OfferSide.BID, AppliedPrice.CLOSE, 30,
 				indicatorFilter, 2, prevBar.getTime(), 0);
