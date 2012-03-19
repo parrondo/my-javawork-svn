@@ -31,11 +31,12 @@ public class SMAStrategy implements IStrategy {
 	private int linecount = 0;
 	private Core lib = new Core();
 	private IBar Marubozu = null;
+	private List<IBar> MarubozuLists;
 
 	@Configurable("Instrument")
 	public Instrument selectedInstrument = Instrument.EURUSD;
 	@Configurable("Period")
-	public Period selectedPeriod = Period.ONE_HOUR;
+	public Period selectedPeriod = Period.FIFTEEN_MINS;
 	@Configurable("SMA filter")
 	public Filter indicatorFilter = Filter.WEEKENDS;
 
@@ -89,6 +90,8 @@ public class SMAStrategy implements IStrategy {
 		if (isFilterhey(currBar.getTime())) {
 			return;
 		}
+		List<IBar> bars = history.getBars(instrument, Period.FIFTEEN_MINS, OfferSide.BID, indicatorFilter,10,prevBar.getTime(),0);
+		
 		/*
 		 * factory = chart.getChartObjectFactory(); VLine =
 		 * factory.createVerticalLine("VerticalLine"+linecount); linecount++;
@@ -107,6 +110,8 @@ public class SMAStrategy implements IStrategy {
 		filteredSma5 = indicators.sma(instrument, selectedPeriod,
 				OfferSide.BID, AppliedPrice.CLOSE, 5, indicatorFilter, 2,
 				prevBar.getTime(), 0);
+		
+		
 
 		// SMA10 crossover SMA90 from UP to DOWN ÏÂ´©
 		if ((filteredSmma10[1] < filteredSmma10[0])
@@ -133,25 +138,30 @@ public class SMAStrategy implements IStrategy {
 		if ((filteredSmma10[1] > filteredSmma10[0])
 				&& (filteredSmma10[1] > filteredSmma30[1])
 				&& (filteredSmma10[0] <= filteredSmma30[0])) {
-			if (engine.getOrders().size() > 0) {
-				for (IOrder orderInMarket : engine.getOrders()) {
-					if (orderInMarket.isLong()) {
-						print("Closing Long position");
-						orderInMarket.close();
+			if ((filteredSma5[1] > filteredSma5[0])
+					&& (filteredSma5[1] > filteredSmma10[1])
+					&& (filteredSma5[0] <= filteredSmma10[0])) {
+				if (engine.getOrders().size() > 0) {
+					for (IOrder orderInMarket : engine.getOrders()) {
+						if (orderInMarket.isLong()) {
+							print("Closing Long position");
+							orderInMarket.close();
+						}
 					}
 				}
-			}
-			if ((order == null)
-					|| (order.isLong() && order.getState().equals(
-							IOrder.State.CLOSED))) {
-				print("Create Sell");
-				order = engine.submitOrder(getLabel(instrument), instrument,
-						OrderCommand.SELL, 0.001);
+				if ((order == null)
+						|| (order.isLong() && order.getState().equals(
+								IOrder.State.CLOSED))) {
+					print("Create Sell");
+					order = engine.submitOrder(getLabel(instrument),
+							instrument, OrderCommand.SELL, 0.001);
+				}
 			}
 
 		}
 	}
-
+	
+	
 	protected String getLabel(Instrument instrument) {
 		String label = instrument.name();
 		label = label + (counter++);
@@ -162,32 +172,25 @@ public class SMAStrategy implements IStrategy {
 	public void print(String message) {
 		console.getOut().println(message);
 	}
-/*
-	public void writetofile() {
-		File dirFile = context.getFilesDir();
-		if (!dirFile.exists()) {
-			console.getErr().println(
-					"Please create files directory in My Strategies");
-			context.stop();
-		}
-		File file = new File(dirFile, "last10bars.txt");
-		console.getOut().println("Writing to file " + file);
-		try {
-			PrintWriter pw = new PrintWriter(new FileOutputStream(
-					file.toString(), true));
-			prevBarTime.setTime(prevBar.getTime());
-			currBarTime.setTime(currBar.getTime());
-			pw.println(sdf.format(prevBarTime) + "," + sdf.format(currBarTime)
-					+ "," + (order == null) + "," + order.isLong() + ","
-					+ order.getState().equals(IOrder.State.CLOSED));
 
-			pw.close();
-		} catch (IOException e) {
-			e.printStackTrace(console.getErr());
-		}
-
-	}
-	*/
+	/*
+	 * public void writetofile() { File dirFile = context.getFilesDir(); if
+	 * (!dirFile.exists()) { console.getErr().println(
+	 * "Please create files directory in My Strategies"); context.stop(); } File
+	 * file = new File(dirFile, "last10bars.txt");
+	 * console.getOut().println("Writing to file " + file); try { PrintWriter pw
+	 * = new PrintWriter(new FileOutputStream( file.toString(), true));
+	 * prevBarTime.setTime(prevBar.getTime());
+	 * currBarTime.setTime(currBar.getTime());
+	 * pw.println(sdf.format(prevBarTime) + "," + sdf.format(currBarTime) + ","
+	 * + (order == null) + "," + order.isLong() + "," +
+	 * order.getState().equals(IOrder.State.CLOSED));
+	 * 
+	 * pw.close(); } catch (IOException e) {
+	 * e.printStackTrace(console.getErr()); }
+	 * 
+	 * }
+	 */
 
 	protected boolean isFilterhey(long time) {
 		int hour;
