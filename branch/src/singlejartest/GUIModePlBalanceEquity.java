@@ -78,59 +78,66 @@ import com.dukascopy.api.system.ITesterClient.InterpolationMethod;
 import com.dukascopy.api.drawings.*;
 
 /**
- * This small program demonstrates how to initialize Dukascopy tester and start a strategy in GUI mode
+ * This small program demonstrates how to initialize Dukascopy tester and start
+ * a strategy in GUI mode
  */
 @SuppressWarnings("serial")
-public class GUIModePlBalanceEquity extends JFrame implements ITesterUserInterface, ITesterExecution {
-    private static final Logger LOGGER = LoggerFactory.getLogger(GUIModePlBalanceEquity.class);
+public class GUIModePlBalanceEquity extends JFrame implements
+		ITesterUserInterface, ITesterExecution {
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(GUIModePlBalanceEquity.class);
 
-    private final int frameWidth = 1000;
-    private final int frameHeight = 600;
-    private final int controlPanelHeight = 40;
-    
-    private JPanel currentChartPanel = null;
-    private ITesterExecutionControl executionControl = null;
-    private ITesterChartController chartController;
-    
-    private JPanel controlPanel = null;
-    private JButton startStrategyButton = null;
-    private JButton pauseButton = null;
-    private JButton continueButton = null;
-    private JButton cancelButton = null;
-    
-	//url of the DEMO jnlp
-    private static String jnlpUrl = "https://www.dukascopy.com/client/demo/jclient/jforex.jnlp";
-    //user name
-    private static String userName = "DEMO2uTbuN";
-    //password
-    private static String password = "uTbuN";
-    public GUIModePlBalanceEquity(){
-    	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-    }
-    
-    @Override
+	private final int frameWidth = 1000;
+	private final int frameHeight = 600;
+	private final int controlPanelHeight = 40;
+
+	private JPanel currentChartPanel = null;
+	private ITesterExecutionControl executionControl = null;
+	private ITesterChartController chartController;
+
+	private JPanel controlPanel = null;
+	private JButton startStrategyButton = null;
+	private JButton pauseButton = null;
+	private JButton continueButton = null;
+	private JButton cancelButton = null;
+
+	// url of the DEMO jnlp
+	private static String jnlpUrl = "https://www.dukascopy.com/client/demo/jclient/jforex.jnlp";
+	// user name
+	private static String userName = "DEMO2uTbuN";
+	// password
+	private static String password = "uTbuN";
+
+	public GUIModePlBalanceEquity() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		getContentPane().setLayout(
+				new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+	}
+
+	@Override
 	public void setChartPanels(Map<IChart, ITesterGui> chartPanels) {
-		if(chartPanels != null && chartPanels.size() > 0){
-			
+		if (chartPanels != null && chartPanels.size() > 0) {
+
 			IChart chart = chartPanels.keySet().iterator().next();
-			
+
 			Instrument instrument = chart.getInstrument();
-					
-			 IFeedDescriptor feedDescriptor = new FeedDescriptor();
-			 feedDescriptor.setDataType(DataType.TIME_PERIOD_AGGREGATION);
-             feedDescriptor.setOfferSide(OfferSide.BID);
-             feedDescriptor.setInstrument(Instrument.EURUSD); 
-		     feedDescriptor.setPeriod(Period.ONE_HOUR);
-		     feedDescriptor.setFilter(Filter.WEEKENDS) ;
-		     chartPanels.get(chart).getTesterChartController().setFeedDescriptor(feedDescriptor);
-		     
-			setTitle(instrument.toString() + " " + chart.getSelectedOfferSide() + " " + chart.getSelectedPeriod());
-			
+
+			IFeedDescriptor feedDescriptor = new FeedDescriptor();
+			feedDescriptor.setDataType(DataType.TIME_PERIOD_AGGREGATION);
+			feedDescriptor.setOfferSide(OfferSide.BID);
+			feedDescriptor.setInstrument(Instrument.EURUSD);
+			feedDescriptor.setPeriod(Period.ONE_HOUR);
+			feedDescriptor.setFilter(Filter.WEEKENDS);
+			chartPanels.get(chart).getTesterChartController()
+					.setFeedDescriptor(feedDescriptor);
+
+			setTitle(instrument.toString() + " " + chart.getSelectedOfferSide()
+					+ " " + chart.getSelectedPeriod());
+
 			chartController = chartPanels.get(chart).getTesterChartController();
 			JPanel chartPanel = chartPanels.get(chart).getChartPanel();
 			addChartPanel(chartPanel);
-			
+
 		}
 	}
 
@@ -138,185 +145,195 @@ public class GUIModePlBalanceEquity extends JFrame implements ITesterUserInterfa
 	public void setExecutionControl(ITesterExecutionControl executionControl) {
 		this.executionControl = executionControl;
 	}
-	
-    public void startStrategy() throws Exception {
-        //get the instance of the IClient interface
-        final ITesterClient client = TesterFactory.getDefaultInstance();
-        //set the listener that will receive system events
-        client.setSystemListener(new ISystemListener() {
-            @Override
-            public void onStart(long processId) {
-                LOGGER.info("Strategy started: " + processId);
-                updateButtons();
-            }
 
-            @Override
-            public void onStop(long processId) {
-                LOGGER.info("Strategy stopped: " + processId);
-                resetButtons();
-                
-                File reportFile = new File("C:\\report.html");
-                try {
-                    client.createReport(processId, reportFile);
-                } catch (Exception e) {
-                    LOGGER.error(e.getMessage(), e);
-                }
-                if (client.getStartedStrategies().size() == 0) {
-                    //Do nothing
-                }
-            }
+	public void startStrategy() throws Exception {
+		// get the instance of the IClient interface
+		final ITesterClient client = TesterFactory.getDefaultInstance();
+		// set the listener that will receive system events
+		client.setSystemListener(new ISystemListener() {
+			@Override
+			public void onStart(long processId) {
+				LOGGER.info("Strategy started: " + processId);
+				updateButtons();
+			}
 
-            @Override
-            public void onConnect() {
-                LOGGER.info("Connected");
-            }
+			@Override
+			public void onStop(long processId) {
+				LOGGER.info("Strategy stopped: " + processId);
+				resetButtons();
 
-            @Override
-            public void onDisconnect() {
-                //tester doesn't disconnect
-            }
-        });
+				File reportFile = new File("C:\\report.html");
+				try {
+					client.createReport(processId, reportFile);
+				} catch (Exception e) {
+					LOGGER.error(e.getMessage(), e);
+				}
+				if (client.getStartedStrategies().size() == 0) {
+					// Do nothing
+				}
+			}
 
-        LOGGER.info("Connecting...");
-        //connect to the server using jnlp, user name and password
-        //connection is needed for data downloading
-        client.connect(jnlpUrl, userName, password);
-        
-        //wait for it to connect
-       
-        int i = 10; //wait max ten seconds
-        while (i > 0 && !client.isConnected()) {
-            Thread.sleep(1000);
-            i--;
-        }
-        if (!client.isConnected()) {
-            LOGGER.error("Failed to connect Dukascopy servers");
-            System.exit(1);
-        }      
+			@Override
+			public void onConnect() {
+				LOGGER.info("Connected");
+			}
 
-        //set instruments that will be used in testing
-        final Set<Instrument> instruments = new HashSet<Instrument>();
-        instruments.add(Instrument.EURUSD);
-        
-        LOGGER.info("Subscribing instruments...");
-        client.setSubscribedInstruments(instruments);
-        //setting initial deposit
-        client.setInitialDeposit(Instrument.EURUSD.getSecondaryCurrency(), 50000);
-        
-        final SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+			@Override
+			public void onDisconnect() {
+				// tester doesn't disconnect
+			}
+		});
 
-        Date dateFrom = dateFormat.parse("01/5/2012 00:00:00");
-        Date dateTo = dateFormat.parse("03/14/2012 00:00:00");
-        client.setDataInterval(DataLoadingMethod.ALL_TICKS, dateFrom.getTime(), dateTo.getTime());
-        client.setDataInterval(Period.TICK,OfferSide.BID,InterpolationMethod.OPEN_TICK ,  dateFrom.getTime(), dateTo.getTime());     
-        //load data
-        LOGGER.info("Downloading data");
-        Future<?> future = client.downloadData(null);
-        //wait for downloading to complete
-        future.get();
-        //start the strategy
-        LOGGER.info("Starting strategy");
+		LOGGER.info("Connecting...");
+		// connect to the server using jnlp, user name and password
+		// connection is needed for data downloading
+		client.connect(jnlpUrl, userName, password);
 
-     // Implementation of IndicatorParameterBean 
-        final class IndicatorParameterBean implements ITesterIndicatorsParameters {
-            @Override
-            public boolean isEquityIndicatorEnabled() {
-                return false;
-            }
-            @Override
-            public boolean isProfitLossIndicatorEnabled() {
-                return true;
-            }
-            @Override
-            public boolean isBalanceIndicatorEnabled() {
-                return false;
-            }
-        }
-        // Implementation of TesterVisualModeParametersBean
-        final class TesterVisualModeParametersBean implements ITesterVisualModeParameters {
-            @Override
-            public Map<Instrument, ITesterIndicatorsParameters> getTesterIndicatorsParameters() {
-                Map<Instrument, ITesterIndicatorsParameters> indicatorParameters = new HashMap<Instrument, ITesterIndicatorsParameters>();
-                IndicatorParameterBean indicatorParameterBean = new IndicatorParameterBean();
-                indicatorParameters.put(Instrument.EURUSD, indicatorParameterBean);
-                return indicatorParameters;
-            }
-        }
-        // Create TesterVisualModeParametersBean
-        TesterVisualModeParametersBean visualModeParametersBean = new TesterVisualModeParametersBean();
-   
-        // Start strategy
-        /*         
-        client.startStrategy(
-        		new SMAStrategy()
-        		);
-        		    */
-      		
-        client.startStrategy(
-            new SMAStrategy(),
-            new LoadingProgressListener() {
-                @Override
-                public void dataLoaded(long startTime, long endTime, long currentTime, String information) {
-                    LOGGER.info(information);
-                }
+		// wait for it to connect
 
-                @Override
-                public void loadingFinished(boolean allDataLoaded, long startTime, long endTime, long currentTime) {
-                }
+		int i = 10; // wait max ten seconds
+		while (i > 0 && !client.isConnected()) {
+			Thread.sleep(1000);
+			i--;
+		}
+		if (!client.isConnected()) {
+			LOGGER.error("Failed to connect Dukascopy servers");
+			System.exit(1);
+		}
 
-                @Override
-                public boolean stopJob() {
-                    return false;
-                }
-            },
-            visualModeParametersBean,
-            this,
-            this
-        );
-    
-        //now it's running
-    }
-    
-	/**
-	 * Center a frame on the screen 
-	 */
-	private void centerFrame(){
-		Toolkit tk = Toolkit.getDefaultToolkit();
-	    Dimension screenSize = tk.getScreenSize();
-	    int screenHeight = screenSize.height;
-	    int screenWidth = screenSize.width;
-	    setSize(screenWidth / 2, screenHeight / 2);
-	    setLocation(screenWidth / 4, screenHeight / 4);
+		// set instruments that will be used in testing
+		final Set<Instrument> instruments = new HashSet<Instrument>();
+		instruments.add(Instrument.EURUSD);
+
+		LOGGER.info("Subscribing instruments...");
+		client.setSubscribedInstruments(instruments);
+		// setting initial deposit
+		client.setInitialDeposit(Instrument.EURUSD.getSecondaryCurrency(),
+				50000);
+
+		final SimpleDateFormat dateFormat = new SimpleDateFormat(
+				"MM/dd/yyyy HH:mm:ss");
+		dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+
+		Date dateFrom = dateFormat.parse("01/5/2012 00:00:00");
+		Date dateTo = dateFormat.parse("03/14/2012 00:00:00");
+		client.setDataInterval(DataLoadingMethod.ALL_TICKS, dateFrom.getTime(),
+				dateTo.getTime());
+		client.setDataInterval(Period.TICK, OfferSide.BID,
+				InterpolationMethod.OPEN_TICK, dateFrom.getTime(),
+				dateTo.getTime());
+		// load data
+		LOGGER.info("Downloading data");
+		Future<?> future = client.downloadData(null);
+		// wait for downloading to complete
+		future.get();
+		// start the strategy
+		LOGGER.info("Starting strategy");
+
+		// Implementation of IndicatorParameterBean
+		final class IndicatorParameterBean implements
+				ITesterIndicatorsParameters {
+			@Override
+			public boolean isEquityIndicatorEnabled() {
+				return false;
+			}
+
+			@Override
+			public boolean isProfitLossIndicatorEnabled() {
+				return true;
+			}
+
+			@Override
+			public boolean isBalanceIndicatorEnabled() {
+				return false;
+			}
+		}
+		// Implementation of TesterVisualModeParametersBean
+		final class TesterVisualModeParametersBean implements
+				ITesterVisualModeParameters {
+			@Override
+			public Map<Instrument, ITesterIndicatorsParameters> getTesterIndicatorsParameters() {
+				Map<Instrument, ITesterIndicatorsParameters> indicatorParameters = new HashMap<Instrument, ITesterIndicatorsParameters>();
+				IndicatorParameterBean indicatorParameterBean = new IndicatorParameterBean();
+				indicatorParameters.put(Instrument.EURUSD,
+						indicatorParameterBean);
+				return indicatorParameters;
+			}
+		}
+		// Create TesterVisualModeParametersBean
+		TesterVisualModeParametersBean visualModeParametersBean = new TesterVisualModeParametersBean();
+
+		// Start strategy
+		/*
+		 * client.startStrategy( new SMAStrategy() );
+		 */
+
+		client.startStrategy(new SMAStrategy(), new LoadingProgressListener() {
+			@Override
+			public void dataLoaded(long startTime, long endTime,
+					long currentTime, String information) {
+				LOGGER.info(information);
+			}
+
+			@Override
+			public void loadingFinished(boolean allDataLoaded, long startTime,
+					long endTime, long currentTime) {
+			}
+
+			@Override
+			public boolean stopJob() {
+				return false;
+			}
+		}, visualModeParametersBean, this, this);
+
+		// now it's running
 	}
-	
+
+	/**
+	 * Center a frame on the screen
+	 */
+	private void centerFrame() {
+		Toolkit tk = Toolkit.getDefaultToolkit();
+		Dimension screenSize = tk.getScreenSize();
+		int screenHeight = screenSize.height;
+		int screenWidth = screenSize.width;
+		setSize(screenWidth / 2, screenHeight / 2);
+		setLocation(screenWidth / 4, screenHeight / 4);
+	}
+
 	/**
 	 * Add chart panel to the frame
+	 * 
 	 * @param panel
 	 */
-	private void addChartPanel(JPanel chartPanel){
+	private void addChartPanel(JPanel chartPanel) {
 		removecurrentChartPanel();
-		
+
 		this.currentChartPanel = chartPanel;
-		chartPanel.setPreferredSize(new Dimension(frameWidth, frameHeight - controlPanelHeight));
+		chartPanel.setPreferredSize(new Dimension(frameWidth, frameHeight
+				- controlPanelHeight));
 		chartPanel.setMinimumSize(new Dimension(frameWidth, 200));
-		chartPanel.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
+		chartPanel.setMaximumSize(new Dimension(Short.MAX_VALUE,
+				Short.MAX_VALUE));
 		getContentPane().add(chartPanel);
 		this.validate();
 		chartPanel.repaint();
 	}
 
 	/**
-	 * Add buttons to start/pause/continue/cancel actions 
+	 * Add buttons to start/pause/continue/cancel actions
 	 */
-	private void addControlPanel(){
-		
+	private void addControlPanel() {
+
 		controlPanel = new JPanel();
 		FlowLayout flowLayout = new FlowLayout(FlowLayout.LEFT);
 		controlPanel.setLayout(flowLayout);
-		controlPanel.setPreferredSize(new Dimension(frameWidth, controlPanelHeight));
-		controlPanel.setMinimumSize(new Dimension(frameWidth, controlPanelHeight));
-		controlPanel.setMaximumSize(new Dimension(Short.MAX_VALUE, controlPanelHeight));
+		controlPanel.setPreferredSize(new Dimension(frameWidth,
+				controlPanelHeight));
+		controlPanel.setMinimumSize(new Dimension(frameWidth,
+				controlPanelHeight));
+		controlPanel.setMaximumSize(new Dimension(Short.MAX_VALUE,
+				controlPanelHeight));
 
 		startStrategyButton = new JButton("Start strategy");
 		startStrategyButton.addActionListener(new ActionListener() {
@@ -338,119 +355,122 @@ public class GUIModePlBalanceEquity extends JFrame implements ITesterUserInterfa
 				t.start();
 			}
 		});
-		
+
 		pauseButton = new JButton("Pause");
 		pauseButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(executionControl != null){
+				if (executionControl != null) {
 					executionControl.pauseExecution();
 					updateButtons();
 				}
 			}
 		});
-		
+
 		continueButton = new JButton("Continue");
 		continueButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(executionControl != null){
+				if (executionControl != null) {
 					executionControl.continueExecution();
 					updateButtons();
 				}
 			}
 		});
-		
+
 		cancelButton = new JButton("Cancel");
 		cancelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(executionControl != null){
+				if (executionControl != null) {
 					executionControl.cancelExecution();
 					updateButtons();
 				}
 			}
 		});
-		
+
 		JButton zoomInButton = new JButton("Zoom In");
 		zoomInButton.addActionListener(new ActionListener() {
-		    @Override
-		    public void actionPerformed(ActionEvent e) {
-		    	chartController.zoomIn();
-		    }
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				chartController.zoomIn();
+			}
 		});
 		controlPanel.add(zoomInButton);
-		
+
 		JButton zoomOutButton = new JButton("Zoom Out");
 		zoomOutButton.addActionListener(new ActionListener() {
-		    @Override
-		    public void actionPerformed(ActionEvent e) {
-		    	chartController.zoomOut();
-		    }
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				chartController.zoomOut();
+			}
 		});
 		controlPanel.add(zoomOutButton);
-		
+
 		JButton addIndicatorsButton = new JButton("Add Indicators");
 		addIndicatorsButton.addActionListener(new ActionListener() {
-		    @Override
-		    public void actionPerformed(ActionEvent e) {
-		    	chartController.addIndicators();               
-		    }
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				chartController.addIndicators();
+			}
 		});
 		controlPanel.add(addIndicatorsButton);
-		
+
 		controlPanel.add(startStrategyButton);
 		controlPanel.add(pauseButton);
 		controlPanel.add(continueButton);
 		controlPanel.add(cancelButton);
 		getContentPane().add(controlPanel);
-		
+
 		pauseButton.setEnabled(false);
 		continueButton.setEnabled(false);
 		cancelButton.setEnabled(false);
 	}
 
-	private void updateButtons(){
-		if(executionControl != null){
-			startStrategyButton.setEnabled(executionControl.isExecutionCanceled());
-			pauseButton.setEnabled(!executionControl.isExecutionPaused() && !executionControl.isExecutionCanceled());
+	private void updateButtons() {
+		if (executionControl != null) {
+			startStrategyButton.setEnabled(executionControl
+					.isExecutionCanceled());
+			pauseButton.setEnabled(!executionControl.isExecutionPaused()
+					&& !executionControl.isExecutionCanceled());
 			cancelButton.setEnabled(!executionControl.isExecutionCanceled());
 			continueButton.setEnabled(executionControl.isExecutionPaused());
 		}
 	}
 
-	private void resetButtons(){
-        startStrategyButton.setEnabled(true);
-        pauseButton.setEnabled(false);
-        continueButton.setEnabled(false);
-        cancelButton.setEnabled(false);
+	private void resetButtons() {
+		startStrategyButton.setEnabled(true);
+		pauseButton.setEnabled(false);
+		continueButton.setEnabled(false);
+		cancelButton.setEnabled(false);
 	}
-	
-    private void removecurrentChartPanel(){
-		if(this.currentChartPanel != null){
+
+	private void removecurrentChartPanel() {
+		if (this.currentChartPanel != null) {
 			try {
 				SwingUtilities.invokeAndWait(new Runnable() {
 					@Override
 					public void run() {
-						GUIModePlBalanceEquity.this.getContentPane().remove(GUIModePlBalanceEquity.this.currentChartPanel);
+						GUIModePlBalanceEquity.this.getContentPane().remove(
+								GUIModePlBalanceEquity.this.currentChartPanel);
 						GUIModePlBalanceEquity.this.getContentPane().repaint();
 					}
-				});				
+				});
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
 			}
 		}
-    }
+	}
 
-	public void showChartFrame(){
+	public void showChartFrame() {
 		setSize(frameWidth, frameHeight);
 		centerFrame();
 		addControlPanel();
 		setVisible(true);
 	}
-    
-    public static void main(String[] args) throws Exception {
-    	GUIModePlBalanceEquity testerMainGUI = new GUIModePlBalanceEquity();
-    	testerMainGUI.showChartFrame();
-    }
+
+	public static void main(String[] args) throws Exception {
+		GUIModePlBalanceEquity testerMainGUI = new GUIModePlBalanceEquity();
+		testerMainGUI.showChartFrame();
+	}
 }
