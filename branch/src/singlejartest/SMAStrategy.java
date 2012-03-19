@@ -90,7 +90,7 @@ public class SMAStrategy implements IStrategy {
 		if (isFilterhey(currBar.getTime())) {
 			return;
 		}
-		List<IBar> bars = history.getBars(instrument, Period.FIFTEEN_MINS, OfferSide.BID, indicatorFilter,10,prevBar.getTime(),0);
+		List<IBar> bars = history.getBars(instrument, Period.FIFTEEN_MINS, OfferSide.BID, indicatorFilter,11,prevBar.getTime(),0);
 		
 		/*
 		 * factory = chart.getChartObjectFactory(); VLine =

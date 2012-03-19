@@ -9,6 +9,9 @@ import com.tictactec.ta.lib.MInteger;
 import com.tictactec.ta.lib.RangeType;
 import com.tictactec.ta.lib.RetCode;
 
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+
 public class CandlePattern {
 	private double input[];
     private int inputInt[];
@@ -23,6 +26,8 @@ public class CandlePattern {
     private RetCode retCode;
     private Core lib;
     private int lookback;
+    private static final Logger LOGGER = LoggerFactory
+			.getLogger(CandlePattern.class);
     
     public CandlePattern() {
         // Create the library (typically done only once).
@@ -43,9 +48,12 @@ public class CandlePattern {
     
     public boolean isMarubozu(List<IBar> bars)
     {
-    	lib.SetCandleSettings(CandleSettingType.BodyLong,RangeType.RealBody, 10, 2.0);
-    	retCode = lib.cdlMarubozu(0,16,bars.getOpen(),bar.getHigh(),bar.getLow(),bar.getClose(),outBegIdx,outNbElement,outputInt);
-        lib.cdlBeltHoldLookback();
+    	lib.SetCandleSettings(CandleSettingType.BodyLong,RangeType.RealBody, 10, 2.5);
+    	retCode = lib.cdlMarubozu(0,10,open,high,low,close,outBegIdx,outNbElement,outputInt);
+        if(retCode!=RetCode.Success){
+        	LOGGER.info("Failed: "+retCode);
+        	return false;
+        }
         return true;
     }
     
@@ -56,10 +64,15 @@ public class CandlePattern {
     
     public boolean BarsToOHLC(List<IBar> bars)
     {
+    	int i=0;
     	for (IBar bar : bars) {
-    		open. bar.getOpen();
+    		open[i]=bar.getOpen();
+    		high[i]=bar.getHigh();
+    		low[i]=bar.getLow();
+    		close[i]=bar.getClose();
+    		i++;
     	}
-    	return false;
+    	return true;
     }
     
 
