@@ -54,7 +54,9 @@ public class CandlePattern {
     
     public RetCode addMarubozu(List<IBar> MaruLists,List<IBar> bars)
     {
-    	lib.SetCandleSettings(CandleSettingType.BodyLong,RangeType.RealBody, 10, 2);
+    	lib.SetCandleSettings(CandleSettingType.BodyLong,RangeType.RealBody, 10, 3);
+    	lib.SetCandleSettings(CandleSettingType.ShadowVeryShort,RangeType.RealBody, 10, 0.3);
+    	BarsToOHLC(bars);
     	retCode = lib.cdlMarubozu(0,bars.size()-1,open,high,low,close,outBegIdx,outNbElement,outputInt);
         if(retCode!=RetCode.Success){
 //        	LOGGER.error("Failed: "+retCode);
@@ -62,12 +64,12 @@ public class CandlePattern {
         }
         else 
         {
-        	if(outputInt[bars.size()-1]==100) {
+        	if(outputInt[bars.size()-1-10]==100) {
         		MaruLists.add(bars.get(bars.size()-1));
         		return retCode;
         	}
         		
-        	else if (outputInt[bars.size()-1]==-100){
+        	else if (outputInt[bars.size()-1-10]==-100){
         		MaruLists.add(bars.get(bars.size()-1));
         		return retCode;
         	}

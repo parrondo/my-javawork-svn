@@ -126,7 +126,7 @@ public class GUIModePlBalanceEquity extends JFrame implements
 			feedDescriptor.setDataType(DataType.TIME_PERIOD_AGGREGATION);
 			feedDescriptor.setOfferSide(OfferSide.BID);
 			feedDescriptor.setInstrument(Instrument.EURUSD);
-			feedDescriptor.setPeriod(Period.ONE_HOUR);
+			feedDescriptor.setPeriod(Period.FIFTEEN_MINS);
 			feedDescriptor.setFilter(Filter.WEEKENDS);
 			chartPanels.get(chart).getTesterChartController()
 					.setFeedDescriptor(feedDescriptor);

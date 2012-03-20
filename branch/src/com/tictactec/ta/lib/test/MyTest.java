@@ -23,7 +23,7 @@ public class MyTest {
 	static public double[] BeltHoldOpenin = new double[] {3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19};
 	static public double[] BeltHoldHighin = new double[] {5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,23.21};
 	static public double[] BeltHoldLowin = new double[]  {3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,18.82};
-	static public double[] BeltHoldClosein = new double[]{5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,23.00};
+	static public double[] BeltHoldClosein = new double[]{5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,23.10};
 	
 	public void test()
     {

@@ -83,7 +83,7 @@ public class SMAStrategy implements IStrategy {
 
 	public void onBar(Instrument instrument, Period period, IBar askBar,
 			IBar bidBar) throws JFException {
-		if (!instrument.equals(selectedInstrument)) {
+		if (!instrument.equals(selectedInstrument)||!period.equals(Period.FIFTEEN_MINS)) {
 			return;
 		}
 		Date prevBarTime = new Date();
@@ -108,7 +108,8 @@ public class SMAStrategy implements IStrategy {
 		}
 		if (!MarubozuLists.isEmpty()) {
 			if (MarubozuLists.get(MarubozuLists.size() - 1).getTime() == prevBar.getTime())
-				drawshortLine(prevBar);
+//				drawshortLine(prevBar);
+				drawVLine(prevBar);
 		}
 
 		MInteger outBegIdx = new MInteger();
@@ -204,11 +205,19 @@ public class SMAStrategy implements IStrategy {
 	 */
 
 	protected void drawshortLine(IBar bar) {
-
-		shortLine = factory.createShortLine(new Date(bar.getTime()).toString());
-		shortLine.setTime(0, bar.getTime());
-		shortLine.setPrice(10, bar.getHigh());
+		shortLine = factory.createShortLine(new Date(bar.getTime()).toString(),bar.getTime(),
+				bar.getHigh()+0.0006,bar.getTime(),bar.getHigh()+0.0020);
+//		shortLine = factory.createShortLine(new Date(bar.getTime()).toString());
+//		shortLine.setTime(0, bar.getTime());
+//		shortLine.setPrice(0, bar.getHigh());
 		chart.addToMainChart(shortLine);
+	}
+	
+	protected void drawVLine(IBar bar) {
+		VLine = factory.createVerticalLine(new Date(bar.getTime()).toString());
+		VLine.setTime(0, bar.getTime());
+//		shortLine.setPrice(0, bar.getHigh());
+		chart.addToMainChart(VLine);
 	}
 	
 	public void printMarubozu()
