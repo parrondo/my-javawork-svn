@@ -46,15 +46,35 @@ public class CandlePattern {
         outNbElement = new MInteger();
     }
     
-    public boolean isMarubozu(List<IBar> bars)
+    public RetCode addMarubozu(List<IBar> MaruLists,List<IBar> bars)
     {
     	lib.SetCandleSettings(CandleSettingType.BodyLong,RangeType.RealBody, 10, 2.5);
-    	retCode = lib.cdlMarubozu(0,10,open,high,low,close,outBegIdx,outNbElement,outputInt);
+    	retCode = lib.cdlMarubozu(0,bars.size()-1,open,high,low,close,outBegIdx,outNbElement,outputInt);
         if(retCode!=RetCode.Success){
-        	LOGGER.info("Failed: "+retCode);
-        	return false;
+//        	LOGGER.error("Failed: "+retCode);
+        	return retCode;
         }
-        return true;
+        else 
+        {
+        	if(outputInt[bars.size()-1]==100) {
+        		MaruLists.add(bars.get(bars.size()-1));
+        		return retCode;
+        	}
+        		
+        	else if (outputInt[bars.size()-1]==-100){
+        		MaruLists.add(bars.get(bars.size()-1));
+        		return retCode;
+        	}
+        	
+        	else if  (outputInt[bars.size()-1]==0){
+        		return retCode;
+        	}
+        	else{
+  //      		LOGGER.error("unknown value");
+        		return retCode;
+        	}
+        }
+       
     }
     
     public boolean isMarubozuBreak()

@@ -12,6 +12,7 @@ import java.text.*;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
+import com.sun.org.apache.xml.internal.serializer.ElemDesc;
 import com.tictactec.ta.lib.*;
 
 public class SMAStrategy implements IStrategy {
@@ -27,11 +28,15 @@ public class SMAStrategy implements IStrategy {
 	private double[] filteredSma5;
 	private IOrder order = null;
 	private IVerticalLineChartObject VLine;
+	private IShortLineChartObject shortLine;
 	private IChartObjectFactory factory;
 	private int linecount = 0;
 	private Core lib = new Core();
 	private IBar Marubozu = null;
-	private List<IBar> MarubozuLists;
+	private ArrayList<IBar> MarubozuLists;
+	private CandlePattern cdlPattern;
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(SMAStrategy.class);
 
 	@Configurable("Instrument")
 	public Instrument selectedInstrument = Instrument.EURUSD;
@@ -47,6 +52,9 @@ public class SMAStrategy implements IStrategy {
 		this.history = context.getHistory();
 		this.indicators = context.getIndicators();
 		this.chart = context.getChart(Instrument.EURUSD);
+		factory = chart.getChartObjectFactory();
+		MarubozuLists = new ArrayList<IBar>();
+		cdlPattern = new CandlePattern();
 	}
 
 	public void onAccount(IAccount account) throws JFException {
@@ -90,16 +98,21 @@ public class SMAStrategy implements IStrategy {
 		if (isFilterhey(currBar.getTime())) {
 			return;
 		}
-		List<IBar> bars = history.getBars(instrument, Period.FIFTEEN_MINS, OfferSide.BID, indicatorFilter,11,prevBar.getTime(),0);
-		
-		/*
-		 * factory = chart.getChartObjectFactory(); VLine =
-		 * factory.createVerticalLine("VerticalLine"+linecount); linecount++;
-		 * VLine.setTime(0,currBar.getTime()); chart.addToMainChart(VLine);
-		 * 
-		 * MInteger outBegIdx = new MInteger(); MInteger outNbElement = new
-		 * MInteger(); int[] output = new int[100];
-		 */
+		List<IBar> bars = history.getBars(instrument, Period.FIFTEEN_MINS,
+				OfferSide.BID, indicatorFilter, 10 + 1, prevBar.getTime(), 0);
+		RetCode retCode = cdlPattern.addMarubozu(MarubozuLists, bars);
+		if (retCode != RetCode.Success) {
+			LOGGER.error("Failed: " + retCode);
+			return;
+		}
+		if (!MarubozuLists.isEmpty()) {
+			if (MarubozuLists.get(MarubozuLists.size() - 1).getTime() == prevBar.getTime())
+				drawshortLine(prevBar);
+		}
+
+		MInteger outBegIdx = new MInteger();
+		MInteger outNbElement = new MInteger();
+		int[] output = new int[100];
 
 		filteredSmma30 = indicators.smma(instrument, selectedPeriod,
 				OfferSide.BID, AppliedPrice.CLOSE, 30, indicatorFilter, 2,
@@ -110,8 +123,6 @@ public class SMAStrategy implements IStrategy {
 		filteredSma5 = indicators.sma(instrument, selectedPeriod,
 				OfferSide.BID, AppliedPrice.CLOSE, 5, indicatorFilter, 2,
 				prevBar.getTime(), 0);
-		
-		
 
 		// SMA10 crossover SMA90 from UP to DOWN ÏÂ´©
 		if ((filteredSmma10[1] < filteredSmma10[0])
@@ -160,8 +171,7 @@ public class SMAStrategy implements IStrategy {
 
 		}
 	}
-	
-	
+
 	protected String getLabel(Instrument instrument) {
 		String label = instrument.name();
 		label = label + (counter++);
@@ -191,6 +201,14 @@ public class SMAStrategy implements IStrategy {
 	 * 
 	 * }
 	 */
+
+	protected void drawshortLine(IBar bar) {
+
+		shortLine = factory.createShortLine(new Date(bar.getTime()).toString());
+		shortLine.setTime(0, bar.getTime());
+		shortLine.setPrice(10, bar.getHigh());
+		chart.addToMainChart(shortLine);
+	}
 
 	protected boolean isFilterhey(long time) {
 		int hour;
