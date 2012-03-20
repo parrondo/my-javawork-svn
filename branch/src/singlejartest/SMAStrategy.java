@@ -74,6 +74,7 @@ public class SMAStrategy implements IStrategy {
 		for (IOrder order : engine.getOrders()) {
 			engine.getOrder(order.getLabel()).close();
 		}
+		printMarubozu();
 	}
 
 	public void onTick(Instrument instrument, ITick tick) throws JFException {
@@ -209,6 +210,18 @@ public class SMAStrategy implements IStrategy {
 		shortLine.setPrice(10, bar.getHigh());
 		chart.addToMainChart(shortLine);
 	}
+	
+	public void printMarubozu()
+	{
+		if(MarubozuLists.isEmpty()) {
+			print("The Marub is empty");
+			return;
+		}
+		for(IBar bar:MarubozuLists)
+		{
+			print("The Marub is at:" +bar.getTime());
+		}
+	}
 
 	protected boolean isFilterhey(long time) {
 		int hour;
@@ -222,18 +235,18 @@ public class SMAStrategy implements IStrategy {
 			hour = cal.get(GregorianCalendar.HOUR_OF_DAY);
 
 			if (hour >= 22) {
-				print(sdf.format(currBarTime) + " filterd OK");
+//				print(sdf.format(currBarTime) + " filterd OK");
 				return true;
 			} else
 				return false;
 
 		} else if (cal.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SATURDAY) {
-			print(sdf.format(currBarTime) + " filterd OK");
+//			print(sdf.format(currBarTime) + " filterd OK");
 			return true;
 		} else if (cal.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SUNDAY) {
 			hour = cal.get(GregorianCalendar.HOUR_OF_DAY);
 			if (hour < 22) {
-				print(sdf.format(currBarTime) + " filterd OK");
+//				print(sdf.format(currBarTime) + " filterd OK");
 				return true;
 			} else
 				return false;

@@ -8,6 +8,7 @@ import com.tictactec.ta.lib.Core;
 import com.tictactec.ta.lib.MInteger;
 import com.tictactec.ta.lib.RangeType;
 import com.tictactec.ta.lib.RetCode;
+//import com.tictactec.ta.lib.test.MyTest;
 
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
@@ -29,6 +30,11 @@ public class CandlePattern {
     private static final Logger LOGGER = LoggerFactory
 			.getLogger(CandlePattern.class);
     
+    static public double[] BeltHoldOpenin = new double[] {3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19};
+	static public double[] BeltHoldHighin = new double[] {5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,23.21};
+	static public double[] BeltHoldLowin = new double[]  {3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,18.82};
+	static public double[] BeltHoldClosein = new double[]{5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,23.00};
+    
     public CandlePattern() {
         // Create the library (typically done only once).
         lib = new Core();
@@ -48,7 +54,7 @@ public class CandlePattern {
     
     public RetCode addMarubozu(List<IBar> MaruLists,List<IBar> bars)
     {
-    	lib.SetCandleSettings(CandleSettingType.BodyLong,RangeType.RealBody, 10, 2.5);
+    	lib.SetCandleSettings(CandleSettingType.BodyLong,RangeType.RealBody, 10, 2);
     	retCode = lib.cdlMarubozu(0,bars.size()-1,open,high,low,close,outBegIdx,outNbElement,outputInt);
         if(retCode!=RetCode.Success){
 //        	LOGGER.error("Failed: "+retCode);
@@ -94,6 +100,14 @@ public class CandlePattern {
     	}
     	return true;
     }
+    public static void main(String[] args) throws Exception {
+//		MyTest mytest=new MyTest();
+//		mytest.test();
+//		mytest.BeltHoldtest();
+//		mytest.cdl2CrowsTest();
+//		mytest.DarkCloudCoverTest();
+//		mytest.cdlMarubozuTest();
+	}
     
 
 }
