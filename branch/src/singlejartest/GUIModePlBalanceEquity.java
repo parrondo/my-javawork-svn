@@ -29,6 +29,7 @@
  */
 package singlejartest;
 
+import charts.test.*;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Toolkit;
@@ -215,7 +216,7 @@ public class GUIModePlBalanceEquity extends JFrame implements
 				"MM/dd/yyyy HH:mm:ss");
 		dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 
-		Date dateFrom = dateFormat.parse("01/5/2012 00:00:00");
+		Date dateFrom = dateFormat.parse("01/11/2012 00:00:00");
 		Date dateTo = dateFormat.parse("01/12/2012 00:00:00");
 		client.setDataInterval(DataLoadingMethod.ALL_TICKS, dateFrom.getTime(),
 				dateTo.getTime());
@@ -268,7 +269,7 @@ public class GUIModePlBalanceEquity extends JFrame implements
 		 * client.startStrategy( new SMAStrategy() );
 		 */
 
-		client.startStrategy(new SMAStrategy(), new LoadingProgressListener() {
+		client.startStrategy(new InteractiveRectangleDrawer(), new LoadingProgressListener() {
 			@Override
 			public void dataLoaded(long startTime, long endTime,
 					long currentTime, String information) {
