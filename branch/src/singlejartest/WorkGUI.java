@@ -50,11 +50,15 @@ import javax.swing.Action;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import org.slf4j.Logger;
@@ -95,7 +99,7 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 
 	private final int frameWidth = 1000;
 	private final int frameHeight = 600;
-	private final int controlPanelHeight = 40;
+	private final int controlPanelHeight = 80;
 
 	private JPanel currentChartPanel = null;
 	private ITesterExecutionControl executionControl = null;
@@ -432,13 +436,19 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 		});
 		controlPanel.add(AddVerticalButton);
 
+		final JTextField textField = new JTextField(8);
+		final JPasswordField passwordField = new JPasswordField(8);
+		controlPanel.add(new JLabel("User name: ", SwingConstants.RIGHT));
+		controlPanel.add(textField);
+		controlPanel.add(new JLabel("Password: ", SwingConstants.RIGHT));
+		controlPanel.add(passwordField);
+
 		JMenu fileMenu = new JMenu("File");
 		fileMenu.add(new TestAction("New"));
 		JMenuItem openItem = fileMenu.add(new TestAction("Open"));
 		openItem.setAccelerator(KeyStroke.getKeyStroke("ctrl O"));
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
-
 		menuBar.add(fileMenu);
 
 		controlPanel.add(startStrategyButton);
