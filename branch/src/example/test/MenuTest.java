@@ -1,3 +1,5 @@
+package example.test;
+
 import java.awt.EventQueue;
 import java.awt.event.*;
 import javax.swing.*;

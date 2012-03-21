@@ -45,10 +45,16 @@ import java.util.concurrent.Future;
 import java.text.*;
 import java.util.*;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 import org.slf4j.Logger;
@@ -83,10 +89,9 @@ import com.dukascopy.api.drawings.*;
  * a strategy in GUI mode
  */
 @SuppressWarnings("serial")
-public class GUIModePlBalanceEquity extends JFrame implements
-		ITesterUserInterface, ITesterExecution {
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(GUIModePlBalanceEquity.class);
+public class WorkGUI extends JFrame implements ITesterUserInterface,
+		ITesterExecution {
+	private static final Logger LOGGER = LoggerFactory.getLogger(WorkGUI.class);
 
 	private final int frameWidth = 1000;
 	private final int frameHeight = 600;
@@ -109,7 +114,7 @@ public class GUIModePlBalanceEquity extends JFrame implements
 	// password
 	private static String password = "uTbuN";
 
-	public GUIModePlBalanceEquity() {
+	public WorkGUI() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(
 				new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
@@ -269,23 +274,24 @@ public class GUIModePlBalanceEquity extends JFrame implements
 		 * client.startStrategy( new SMAStrategy() );
 		 */
 
-		client.startStrategy(new InteractiveRectangleDrawer(), new LoadingProgressListener() {
-			@Override
-			public void dataLoaded(long startTime, long endTime,
-					long currentTime, String information) {
-				LOGGER.info(information);
-			}
+		client.startStrategy(new InteractiveRectangleDrawer(),
+				new LoadingProgressListener() {
+					@Override
+					public void dataLoaded(long startTime, long endTime,
+							long currentTime, String information) {
+						LOGGER.info(information);
+					}
 
-			@Override
-			public void loadingFinished(boolean allDataLoaded, long startTime,
-					long endTime, long currentTime) {
-			}
+					@Override
+					public void loadingFinished(boolean allDataLoaded,
+							long startTime, long endTime, long currentTime) {
+					}
 
-			@Override
-			public boolean stopJob() {
-				return false;
-			}
-		}, visualModeParametersBean, this, this);
+					@Override
+					public boolean stopJob() {
+						return false;
+					}
+				}, visualModeParametersBean, this, this);
 
 		// now it's running
 	}
@@ -298,8 +304,8 @@ public class GUIModePlBalanceEquity extends JFrame implements
 		Dimension screenSize = tk.getScreenSize();
 		int screenHeight = screenSize.height;
 		int screenWidth = screenSize.width;
-		setSize(screenWidth / 2, screenHeight / 2);
-		setLocation(screenWidth / 4, screenHeight / 4);
+		setSize(screenWidth / 4 * 3, screenHeight / 4 * 3);
+		setLocation(screenWidth / 6, screenHeight / 6);
 	}
 
 	/**
@@ -417,6 +423,24 @@ public class GUIModePlBalanceEquity extends JFrame implements
 		});
 		controlPanel.add(addIndicatorsButton);
 
+		JButton AddVerticalButton = new JButton("Add Vertical Line");
+		AddVerticalButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				chartController.activateVerticalLine();
+			}
+		});
+		controlPanel.add(AddVerticalButton);
+
+		JMenu fileMenu = new JMenu("File");
+		fileMenu.add(new TestAction("New"));
+		JMenuItem openItem = fileMenu.add(new TestAction("Open"));
+		openItem.setAccelerator(KeyStroke.getKeyStroke("ctrl O"));
+		JMenuBar menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+
+		menuBar.add(fileMenu);
+
 		controlPanel.add(startStrategyButton);
 		controlPanel.add(pauseButton);
 		controlPanel.add(continueButton);
@@ -452,9 +476,9 @@ public class GUIModePlBalanceEquity extends JFrame implements
 				SwingUtilities.invokeAndWait(new Runnable() {
 					@Override
 					public void run() {
-						GUIModePlBalanceEquity.this.getContentPane().remove(
-								GUIModePlBalanceEquity.this.currentChartPanel);
-						GUIModePlBalanceEquity.this.getContentPane().repaint();
+						WorkGUI.this.getContentPane().remove(
+								WorkGUI.this.currentChartPanel);
+						WorkGUI.this.getContentPane().repaint();
 					}
 				});
 			} catch (Exception e) {
@@ -464,6 +488,7 @@ public class GUIModePlBalanceEquity extends JFrame implements
 	}
 
 	public void showChartFrame() {
+		setTitle("WorkGUI");
 		setSize(frameWidth, frameHeight);
 		centerFrame();
 		addControlPanel();
@@ -471,7 +496,17 @@ public class GUIModePlBalanceEquity extends JFrame implements
 	}
 
 	public static void main(String[] args) throws Exception {
-		GUIModePlBalanceEquity testerMainGUI = new GUIModePlBalanceEquity();
+		WorkGUI testerMainGUI = new WorkGUI();
 		testerMainGUI.showChartFrame();
+	}
+}
+
+class TestAction extends AbstractAction {
+	public TestAction(String name) {
+		super(name);
+	}
+
+	public void actionPerformed(ActionEvent event) {
+		System.out.println(getValue(Action.NAME) + " selected.");
 	}
 }
