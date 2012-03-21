@@ -1,3 +1,4 @@
+package example.MyClassLoader;
 import java.util.*;
 import java.io.*;
 
@@ -43,7 +44,7 @@ class CustomCL extends ClassLoader {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return defineClass(name, raw, 0, raw.length);
+		return defineClass("example.MyClassLoader."+name, raw, 0, raw.length);
 	}
 
 	protected Class loadClass(String name, boolean resolve)
