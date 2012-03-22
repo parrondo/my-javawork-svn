@@ -23,7 +23,7 @@ public class InteractiveRectangleDrawer implements IStrategy {
 	private Instrument instrument = Instrument.EURUSD;
 	private Period period = Period.TEN_SECS;
 	
-	public void setInstance(ChartObjectListener instance)
+	public void setInstance(MyChartObjectAdapter instance)
 	{
 		this.ichartobjectlistener=instance;
 	}
@@ -61,16 +61,6 @@ public class InteractiveRectangleDrawer implements IStrategy {
 		VLine = factory.createVerticalLine(getKey("Vline"));
 		VLine.setTime(0, prevBar.getTime());
 
-		try {
-			CustomCL cl = new CustomCL("bin",
-					new String[] { "charts.test.InteractiveRectangleDrawer$MyChartObjectAdapter" });
-			Class cls = cl.loadClass("charts.test.InteractiveRectangleDrawer$MyChartObjectAdapter");
-			 ichartobjectlistener = (ChartObjectListener) cls
-					.newInstance();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-
 		VLine.setChartObjectListener(ichartobjectlistener);
 		chart.addToMainChart(VLine);
 		addToChart();
@@ -98,7 +88,8 @@ public class InteractiveRectangleDrawer implements IStrategy {
 		chart.addToMainChartUnlocked(label);
 	}
 
-	class MyChartObjectAdapter extends ChartObjectAdapter {
+public	class MyChartObjectAdapter extends ChartObjectAdapter {
+		
 		@Override
 		public void deleted(ChartObjectEvent e) {
 			print("deleted " + VLine.getKey());

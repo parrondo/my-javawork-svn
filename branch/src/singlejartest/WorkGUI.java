@@ -44,6 +44,7 @@ import java.util.concurrent.Future;
 
 import java.text.*;
 import java.util.*;
+import java.lang.reflect.*;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -64,10 +65,7 @@ import javax.swing.SwingUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.dukascopy.api.Filter;
-import com.dukascopy.api.IChart;
-import com.dukascopy.api.Instrument;
-import com.dukascopy.api.LoadingProgressListener;
+import com.dukascopy.api.*;
 import com.dukascopy.api.system.ISystemListener;
 import com.dukascopy.api.system.ITesterClient;
 import com.dukascopy.api.system.TesterFactory;
@@ -286,9 +284,22 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 		try { 
 //			CustomCL cl = new CustomCL("bin\\singlejartest", new String[]{"SMAStrategy"}); 
 //	        Class cls = cl.loadClass("singlejartest.SMAStrategy"); 
-			CustomCL cl = new CustomCL("bin", new String[]{"charts.test.InteractiveRectangleDrawer"}); 
-	        Class cls = cl.loadClass("charts.test.InteractiveRectangleDrawer"); 
-	         strategy = (IStrategy)cls.newInstance(); 
+			CustomCL cl = new CustomCL("bin", new String[]{"charts.test.InteractiveRectangleDrawer",
+					"charts.test.InteractiveRectangleDrawer$MyChartObjectAdapter"}); 
+	        Class cls1 = cl.loadClass("charts.test.InteractiveRectangleDrawer"); 
+	        strategy = (IStrategy)cls1.newInstance(); 
+	       		
+	        Class cls2 = cl.loadClass("charts.test.InteractiveRectangleDrawer$MyChartObjectAdapter");       
+//	        Method method= cls1.getMethod("setInstance");
+//	        method.invoke(strategy,strategy );
+	        
+
+	        ChartObjectListener ilisterner=( ChartObjectListener )cls2.getDeclaredConstructors()[0].newInstance(strategy);
+//	        ChartObjectListener ilisterner=( ChartObjectListener )cls2.newInstance(); 
+	        Method method= cls1.getMethod("setInstance",cls2);
+	        method.invoke(strategy,ilisterner );
+	        
+	                
 	    } catch(Exception ex) { 
 	        ex.printStackTrace(); 
 	    } 
