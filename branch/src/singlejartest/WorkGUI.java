@@ -86,6 +86,7 @@ import com.dukascopy.api.system.ITesterClient.DataLoadingMethod;
 import com.dukascopy.api.system.ITesterClient.InterpolationMethod;
 import com.dukascopy.api.drawings.*;
 import com.dukascopy.api.IStrategy;
+import com.sun.org.apache.bcel.internal.generic.NEW;
 
 import example.test.*;
 
@@ -101,7 +102,9 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 	private final int frameWidth = 1000;
 	private final int frameHeight = 600;
 	private final int controlPanelHeight = 80;
-
+	private List<IChartObject> chartobjlist= null;
+	private List<IChartObject> TimerMarkerlist= new ArrayList<IChartObject>();
+	private IChart chart = null;
 	private JPanel currentChartPanel = null;
 	private ITesterExecutionControl executionControl = null;
 	private ITesterChartController chartController;
@@ -130,7 +133,7 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 	public void setChartPanels(Map<IChart, ITesterGui> chartPanels) {
 		if (chartPanels != null && chartPanels.size() > 0) {
 
-			IChart chart = chartPanels.keySet().iterator().next();
+			 chart = chartPanels.keySet().iterator().next();
 
 			Instrument instrument = chart.getInstrument();
 
@@ -450,14 +453,36 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 		});
 		controlPanel.add(addIndicatorsButton);
 
-		JButton AddVerticalButton = new JButton("Add Vertical Line");
-		AddVerticalButton.addActionListener(new ActionListener() {
+		JButton CaluTime = new JButton("CaluTime");
+		CaluTime.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				chartController.activateVerticalLine();
+				chartobjlist=chart.getAll();
+				for(IChartObject charobj:chartobjlist){
+					if(charobj.getType()==IChart.Type.TIMEMARKER){
+						TimerMarkerlist.add(charobj);
+					}
+				}
+				if(TimerMarkerlist.size()!=2)
+				{
+					LOGGER.error("timerMarket must have 2");
+					TimerMarkerlist.clear();
+					return;
+				}
+				
+				TimerMarkerlist.clear();
 			}
 		});
-		controlPanel.add(AddVerticalButton);
+		controlPanel.add(CaluTime);
+		
+		JButton RectangleButton = new JButton("Add Rectangle");
+		RectangleButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				chartController.activateTimeMarker();
+			}
+		});
+		controlPanel.add(RectangleButton);
 
 		final JTextField textField = new JTextField(8);
 		final JPasswordField passwordField = new JPasswordField(8);
