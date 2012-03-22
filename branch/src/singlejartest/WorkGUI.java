@@ -87,6 +87,9 @@ import com.dukascopy.api.feed.IFeedDescriptor;
 import com.dukascopy.api.system.ITesterClient.DataLoadingMethod;
 import com.dukascopy.api.system.ITesterClient.InterpolationMethod;
 import com.dukascopy.api.drawings.*;
+import com.dukascopy.api.IStrategy;
+
+import example.test.*;
 
 /**
  * This small program demonstrates how to initialize Dukascopy tester and start
@@ -110,6 +113,7 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 	private JButton pauseButton = null;
 	private JButton continueButton = null;
 	private JButton cancelButton = null;
+	
 
 	// url of the DEMO jnlp
 	private static String jnlpUrl = "https://www.dukascopy.com/client/demo/jclient/jforex.jnlp";
@@ -159,6 +163,7 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 	public void startStrategy() throws Exception {
 		// get the instance of the IClient interface
 		final ITesterClient client = TesterFactory.getDefaultInstance();
+		IStrategy strategy = null;
 		// set the listener that will receive system events
 		client.setSystemListener(new ISystemListener() {
 			@Override
@@ -277,8 +282,18 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 		/*
 		 * client.startStrategy( new SMAStrategy() );
 		 */
+		
+		try { 
+//			CustomCL cl = new CustomCL("bin\\singlejartest", new String[]{"SMAStrategy"}); 
+//	        Class cls = cl.loadClass("singlejartest.SMAStrategy"); 
+			CustomCL cl = new CustomCL("bin", new String[]{"charts.test.InteractiveRectangleDrawer"}); 
+	        Class cls = cl.loadClass("charts.test.InteractiveRectangleDrawer"); 
+	         strategy = (IStrategy)cls.newInstance(); 
+	    } catch(Exception ex) { 
+	        ex.printStackTrace(); 
+	    } 
 
-		client.startStrategy(new InteractiveRectangleDrawer(),
+		client.startStrategy(strategy,
 				new LoadingProgressListener() {
 					@Override
 					public void dataLoaded(long startTime, long endTime,

@@ -2,7 +2,7 @@ package example.test;
 import java.util.*;
 import java.io.*;
 
-class CustomCL extends ClassLoader {
+public class CustomCL extends ClassLoader {
 
 	private String basedir; // 需要该类加载器直接加载的类文件的基目录
 	private HashSet dynaclazns; // 需要由该类加载器直接加载的类名
@@ -25,6 +25,9 @@ class CustomCL extends ClassLoader {
 		Class cls = null;
 		StringBuffer sb = new StringBuffer(basedir);
 		String classname = name.replace('.', File.separatorChar) + ".class";
+		
+//		String classname = name+".class";
+		
 		sb.append(File.separator + classname);
 		File classF = new File(sb.toString());
 		try {
@@ -44,7 +47,7 @@ class CustomCL extends ClassLoader {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return defineClass("example.MyClassLoader."+name, raw, 0, raw.length);
+		return defineClass(name, raw, 0, raw.length);
 	}
 
 	protected Class loadClass(String name, boolean resolve)

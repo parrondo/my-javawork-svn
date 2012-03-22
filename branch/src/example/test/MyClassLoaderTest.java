@@ -18,7 +18,7 @@ public class MyClassLoaderTest {
 class TimerTestTask extends TimerTask {
 
 	public void run() {
-		try {
+	/*try {
 			// 每次都创建出一个新的类加载器
 			CustomCL cl = new CustomCL("bin\\example\\MyClassLoader",
 					new String[] { "Foo" });
@@ -30,8 +30,18 @@ class TimerTestTask extends TimerTask {
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
-		}
+		}*/
 		// timer.cancel();
+		
+		try { 
+			CustomCL cl = new CustomCL("bin", new String[]{"example.test.Foo"}); 
+	        Class cls = cl.loadClass("example.test.Foo"); 
+	        IFoo foo = (IFoo)cls.newInstance(); 
+	        foo.sayHello(); 
+	    } catch(Exception ex) { 
+	        ex.printStackTrace(); 
+	    } 
+
 
 	}
 }

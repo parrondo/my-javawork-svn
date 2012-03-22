@@ -75,6 +75,8 @@ public class SMAStrategy implements IStrategy {
 			engine.getOrder(order.getLabel()).close();
 		}
 		printMarubozu();
+		print("version three");
+//		chart.addIndicator(indicators.getIndicator("ZIGZAG"));
 	}
 
 	public void onTick(Instrument instrument, ITick tick) throws JFException {
@@ -109,7 +111,8 @@ public class SMAStrategy implements IStrategy {
 		if (!MarubozuLists.isEmpty()) {
 			if (MarubozuLists.get(MarubozuLists.size() - 1).getTime() == prevBar.getTime())
 //				drawshortLine(prevBar);
-				drawVLine(prevBar);
+//				drawVLine(prevBar);
+				;
 		}
 
 		MInteger outBegIdx = new MInteger();

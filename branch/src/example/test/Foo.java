@@ -1,8 +1,10 @@
 package example.test;
 
-public class Foo{ 
+import com.dukascopy.api.IStrategy;
+
+public class Foo implements IFoo{ 
     public void sayHello() { 
-        System.out.println("hello world! (version three)"); 
+        System.out.println("hello world! (version two)"); 
     } 
 } 
  
