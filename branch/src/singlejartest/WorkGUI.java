@@ -284,15 +284,12 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 		try { 
 //			CustomCL cl = new CustomCL("bin\\singlejartest", new String[]{"SMAStrategy"}); 
 //	        Class cls = cl.loadClass("singlejartest.SMAStrategy"); 
-			CustomCL cl = new CustomCL("bin", new String[]{"charts.test.InteractiveRectangleDrawer",
-					"charts.test.InteractiveRectangleDrawer$MyChartObjectAdapter"}); 
-	        Class cls1 = cl.loadClass("charts.test.InteractiveRectangleDrawer"); 
+			CustomCL cl = new CustomCL("bin", new String[]{"singlejartest.SMAStrategy",
+					"singlejartest.SMAStrategy$MyChartObjectAdapter"}); 
+	        Class cls1 = cl.loadClass("singlejartest.SMAStrategy"); 
 	        strategy = (IStrategy)cls1.newInstance(); 
 	       		
-	        Class cls2 = cl.loadClass("charts.test.InteractiveRectangleDrawer$MyChartObjectAdapter");       
-//	        Method method= cls1.getMethod("setInstance");
-//	        method.invoke(strategy,strategy );
-	        
+	        Class cls2 = cl.loadClass("singlejartest.SMAStrategy$MyChartObjectAdapter");       
 
 	        ChartObjectListener ilisterner=( ChartObjectListener )cls2.getDeclaredConstructors()[0].newInstance(strategy);
 //	        ChartObjectListener ilisterner=( ChartObjectListener )cls2.newInstance(); 

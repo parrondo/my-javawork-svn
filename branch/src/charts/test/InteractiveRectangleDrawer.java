@@ -99,14 +99,23 @@ public	class MyChartObjectAdapter extends ChartObjectAdapter {
 
 		@Override
 		public void selected(ChartObjectEvent e) {
-			print("selected " + VLine.getKey());
+			print("selected OK  " + VLine.getKey());
 		}
 
 		@Override
 		public void moved(ChartObjectEvent e) {
 			// move the label to the middle of the rectangle
-			label.setPrice(0, getLabelPrice());
-			label.setTime(0, getLabelTime());
+//			label.setPrice(0, getLabelPrice());
+//			label.setTime(0, getLabelTime());
+		}
+		@Override
+		public void attrChanged(ChartObjectEvent e){
+			print("attrChanged OK");
+			
+		}
+		@Override
+		public void deselected(ChartObjectEvent e) {
+			print("deselected OK");
 		}
 
 	}

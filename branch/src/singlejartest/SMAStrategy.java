@@ -1,5 +1,7 @@
 package singlejartest;
 
+import charts.test.InteractiveRectangleDrawer.MyChartObjectAdapter;
+
 import com.dukascopy.api.*;
 import com.dukascopy.api.IEngine.OrderCommand;
 import com.dukascopy.api.IIndicators.AppliedPrice;
@@ -35,6 +37,7 @@ public class SMAStrategy implements IStrategy {
 	private IBar Marubozu = null;
 	private ArrayList<IBar> MarubozuLists;
 	private CandlePattern cdlPattern;
+	private ChartObjectListener ichartobjectlistener;
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(SMAStrategy.class);
 
@@ -44,7 +47,11 @@ public class SMAStrategy implements IStrategy {
 	public Period selectedPeriod = Period.FIFTEEN_MINS;
 	@Configurable("SMA filter")
 	public Filter indicatorFilter = Filter.WEEKENDS;
-
+	
+	public void setInstance(MyChartObjectAdapter instance)
+	{
+		this.ichartobjectlistener=instance;
+	}
 	public void onStart(IContext context) throws JFException {
 		this.context = context;
 		this.engine = context.getEngine();
@@ -264,6 +271,38 @@ public class SMAStrategy implements IStrategy {
 				return false;
 		} else {
 			return false;
+		}
+
+	}
+	
+public	class MyChartObjectAdapter extends ChartObjectAdapter {
+		
+		@Override
+		public void deleted(ChartObjectEvent e) {
+			print("deleted " + VLine.getKey());
+			// remove label as well
+//			chart.remove(label);
+		}
+
+		@Override
+		public void selected(ChartObjectEvent e) {
+			print("selected OK  " + VLine.getKey());
+		}
+
+		@Override
+		public void moved(ChartObjectEvent e) {
+			// move the label to the middle of the rectangle
+//			label.setPrice(0, getLabelPrice());
+//			label.setTime(0, getLabelTime());
+		}
+		@Override
+		public void attrChanged(ChartObjectEvent e){
+			print("attrChanged OK");
+			
+		}
+		@Override
+		public void deselected(ChartObjectEvent e) {
+			print("deselected OK");
 		}
 
 	}
