@@ -119,9 +119,9 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 	// url of the DEMO jnlp
 	private static String jnlpUrl = "https://www.dukascopy.com/client/demo/jclient/jforex.jnlp";
 	// user name
-	private static String userName = "DEMO2uTbuN";
+	private static String userName = "DEMO2gbZiW";
 	// password
-	private static String password = "uTbuN";
+	private static String password = "gbZiW";
 
 	public WorkGUI() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -472,7 +472,8 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 				}
 			Date starttime =new Date(TimerMarkerlist.get(0).getTime(0));
 			Date endtime=new Date(TimerMarkerlist.get(1).getTime(0));
-				LOGGER.info(starttime.toString(),endtime.toString());
+				LOGGER.info(endtime.toString());
+				LOGGER.info(starttime.toString());
 				TimerMarkerlist.clear();
 			}
 		});
