@@ -455,6 +455,7 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 
 		JButton CaluTime = new JButton("CaluTime");
 		CaluTime.addActionListener(new ActionListener() {
+//			long starttime, endtime;
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				chartobjlist=chart.getAll();
@@ -469,7 +470,9 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 					TimerMarkerlist.clear();
 					return;
 				}
-				
+			Date starttime =new Date(TimerMarkerlist.get(0).getTime(0));
+			Date endtime=new Date(TimerMarkerlist.get(1).getTime(0));
+				LOGGER.info(starttime.toString(),endtime.toString());
 				TimerMarkerlist.clear();
 			}
 		});
