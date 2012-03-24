@@ -3,9 +3,8 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry excluding="deploy/|doc/|doc/api/|doc/api/au/com/bytecode/opencsv/|doc/api/au/com/bytecode/opencsv/bean/|doc/api/resources/|doc/site/fml/|doc/site/resources/css/|lib/|target/" kind="src" path="opencsv-2.3"/>
 	<classpathentry kind="src" path="ta-lib"/>
-	<classpathentry kind="src" path="JFUtil/tested"/>
-	<classpathentry kind="src" path="JFUtil/test"/>
 	<classpathentry kind="src" path="JFUtil/src"/>
+	<classpathentry kind="src" path="JFUtil/test"/>
 	<classpathentry kind="lib" path="libs/DDS2-jClient-JForex-2.14.26.jar"/>
 	<classpathentry kind="lib" path="libs/JForex-API-2.6.60.jar" sourcepath="libs/JForex-API-2.6.60-sources.jar"/>
 	<classpathentry kind="lib" path="libs/DDS2-Connector-1.1.53.jar"/>
@@ -25,5 +24,6 @@
 	<classpathentry kind="lib" path="libs"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
+	<classpathentry kind="lib" path="opencsv-2.3/lib/junit-4.7.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
