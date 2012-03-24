@@ -1,3 +1,5 @@
+package examples;
+
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
 
@@ -23,7 +25,7 @@ limitations under the License.
 */
 public class AddressExample {
 
-	private static final String ADDRESS_FILE="examples/addresses.csv";
+	private static final String ADDRESS_FILE="opencsv-2.3/examples/addresses.csv";
 	
 	public static void main(String[] args) throws IOException {
 		

@@ -1,3 +1,5 @@
+package examples;
+
 import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
