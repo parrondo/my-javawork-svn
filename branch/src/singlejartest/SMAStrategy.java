@@ -20,7 +20,7 @@ import com.tictactec.ta.lib.*;
 public class SMAStrategy implements IStrategy {
 	private IEngine engine;
 	private IConsole console;
-	private IContext context;
+	private IContext context=null;
 	private IHistory history;
 	private IChart chart;
 	private IIndicators indicators;
@@ -51,6 +51,15 @@ public class SMAStrategy implements IStrategy {
 	public void setInstance(MyChartObjectAdapter instance)
 	{
 		this.ichartobjectlistener=instance;
+	}
+	
+	public IContext getContext(){
+		if(this.context!=null){
+			return this.context;
+		}
+		else {
+			return null;
+		}
 	}
 	public void onStart(IContext context) throws JFException {
 		this.context = context;

@@ -62,6 +62,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
+import org.eclipse.jdt.internal.compiler.ast.ThisReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,6 +78,7 @@ import com.dukascopy.api.system.tester.ITesterIndicatorsParameters;
 import com.dukascopy.api.system.tester.ITesterUserInterface;
 import com.dukascopy.api.system.tester.ITesterVisualModeParameters;
 
+import com.dukascopy.api.IHistory;
 import com.dukascopy.api.OfferSide;
 import com.dukascopy.api.DataType;
 import com.dukascopy.api.Period;
@@ -86,6 +88,8 @@ import com.dukascopy.api.system.ITesterClient.DataLoadingMethod;
 import com.dukascopy.api.system.ITesterClient.InterpolationMethod;
 import com.dukascopy.api.drawings.*;
 import com.dukascopy.api.IStrategy;
+import com.dukascopy.charts.persistence.ITheme.ChartElement;
+import com.dukascopy.dds2.greed.agent.Strategies;
 import com.sun.org.apache.bcel.internal.generic.NEW;
 
 import example.test.*;
@@ -102,8 +106,8 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 	private final int frameWidth = 1000;
 	private final int frameHeight = 600;
 	private final int controlPanelHeight = 80;
-	private List<IChartObject> chartobjlist= null;
-	private List<IChartObject> TimerMarkerlist= new ArrayList<IChartObject>();
+	private List<IChartObject> chartobjlist = null;
+	private List<IChartObject> TimerMarkerlist = new ArrayList<IChartObject>();
 	private IChart chart = null;
 	private JPanel currentChartPanel = null;
 	private ITesterExecutionControl executionControl = null;
@@ -114,7 +118,12 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 	private JButton pauseButton = null;
 	private JButton continueButton = null;
 	private JButton cancelButton = null;
-	
+
+	private CustomCL CLoaderStrategy = null;
+	private Class ClassStrategy = null;
+	private IStrategy strategy = null;
+	private IContext context = null;
+	private IHistory history = null;
 
 	// url of the DEMO jnlp
 	private static String jnlpUrl = "https://www.dukascopy.com/client/demo/jclient/jforex.jnlp";
@@ -133,7 +142,7 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 	public void setChartPanels(Map<IChart, ITesterGui> chartPanels) {
 		if (chartPanels != null && chartPanels.size() > 0) {
 
-			 chart = chartPanels.keySet().iterator().next();
+			chart = chartPanels.keySet().iterator().next();
 
 			Instrument instrument = chart.getInstrument();
 
@@ -164,7 +173,7 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 	public void startStrategy() throws Exception {
 		// get the instance of the IClient interface
 		final ITesterClient client = TesterFactory.getDefaultInstance();
-		IStrategy strategy = null;
+
 		// set the listener that will receive system events
 		client.setSystemListener(new ISystemListener() {
 			@Override
@@ -176,6 +185,29 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 			@Override
 			public void onStop(long processId) {
 				LOGGER.info("Strategy stopped: " + processId);
+				Method method = null;
+				try {
+					method = ClassStrategy.getMethod("getContext");
+				} catch (SecurityException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (NoSuchMethodException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				try {
+					context = (IContext) method.invoke(strategy);
+				} catch (IllegalArgumentException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IllegalAccessException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (InvocationTargetException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				LOGGER.info("Strategy stoped at startStrategy()");
 				resetButtons();
 
 				File reportFile = new File("C:\\report.html");
@@ -283,47 +315,47 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 		/*
 		 * client.startStrategy( new SMAStrategy() );
 		 */
-		
-		try { 
-//			CustomCL cl = new CustomCL("bin\\singlejartest", new String[]{"SMAStrategy"}); 
-//	        Class cls = cl.loadClass("singlejartest.SMAStrategy"); 
-			CustomCL cl = new CustomCL("bin", new String[]{"singlejartest.SMAStrategy",
-					"singlejartest.SMAStrategy$MyChartObjectAdapter"}); 
-	        Class cls1 = cl.loadClass("singlejartest.SMAStrategy"); 
-	        strategy = (IStrategy)cls1.newInstance(); 
-	       		
-	        Class cls2 = cl.loadClass("singlejartest.SMAStrategy$MyChartObjectAdapter");       
 
-	        ChartObjectListener ilisterner=( ChartObjectListener )cls2.getDeclaredConstructors()[0].newInstance(strategy);
-//	        ChartObjectListener ilisterner=( ChartObjectListener )cls2.newInstance(); 
-	        Method method= cls1.getMethod("setInstance",cls2);
-	        method.invoke(strategy,ilisterner );
-	        
-	                
-	    } catch(Exception ex) { 
-	        ex.printStackTrace(); 
-	    } 
+		try {
+			CLoaderStrategy = new CustomCL("bin", new String[] {
+					"singlejartest.SMAStrategy",
+					"singlejartest.SMAStrategy$MyChartObjectAdapter" });
+			ClassStrategy = CLoaderStrategy
+					.loadClass("singlejartest.SMAStrategy");
+			strategy = (IStrategy) ClassStrategy.newInstance();
 
-		client.startStrategy(strategy,
-				new LoadingProgressListener() {
-					@Override
-					public void dataLoaded(long startTime, long endTime,
-							long currentTime, String information) {
-						LOGGER.info(information);
-					}
+			Class cls2 = CLoaderStrategy
+					.loadClass("singlejartest.SMAStrategy$MyChartObjectAdapter");
 
-					@Override
-					public void loadingFinished(boolean allDataLoaded,
-							long startTime, long endTime, long currentTime) {
-					}
+			ChartObjectListener ilisterner = (ChartObjectListener) cls2
+					.getDeclaredConstructors()[0].newInstance(strategy);
+			Method method = ClassStrategy.getMethod("setInstance", cls2);
+			method.invoke(strategy, ilisterner);
 
-					@Override
-					public boolean stopJob() {
-						return false;
-					}
-				}, visualModeParametersBean, this, this);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		client.startStrategy(strategy, new LoadingProgressListener() {
+			@Override
+			public void dataLoaded(long startTime, long endTime,
+					long currentTime, String information) {
+				LOGGER.info(information);
+			}
+
+			@Override
+			public void loadingFinished(boolean allDataLoaded, long startTime,
+					long endTime, long currentTime) {
+			}
+
+			@Override
+			public boolean stopJob() {
+				return false;
+			}
+		}, visualModeParametersBean, this, this);
 
 		// now it's running
+
 	}
 
 	/**
@@ -385,11 +417,13 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 							LOGGER.error(e2.getMessage(), e2);
 							e2.printStackTrace();
 							resetButtons();
+
 						}
 					}
 				};
 				Thread t = new Thread(r);
 				t.start();
+
 			}
 		});
 
@@ -455,30 +489,43 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 
 		JButton CaluTime = new JButton("CaluTime");
 		CaluTime.addActionListener(new ActionListener() {
-//			long starttime, endtime;
+			// long starttime, endtime;
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				chartobjlist=chart.getAll();
-				for(IChartObject charobj:chartobjlist){
-					if(charobj.getType()==IChart.Type.TIMEMARKER){
+				chartobjlist = chart.getAll();
+				for (IChartObject charobj : chartobjlist) {
+					if (charobj.getType() == IChart.Type.TIMEMARKER) {
 						TimerMarkerlist.add(charobj);
 					}
 				}
-				if(TimerMarkerlist.size()!=2)
-				{
+				if (TimerMarkerlist.size() != 2) {
 					LOGGER.error("timerMarket must have 2");
 					TimerMarkerlist.clear();
 					return;
 				}
-			Date starttime =new Date(TimerMarkerlist.get(0).getTime(0));
-			Date endtime=new Date(TimerMarkerlist.get(1).getTime(0));
+				Date starttime = new Date(TimerMarkerlist.get(0).getTime(0));
+				Date endtime = new Date(TimerMarkerlist.get(1).getTime(0));
 				LOGGER.info(endtime.toString());
 				LOGGER.info(starttime.toString());
-				TimerMarkerlist.clear();
+				if (context == null) {
+					LOGGER.error("context 未初始化，计算完策略后再尝试。");
+					return;
+				}
+				WorkGUI.this.history = context.getHistory();
+				try {
+					List<IBar> bars = history.getBars(chart.getInstrument(),
+							chart.getSelectedPeriod(), chart
+									.getSelectedOfferSide(), TimerMarkerlist
+									.get(0).getTime(0), TimerMarkerlist.get(1)
+									.getTime(0));
+					TimerMarkerlist.clear();
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				}
 			}
 		});
 		controlPanel.add(CaluTime);
-		
+
 		JButton RectangleButton = new JButton("Add Rectangle");
 		RectangleButton.addActionListener(new ActionListener() {
 			@Override

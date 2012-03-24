@@ -27,6 +27,7 @@ public class InteractiveRectangleDrawer implements IStrategy {
 	{
 		this.ichartobjectlistener=instance;
 	}
+
 	public void onStart(IContext context) throws JFException {
 		this.console = context.getConsole();
 		this.history = context.getHistory();
