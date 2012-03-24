@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry excluding="deploy/|doc/|doc/api/|doc/api/au/com/bytecode/opencsv/|doc/api/au/com/bytecode/opencsv/bean/|doc/api/resources/|doc/site/fml/|doc/site/resources/css/|lib/|target/" kind="src" path="opencsv-2.3"/>
 	<classpathentry kind="lib" path="libs/DDS2-jClient-JForex-2.14.26.jar"/>
 	<classpathentry kind="lib" path="libs/JForex-API-2.6.60.jar" sourcepath="libs/JForex-API-2.6.60-sources.jar"/>
 	<classpathentry kind="lib" path="libs/DDS2-Connector-1.1.53.jar"/>
