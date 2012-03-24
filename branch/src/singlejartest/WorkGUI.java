@@ -29,8 +29,7 @@
  */
 package singlejartest;
 
-import au.com.bytecode.opencsv.CSVReader;
-import au.com.bytecode.opencsv.CSVWriter;
+
 import charts.test.*;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -93,6 +92,9 @@ import com.dukascopy.api.IStrategy;
 import com.dukascopy.charts.persistence.ITheme.ChartElement;
 import com.dukascopy.dds2.greed.agent.Strategies;
 import com.sun.org.apache.bcel.internal.generic.NEW;
+
+import au.com.bytecode.opencsv.CSVReader;
+import au.com.bytecode.opencsv.CSVWriter;
 
 import example.test.*;
 
