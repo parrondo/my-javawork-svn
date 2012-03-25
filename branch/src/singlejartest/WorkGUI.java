@@ -36,9 +36,10 @@ import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
+import java.io.*;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Future;
@@ -98,6 +99,7 @@ import au.com.bytecode.opencsv.CSVWriter;
 
 import example.test.*;
 
+
 /**
  * This small program demonstrates how to initialize Dukascopy tester and start
  * a strategy in GUI mode
@@ -129,6 +131,9 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 	private IContext context = null;
 	private IHistory history = null;
 
+	private SimpleDateFormat dateFormat = new SimpleDateFormat(
+			"yyyy.MM.dd HH:mm:ss");
+	private DecimalFormat priceFormat= new DecimalFormat("##.#####");
 	// url of the DEMO jnlp
 	private static String jnlpUrl = "https://www.dukascopy.com/client/demo/jclient/jforex.jnlp";
 	// user name
@@ -263,12 +268,9 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 		client.setInitialDeposit(Instrument.EURUSD.getSecondaryCurrency(),
 				50000);
 
-		final SimpleDateFormat dateFormat = new SimpleDateFormat(
-				"MM/dd/yyyy HH:mm:ss");
 		dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-
-		Date dateFrom = dateFormat.parse("01/11/2012 00:00:00");
-		Date dateTo = dateFormat.parse("01/16/2012 00:00:00");
+		Date dateFrom = dateFormat.parse("2012.01.11 00:00:00");
+		Date dateTo = dateFormat.parse("2012.01.16 00:00:00");
 		client.setDataInterval(DataLoadingMethod.ALL_TICKS, dateFrom.getTime(),
 				dateTo.getTime());
 		client.setDataInterval(Period.FIFTEEN_MINS, OfferSide.BID,
@@ -507,10 +509,21 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 					TimerMarkerlist.clear();
 					return;
 				}
-				Date starttime = new Date(TimerMarkerlist.get(0).getTime(0));
-				Date endtime = new Date(TimerMarkerlist.get(1).getTime(0));
-				LOGGER.info(endtime.toString());
-				LOGGER.info(starttime.toString());
+				Date starttime,endtime; 
+				long from ,to;
+				
+				if(TimerMarkerlist.get(0).getTime(0)<TimerMarkerlist.get(1).getTime(0)){
+					from=TimerMarkerlist.get(0).getTime(0);
+					to=TimerMarkerlist.get(1).getTime(0);
+				}
+				else {
+					from=TimerMarkerlist.get(1).getTime(0);
+					to=TimerMarkerlist.get(0).getTime(0);
+				}		
+				starttime=new Date(from);
+				endtime = new Date(to);
+				LOGGER.info(starttime.toString()+" TO "+endtime.toString());
+				
 				if (context == null) {
 					LOGGER.error("context 未初始化，计算完策略后再尝试。");
 					return;
@@ -519,9 +532,25 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 				try {
 					List<IBar> bars = history.getBars(chart.getInstrument(),
 							chart.getSelectedPeriod(), chart
-									.getSelectedOfferSide(), TimerMarkerlist
-									.get(0).getTime(0), TimerMarkerlist.get(1)
-									.getTime(0));
+									.getSelectedOfferSide(), from,to);
+					dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+					List<String[]> allElements=new ArrayList<String[]>();
+											
+					for (IBar bar:bars){
+						String [] line=new String[6];
+						line[0]=dateFormat.format(bar.getTime());
+						line[1]=priceFormat.format(bar.getOpen());
+						line[2]=priceFormat.format(bar.getHigh());
+						line[3]=priceFormat.format(bar.getLow());
+						line[4]= priceFormat.format(bar.getClose());
+						line[5]=priceFormat.format(bar.getVolume());
+						allElements.add(line);
+					}
+					Writer out= new BufferedWriter(new FileWriter("opencsv-2.3/examples/15Mdata.csv"));
+					CSVWriter writer = new CSVWriter(out);
+					writer.writeAll(allElements);
+					writer.close();
+				
 					TimerMarkerlist.clear();
 				} catch (Exception e2) {
 					e2.printStackTrace();
