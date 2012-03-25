@@ -98,7 +98,7 @@ public class MyTest {
         System.out.println(retCode);
 	}
 	
-	public void arrayTodouble(){
+	public void ListToarray(){
 		int i=0;
 		for(Double O:Open){
 			BeltHoldOpenin[i]=O;
@@ -144,7 +144,7 @@ public class MyTest {
 //		mytest.BeltHoldtest();
 //		mytest.cdl2CrowsTest();
 //		mytest.DarkCloudCoverTest();
-//		mytest.arrayTodouble();
+//		mytest.ListToarray();
 		mytest.copyCustom();
 		mytest.cdlMarubozuTest();
 	}
