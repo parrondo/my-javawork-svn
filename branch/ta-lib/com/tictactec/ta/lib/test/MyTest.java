@@ -9,6 +9,7 @@ import com.dukascopy.api.IBar;
 import com.sun.org.apache.bcel.internal.generic.NEW;
 import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 import com.tictactec.ta.lib.*;
+
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
 
@@ -94,8 +95,11 @@ public class MyTest {
         outNbElement = new MInteger();
         output = new int[200];
 //        lib.cdl2CrowsLookback( );
-        retCode = lib.cdlMarubozu(0,16,BeltHoldOpenin,BeltHoldHighin,BeltHoldLowin,BeltHoldClosein,outBegIdx,outNbElement,output);
+        lib.SetCandleSettings(CandleSettingType.BodyLong,RangeType.RealBody, 10, 3);
+    	lib.SetCandleSettings(CandleSettingType.ShadowVeryShort,RangeType.RealBody, 10, 4);
+        retCode = lib.cdlMarubozu(0,10,BeltHoldOpenin,BeltHoldHighin,BeltHoldLowin,BeltHoldClosein,outBegIdx,outNbElement,output);
         System.out.println(retCode);
+        System.out.println(output[0]);
 	}
 	
 	public void ListToarray(){
@@ -144,8 +148,8 @@ public class MyTest {
 //		mytest.BeltHoldtest();
 //		mytest.cdl2CrowsTest();
 //		mytest.DarkCloudCoverTest();
-//		mytest.ListToarray();
-		mytest.copyCustom();
+		mytest.ListToarray();
+//		mytest.copyCustom();
 		mytest.cdlMarubozuTest();
 	}
 

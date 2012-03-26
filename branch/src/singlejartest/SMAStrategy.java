@@ -31,6 +31,7 @@ public class SMAStrategy implements IStrategy {
 	private IOrder order = null;
 	private IVerticalLineChartObject VLine;
 	private IShortLineChartObject shortLine;
+	private ISignalUpChartObject UpSignal;
 	private IChartObjectFactory factory;
 	private int linecount = 0;
 	private Core lib = new Core();
@@ -125,10 +126,12 @@ public class SMAStrategy implements IStrategy {
 			return;
 		}
 		if (!MarubozuLists.isEmpty()) {
-			if (MarubozuLists.get(MarubozuLists.size() - 1).getTime() == prevBar.getTime())
+			if (MarubozuLists.get(MarubozuLists.size() - 1).getTime() == prevBar.getTime()){
 //				drawshortLine(prevBar);
 //				drawVLine(prevBar);
+				drawSignalUp(prevBar);
 				;
+			}
 		}
 
 		MInteger outBegIdx = new MInteger();
@@ -239,6 +242,12 @@ public class SMAStrategy implements IStrategy {
 		chart.addToMainChart(VLine);
 	}
 	
+	public void drawSignalUp(IBar bar){
+		UpSignal=factory.createSignalUp();
+		UpSignal.setTime(0, bar.getTime());
+		UpSignal.setPrice(0, bar.getHigh()+0.0010);
+		chart.addToMainChart(UpSignal);
+	}
 	public void printMarubozu()
 	{
 		if(MarubozuLists.isEmpty()) {
