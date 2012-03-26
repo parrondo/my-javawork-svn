@@ -582,6 +582,9 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		menuBar.add(fileMenu);
+		
+		JMenu indicatMenu=new JMenu("indicators");
+		
 
 		controlPanel.add(startStrategyButton);
 		controlPanel.add(pauseButton);
@@ -640,15 +643,5 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 	public static void main(String[] args) throws Exception {
 		WorkGUI testerMainGUI = new WorkGUI();
 		testerMainGUI.showChartFrame();
-	}
-}
-
-class TestAction extends AbstractAction {
-	public TestAction(String name) {
-		super(name);
-	}
-
-	public void actionPerformed(ActionEvent event) {
-		System.out.println(getValue(Action.NAME) + " selected.");
 	}
 }
