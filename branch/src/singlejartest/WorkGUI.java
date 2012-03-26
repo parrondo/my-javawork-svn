@@ -81,6 +81,8 @@ import com.dukascopy.api.system.tester.ITesterUserInterface;
 import com.dukascopy.api.system.tester.ITesterVisualModeParameters;
 
 import com.dukascopy.api.IHistory;
+import com.dukascopy.api.IIndicators;
+import com.dukascopy.api.indicators.*;
 import com.dukascopy.api.OfferSide;
 import com.dukascopy.api.DataType;
 import com.dukascopy.api.Period;
@@ -559,7 +561,7 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 		});
 		controlPanel.add(CaluTime);
 
-		JButton RectangleButton = new JButton("Add Rectangle");
+		JButton RectangleButton = new JButton("Add TMarker");
 		RectangleButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -567,6 +569,24 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 			}
 		});
 		controlPanel.add(RectangleButton);
+		
+		JButton MA1030Button = new JButton("Add MA1030");
+		MA1030Button.addActionListener(new ActionListener() {		 
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(context==null)return;
+				IIndicators indicators=context.getIndicators();
+				IIndicator smma10=indicators.getIndicator("SMMA");
+				smma10.setInputParameter(index, array)
+				chart.addIndicator();
+			
+				IIndicator smma30=chart.addIndicator(indicators.getIndicator("SMMA"));
+//				chart.addIndicator(indicators.getIndicator("SMA"));
+				
+			}
+		});
+		controlPanel.add(MA1030Button);
+		
 
 		final JTextField textField = new JTextField(8);
 		final JPasswordField passwordField = new JPasswordField(8);

@@ -15,11 +15,10 @@ class TestAction extends AbstractAction {
 	}
 }
 
-class MA1030Action extends AbstractAction {
-	public MA1030Action(String name) {
+class MAAction extends AbstractAction {
+	public MAAction(String name) {
 		super(name);
 	}
-
 	public void actionPerformed(ActionEvent event) {
 		System.out.println(getValue(Action.NAME) + " selected.");
 	}
