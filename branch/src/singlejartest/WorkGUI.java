@@ -580,16 +580,16 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 				if (context == null)
 					return;
 				IIndicators indicators = context.getIndicators();
+				IIndicator sma5 = indicators.getIndicator("SMA");
 				IIndicator smma10 = indicators.getIndicator("SMMA");
-				IIndicator smma20 = indicators.getIndicator("SMMA");
 				IIndicator smma30 = indicators.getIndicator("SMMA");
 				
-				chart.addIndicator(smma10, new Object[] { 10 },
+				chart.addIndicator(sma5, new Object[] { 5 },
 						new Color[] { Color.YELLOW.darker() },
 						new DrawingStyle[] { DrawingStyle.LINE },
 						new int[] { 1 });
 				
-				chart.addIndicator(smma20, new Object[] { 20 },
+				chart.addIndicator(smma10, new Object[] { 10 },
 						new Color[] { Color.RED },
 						new DrawingStyle[] { DrawingStyle.LINE },
 						new int[] { 1 });
