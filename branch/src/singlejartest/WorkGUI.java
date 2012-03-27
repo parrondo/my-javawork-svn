@@ -31,6 +31,8 @@ package singlejartest;
 
 
 import charts.test.*;
+
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Toolkit;
@@ -83,6 +85,7 @@ import com.dukascopy.api.system.tester.ITesterVisualModeParameters;
 import com.dukascopy.api.IHistory;
 import com.dukascopy.api.IIndicators;
 import com.dukascopy.api.indicators.*;
+import com.dukascopy.api.indicators.OutputParameterInfo.DrawingStyle;
 import com.dukascopy.api.OfferSide;
 import com.dukascopy.api.DataType;
 import com.dukascopy.api.Period;
@@ -272,7 +275,7 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 
 		dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 		Date dateFrom = dateFormat.parse("2012.01.11 00:00:00");
-		Date dateTo = dateFormat.parse("2012.01.19 00:00:00");
+		Date dateTo = dateFormat.parse("2012.01.15 00:00:00");
 		client.setDataInterval(DataLoadingMethod.ALL_TICKS, dateFrom.getTime(),
 				dateTo.getTime());
 		client.setDataInterval(Period.FIFTEEN_MINS, OfferSide.BID,
@@ -574,20 +577,31 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 		MA1030Button.addActionListener(new ActionListener() {		 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(context==null)return;
-				IIndicators indicators=context.getIndicators();
-				IIndicator smma10=indicators.getIndicator("SMMA");
-				smma10.setInputParameter(index, array)
-				chart.addIndicator();
-			
-				IIndicator smma30=chart.addIndicator(indicators.getIndicator("SMMA"));
-//				chart.addIndicator(indicators.getIndicator("SMA"));
+				if (context == null)
+					return;
+				IIndicators indicators = context.getIndicators();
+				IIndicator smma10 = indicators.getIndicator("SMMA");
+				IIndicator smma20 = indicators.getIndicator("SMMA");
+				IIndicator smma30 = indicators.getIndicator("SMMA");
 				
+				chart.addIndicator(smma10, new Object[] { 10 },
+						new Color[] { Color.YELLOW.darker() },
+						new DrawingStyle[] { DrawingStyle.LINE },
+						new int[] { 1 });
+				
+				chart.addIndicator(smma20, new Object[] { 20 },
+						new Color[] { Color.RED },
+						new DrawingStyle[] { DrawingStyle.LINE },
+						new int[] { 1 });
+				
+				chart.addIndicator(smma30, new Object[] { 30 },
+						new Color[] { Color.BLUE },
+						new DrawingStyle[] { DrawingStyle.LINE },
+						new int[] { 1 });
 			}
 		});
 		controlPanel.add(MA1030Button);
 		
-
 		final JTextField textField = new JTextField(8);
 		final JPasswordField passwordField = new JPasswordField(8);
 		controlPanel.add(new JLabel("User name: ", SwingConstants.RIGHT));
