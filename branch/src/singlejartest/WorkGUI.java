@@ -174,6 +174,7 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 
 			chartController = chartPanels.get(chart).getTesterChartController();
 			JPanel chartPanel = chartPanels.get(chart).getChartPanel();
+	
 			addChartPanel(chartPanel);
 
 		}
@@ -585,7 +586,7 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 				IIndicator smma30 = indicators.getIndicator("SMMA");
 				
 				chart.addIndicator(sma5, new Object[] { 5 },
-						new Color[] { Color.YELLOW.darker() },
+						new Color[] { Color.BLACK },
 						new DrawingStyle[] { DrawingStyle.LINE },
 						new int[] { 1 });
 				
