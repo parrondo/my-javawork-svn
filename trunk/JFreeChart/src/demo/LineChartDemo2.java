@@ -36,6 +36,7 @@ public class LineChartDemo2 extends ApplicationFrame
     localXYSeries1.add(6.0D, 7.0D);
     localXYSeries1.add(7.0D, 7.0D);
     localXYSeries1.add(8.0D, 8.0D);
+    localXYSeries1.add(9.0D, 9.0D);
     XYSeries localXYSeries2 = new XYSeries("Second");
     localXYSeries2.add(1.0D, 5.0D);
     localXYSeries2.add(2.0D, 7.0D);
