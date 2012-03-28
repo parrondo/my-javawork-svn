@@ -6,6 +6,7 @@
 	<classpathentry kind="src" path="JFUtil/src"/>
 	<classpathentry kind="src" path="JFUtil/test"/>
 	<classpathentry excluding="src/|test/" kind="src" path="JFUtil"/>
+	<classpathentry kind="src" path="Jfreechart"/>
 	<classpathentry kind="lib" path="libs/DDS2-jClient-JForex-2.14.26.jar"/>
 	<classpathentry kind="lib" path="libs/JForex-API-2.6.60.jar" sourcepath="libs/JForex-API-2.6.60-sources.jar"/>
 	<classpathentry kind="lib" path="libs/DDS2-Connector-1.1.53.jar"/>
@@ -26,5 +27,15 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
 	<classpathentry kind="lib" path="opencsv-2.3/lib/junit-4.7.jar"/>
+	<classpathentry kind="lib" path="Jfreechartlibs"/>
+	<classpathentry kind="lib" path="Jfreechartlibs/gnujaxp.jar"/>
+	<classpathentry kind="lib" path="Jfreechartlibs/iText-2.1.5.jar"/>
+	<classpathentry kind="lib" path="Jfreechartlibs/jcommon-1.0.16.jar"/>
+	<classpathentry kind="lib" path="Jfreechartlibs/jfreechart-1.0.13-experimental.jar"/>
+	<classpathentry kind="lib" path="Jfreechartlibs/jfreechart-1.0.13-swt.jar"/>
+	<classpathentry kind="lib" path="Jfreechartlibs/jfreechart-1.0.13.jar"/>
+	<classpathentry kind="lib" path="Jfreechartlibs/junit.jar"/>
+	<classpathentry kind="lib" path="Jfreechartlibs/servlet.jar"/>
+	<classpathentry kind="lib" path="Jfreechartlibs/swtgraphics2d.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
