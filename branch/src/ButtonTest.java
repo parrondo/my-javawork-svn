@@ -62,12 +62,18 @@ class ButtonFrame extends JFrame {
 
 		public void actionPerformed(ActionEvent event) {
 			buttonPanel.setBackground(backgroundColor);
+			 frameno = new JFrame();
+//			frameno.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			frameno.setSize(200,200);
+			frameno.setVisible(true);
+			
 		}
 
 		private Color backgroundColor;
 	}
 
 	private JPanel buttonPanel;
+	private JFrame frameno;
 
 	public static final int DEFAULT_WIDTH = 300;
 	public static final int DEFAULT_HEIGHT = 200;
