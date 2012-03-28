@@ -67,6 +67,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import org.eclipse.jdt.internal.compiler.ast.ThisReference;
+import org.jfree.ui.RefineryUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -515,21 +516,21 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 					TimerMarkerlist.clear();
 					return;
 				}
-				Date starttime,endtime; 
-				long from ,to;
-				
-				if(TimerMarkerlist.get(0).getTime(0)<TimerMarkerlist.get(1).getTime(0)){
-					from=TimerMarkerlist.get(0).getTime(0);
-					to=TimerMarkerlist.get(1).getTime(0);
+				Date starttime, endtime;
+				long from, to;
+
+				if (TimerMarkerlist.get(0).getTime(0) < TimerMarkerlist.get(1)
+						.getTime(0)) {
+					from = TimerMarkerlist.get(0).getTime(0);
+					to = TimerMarkerlist.get(1).getTime(0);
+				} else {
+					from = TimerMarkerlist.get(1).getTime(0);
+					to = TimerMarkerlist.get(0).getTime(0);
 				}
-				else {
-					from=TimerMarkerlist.get(1).getTime(0);
-					to=TimerMarkerlist.get(0).getTime(0);
-				}		
-				starttime=new Date(from);
+				starttime = new Date(from);
 				endtime = new Date(to);
-				LOGGER.info(starttime.toString()+" TO "+endtime.toString());
-				
+				LOGGER.info(starttime.toString() + " TO " + endtime.toString());
+
 				if (context == null) {
 					LOGGER.error("context 未初始化，计算完策略后再尝试。");
 					return;
@@ -537,26 +538,27 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 				WorkGUI.this.history = context.getHistory();
 				try {
 					List<IBar> bars = history.getBars(chart.getInstrument(),
-							chart.getSelectedPeriod(), chart
-									.getSelectedOfferSide(), from,to);
+							chart.getSelectedPeriod(),
+							chart.getSelectedOfferSide(), from, to);
 					dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-					List<String[]> allElements=new ArrayList<String[]>();
-											
-					for (IBar bar:bars){
-						String [] line=new String[6];
-						line[0]=dateFormat.format(bar.getTime());
-						line[1]=priceFormat.format(bar.getOpen());
-						line[2]=priceFormat.format(bar.getHigh());
-						line[3]=priceFormat.format(bar.getLow());
-						line[4]= priceFormat.format(bar.getClose());
-						line[5]=priceFormat.format(bar.getVolume());
+					List<String[]> allElements = new ArrayList<String[]>();
+
+					for (IBar bar : bars) {
+						String[] line = new String[6];
+						line[0] = dateFormat.format(bar.getTime());
+						line[1] = priceFormat.format(bar.getOpen());
+						line[2] = priceFormat.format(bar.getHigh());
+						line[3] = priceFormat.format(bar.getLow());
+						line[4] = priceFormat.format(bar.getClose());
+						line[5] = priceFormat.format(bar.getVolume());
 						allElements.add(line);
 					}
-					Writer out= new BufferedWriter(new FileWriter("opencsv-2.3/examples/15Mdata.csv"));
+					Writer out = new BufferedWriter(new FileWriter(
+							"opencsv-2.3/examples/15Mdata.csv"));
 					CSVWriter writer = new CSVWriter(out);
 					writer.writeAll(allElements);
 					writer.close();
-				
+
 					TimerMarkerlist.clear();
 				} catch (Exception e2) {
 					e2.printStackTrace();
@@ -573,9 +575,9 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 			}
 		});
 		controlPanel.add(RectangleButton);
-		
+
 		JButton MA1030Button = new JButton("Add MA1030");
-		MA1030Button.addActionListener(new ActionListener() {		 
+		MA1030Button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (context == null)
@@ -584,17 +586,17 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 				IIndicator sma5 = indicators.getIndicator("SMA");
 				IIndicator smma10 = indicators.getIndicator("SMMA");
 				IIndicator smma30 = indicators.getIndicator("SMMA");
-				
+
 				chart.addIndicator(sma5, new Object[] { 5 },
 						new Color[] { Color.BLACK },
 						new DrawingStyle[] { DrawingStyle.LINE },
 						new int[] { 1 });
-				
+
 				chart.addIndicator(smma10, new Object[] { 10 },
 						new Color[] { Color.RED },
 						new DrawingStyle[] { DrawingStyle.LINE },
 						new int[] { 1 });
-				
+
 				chart.addIndicator(smma30, new Object[] { 30 },
 						new Color[] { Color.BLUE },
 						new DrawingStyle[] { DrawingStyle.LINE },
@@ -602,7 +604,20 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 			}
 		});
 		controlPanel.add(MA1030Button);
-		
+
+		JButton viewLineButton = new JButton("ViewLine");
+		viewLineButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				DrawMoneyLine localLineChartDemo2 = new DrawMoneyLine(
+						"JFreeChart: LineChartDemo2.java");
+				localLineChartDemo2.pack();
+				RefineryUtilities.centerFrameOnScreen(localLineChartDemo2);
+				localLineChartDemo2.setVisible(true);
+			}
+		});
+		controlPanel.add(viewLineButton);
+
 		final JTextField textField = new JTextField(8);
 		final JPasswordField passwordField = new JPasswordField(8);
 		controlPanel.add(new JLabel("User name: ", SwingConstants.RIGHT));
@@ -617,9 +632,8 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		menuBar.add(fileMenu);
-		
-		JMenu indicatMenu=new JMenu("indicators");
-		
+
+		JMenu indicatMenu = new JMenu("indicators");
 
 		controlPanel.add(startStrategyButton);
 		controlPanel.add(pauseButton);
