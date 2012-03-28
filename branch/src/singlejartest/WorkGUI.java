@@ -575,6 +575,30 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 			}
 		});
 		controlPanel.add(RectangleButton);
+		
+		JButton MoveButton = new JButton("Move");
+		MoveButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+//				chart.move(objectToMove, newTime, newPrice);
+				chartobjlist = chart.getAll();
+				for (IChartObject charobj : chartobjlist) {
+					if (charobj.getType() == IChart.Type.TIMEMARKER) {
+						TimerMarkerlist.add(charobj);
+					}
+				}
+				if (TimerMarkerlist.size() != 2) {
+					LOGGER.error("timerMarket must have 2");
+					TimerMarkerlist.clear();
+					return;
+				}
+				TimerMarkerlist.get(0).move(TimerMarkerlist.get(0).getTime(0)-3600*1000,
+						TimerMarkerlist.get(0).getPrice(0));
+				chart.repaint();
+			}
+		});
+		controlPanel.add(MoveButton);
+		
 
 		JButton MA1030Button = new JButton("Add MA1030");
 		MA1030Button.addActionListener(new ActionListener() {
