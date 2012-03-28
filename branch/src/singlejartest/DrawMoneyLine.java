@@ -1,5 +1,6 @@
 package singlejartest;
 
+import javax.swing.*;
 
 import java.awt.Dimension;
 import javax.swing.JPanel;
@@ -16,14 +17,15 @@ import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
 
-public class DrawMoneyLine extends ApplicationFrame
+public class DrawMoneyLine extends JDialog
 {
-  public DrawMoneyLine (String paramString)
+  private  JPanel localJPanel ;
+  public DrawMoneyLine (JFrame owner)
   {
-    super(paramString);
-    JPanel localJPanel = createDemoPanel();
-    localJPanel.setPreferredSize(new Dimension(500, 270));
-    setContentPane(localJPanel);
+	super(owner, "DialogTest", true);
+//    localJPanel = createDemoPanel();
+//    localJPanel.setPreferredSize(new Dimension(500, 270));
+//    setContentPane(localJPanel);
   }
 
   private static XYDataset createDataset()
@@ -87,9 +89,9 @@ public class DrawMoneyLine extends ApplicationFrame
 
   public static void main(String[] paramArrayOfString)
   {
-	  DrawMoneyLine localLineChartDemo2 = new DrawMoneyLine ("JFreeChart: LineChartDemo2.java");
-    localLineChartDemo2.pack();
-    RefineryUtilities.centerFrameOnScreen(localLineChartDemo2);
-    localLineChartDemo2.setVisible(true);
+//	  DrawMoneyLine localLineChartDemo2 = new DrawMoneyLine ("JFreeChart: LineChartDemo2.java");
+//    localLineChartDemo2.pack();
+//    RefineryUtilities.centerFrameOnScreen(localLineChartDemo2);
+//    localLineChartDemo2.setVisible(true);
   }
 }

@@ -609,10 +609,12 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 		viewLineButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				DrawMoneyLine localLineChartDemo2 = new DrawMoneyLine(
-						"JFreeChart: LineChartDemo2.java");
+				DrawMoneyLine localLineChartDemo2 = new DrawMoneyLine(WorkGUI.this);
+				localLineChartDemo2.add(localLineChartDemo2.createDemoPanel());
 				localLineChartDemo2.pack();
+				
 				RefineryUtilities.centerFrameOnScreen(localLineChartDemo2);
+				localLineChartDemo2.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE );
 				localLineChartDemo2.setVisible(true);
 			}
 		});
