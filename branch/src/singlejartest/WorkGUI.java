@@ -576,7 +576,7 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 		});
 		controlPanel.add(RectangleButton);
 		
-		JButton MoveButton = new JButton("Move");
+		JButton MoveButton = new JButton("AddPattern");
 		MoveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
