@@ -581,6 +581,7 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 			@Override
 			public void actionPerformed(ActionEvent e) {
 //				chart.move(objectToMove, newTime, newPrice);
+				
 				chartobjlist = chart.getAll();
 				for (IChartObject charobj : chartobjlist) {
 					if (charobj.getType() == IChart.Type.TIMEMARKER) {
@@ -594,6 +595,7 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 				}
 				TimerMarkerlist.get(0).move(TimerMarkerlist.get(0).getTime(0)-3600*1000,
 						TimerMarkerlist.get(0).getPrice(0));
+				TimerMarkerlist.get(0).setVisibleInWorkspaceTree(true);
 				chart.repaint();
 			}
 		});
