@@ -6,6 +6,7 @@ public class RTChartInfo {
 	private IBar HighBar;
 	private IBar LowBar;
 	private TrendInfo trendInfo;
+	public final int HLBARSHIFT=40; 
 	
 	public IBar getHighBar(){
 		return this.HighBar;
