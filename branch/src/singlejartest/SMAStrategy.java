@@ -42,6 +42,9 @@ public class SMAStrategy implements IStrategy {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(SMAStrategy.class);
 
+	private List<IBar> highBarList;
+	private RTChartInfo rtChartInfo;
+	
 	@Configurable("Instrument")
 	public Instrument selectedInstrument = Instrument.EURUSD;
 	@Configurable("Period")
@@ -72,6 +75,8 @@ public class SMAStrategy implements IStrategy {
 		factory = chart.getChartObjectFactory();
 		MarubozuLists = new ArrayList<IBar>();
 		cdlPattern = new CandlePattern();
+		rtChartInfo=new RTChartInfo(context);
+		
 	}
 
 	public void onAccount(IAccount account) throws JFException {
@@ -116,8 +121,10 @@ public class SMAStrategy implements IStrategy {
 		IBar currBar = history.getBar(instrument, selectedPeriod,
 				OfferSide.BID, 0);
 		if (isFilterhey(currBar.getTime())) {
-			return;
+			return; 
 		}
+		highBarList=rtChartInfo.getHighBarList(instrument, period, 120, prevBar.getTime());
+		
 		List<IBar> bars = history.getBars(instrument, Period.FIFTEEN_MINS,
 				OfferSide.BID, indicatorFilter, 10 + 1, prevBar.getTime(), 0);
 		RetCode retCode = cdlPattern.addMarubozu(MarubozuLists, bars);
