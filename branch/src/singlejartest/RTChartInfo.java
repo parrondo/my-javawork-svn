@@ -37,7 +37,7 @@ public class RTChartInfo {
 	public void findCrossOver(Instrument instrument,Period period,
 			int numberOfCandlesBefore,long time)  throws JFException {
 		List<IBar> barsList=history.getBars(instrument, period,OfferSide.BID, Filter.WEEKENDS, numberOfCandlesBefore, time, 0);
-		
+	
 		
 	}
 	public boolean isCrossOver(Instrument instrument, Period period,
