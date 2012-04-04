@@ -29,7 +29,6 @@
  */
 package singlejartest;
 
-
 import charts.test.*;
 
 import java.awt.Color;
@@ -105,7 +104,6 @@ import au.com.bytecode.opencsv.CSVWriter;
 
 import example.test.*;
 
-
 /**
  * This small program demonstrates how to initialize Dukascopy tester and start
  * a strategy in GUI mode
@@ -139,7 +137,7 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 
 	private SimpleDateFormat dateFormat = new SimpleDateFormat(
 			"yyyy.MM.dd HH:mm:ss");
-	private DecimalFormat priceFormat= new DecimalFormat("##.#####");
+	private DecimalFormat priceFormat = new DecimalFormat("##.#####");
 	// url of the DEMO jnlp
 	private static String jnlpUrl = "https://www.dukascopy.com/client/demo/jclient/jforex.jnlp";
 	// user name
@@ -175,7 +173,7 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 
 			chartController = chartPanels.get(chart).getTesterChartController();
 			JPanel chartPanel = chartPanels.get(chart).getChartPanel();
-	
+
 			addChartPanel(chartPanel);
 
 		}
@@ -575,13 +573,13 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 			}
 		});
 		controlPanel.add(RectangleButton);
-		
+
 		JButton MoveButton = new JButton("AddPattern");
 		MoveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-//				chart.move(objectToMove, newTime, newPrice);
-				
+				// chart.move(objectToMove, newTime, newPrice);
+
 				chartobjlist = chart.getAll();
 				for (IChartObject charobj : chartobjlist) {
 					if (charobj.getType() == IChart.Type.TIMEMARKER) {
@@ -593,14 +591,14 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 					TimerMarkerlist.clear();
 					return;
 				}
-				TimerMarkerlist.get(0).move(TimerMarkerlist.get(0).getTime(0)-3600*1000,
+				TimerMarkerlist.get(0).move(
+						TimerMarkerlist.get(0).getTime(0) - 3600 * 1000,
 						TimerMarkerlist.get(0).getPrice(0));
 				TimerMarkerlist.get(0).setVisibleInWorkspaceTree(true);
 				chart.repaint();
 			}
 		});
 		controlPanel.add(MoveButton);
-		
 
 		JButton MA1030Button = new JButton("Add MA1030");
 		MA1030Button.addActionListener(new ActionListener() {
@@ -635,10 +633,11 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 		viewLineButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				DrawMoneyLine localLineChartDemo2 = new DrawMoneyLine(WorkGUI.this);
+				DrawMoneyLine localLineChartDemo2 = new DrawMoneyLine(
+						WorkGUI.this);
 				localLineChartDemo2.add(DrawMoneyLine.createDemoPanel());
 				localLineChartDemo2.pack();
-				
+
 				RefineryUtilities.centerFrameOnScreen(localLineChartDemo2);
 				localLineChartDemo2.setVisible(true);
 			}
