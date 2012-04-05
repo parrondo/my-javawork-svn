@@ -79,9 +79,10 @@ public class SMAStrategy implements IStrategy {
 		rtChartInfo=new RTChartInfo(context);
 		IBar currBar = history.getBar(this.selectedInstrument, Period.FIFTEEN_MINS, OfferSide.ASK, 0);
 		IBar prevDailyBar1 = history.getBar(this.selectedInstrument, Period.FIFTEEN_MINS, OfferSide.ASK, 1);
-		rtChartInfo.initChart(Instrument.EURUSD,Period.FIFTEEN_MINS,800,currBar.getTime());
+		rtChartInfo.initChart(Instrument.EURUSD,Period.FIFTEEN_MINS,400,currBar.getTime());
 		drawSignalDown(rtChartInfo.crossPoint.crossBar);
-		print("crossBar at " +rtChartInfo.crossPoint.crossBar);
+		print("crossBar at " +rtChartInfo.crossPoint.crossBar+" smma: "+
+				CrossPoint.smmaCrossPrice);
 		
 		
 	}

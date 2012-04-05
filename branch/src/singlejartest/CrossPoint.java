@@ -16,6 +16,7 @@ public class CrossPoint {
 	private  long time;
 	private  CrossType crossType;
 	public   static IBar crossBar;
+	public   static  double smmaCrossPrice;
 	
 	
 	public CrossPoint(CrossType crossType) {
