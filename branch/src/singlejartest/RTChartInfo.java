@@ -6,12 +6,14 @@ import singlejartest.CrossPoint.CrossType;
 
 import com.dukascopy.api.*;
 import com.dukascopy.api.IIndicators.AppliedPrice;
+import com.sun.org.apache.bcel.internal.generic.NEW;
 
 public class RTChartInfo {
 	private IBar highBar;
 	private IBar lowBar;
-	private List<IBar> hBarList;
-	private List<IBar> lBarList;
+	private List<IBar> hBarList=new ArrayList<IBar>();
+	private List<IBar> lBarList=new ArrayList<IBar>();
+	private List<IBar> rawBarList;
 	private TrendInfo trendInfo;
 	public final int HLBARSHIFT = 40;
 	private IBar crossBar;
@@ -40,6 +42,13 @@ public class RTChartInfo {
 			System.out.println("bars number is not enough");
 			System.exit(0);
 		}	
+		CreateHighBarList(instrument,period,numberOfCandlesBefore,time);
+		CreateLowBarList(instrument,period,numberOfCandlesBefore,time);
+		findTrend();
+	}
+	
+	public void findTrend(){
+		
 	}
 
 	public void findFirstCross(Instrument instrument, Period period,
@@ -70,41 +79,44 @@ public class RTChartInfo {
 		}
 	}
 
-	public boolean isDownCrossOver(double[] Smma30, double[] Smma10)
+	public boolean isDownCrossOver(double[] slow, double[] fast)
 			throws JFException {
-		if ((Smma10[1] < Smma10[0]) && (Smma10[1] < Smma30[1])
-				&& (Smma10[0] >= Smma30[0])) {		
+		if ((fast[1] < fast[0]) && (fast[1] < slow[1])
+				&& (fast[0] >= slow[0])) {		
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	public boolean isUpCrossOver(double[] Smma30, double[] Smma10) 
+	public boolean isUpCrossOver(double[] slow, double[] fast) 
 			throws JFException {
-		if ((Smma10[1] > Smma10[0]) && (Smma10[1] > Smma30[1])
-				&& (Smma10[0] <= Smma30[0])) {
+		if ((fast[1] > fast[0]) && (fast[1] > slow[1])
+				&& (fast[0] <= slow[0])) {
 			return true;
 		} else
 			return false;
 	}
 
-	public List<IBar> getHighBarList(Instrument instrument, Period period,
+	public void CreateHighBarList(Instrument instrument, Period period,
 			int numberOfCandlesBefore, long time) throws JFException {
-		hBarList = history.getBars(instrument, period, OfferSide.BID,
+		rawBarList = history.getBars(instrument, period, OfferSide.BID,
 				Filter.WEEKENDS, numberOfCandlesBefore, time, 0);
+		hBarList.addAll(rawBarList);
+		lBarList.addAll(rawBarList);
 		Collections.sort(hBarList, new IBarCompareHigh());
+		Collections.sort(lBarList, new IBarCompareLow());
 //		for (IBar bar : hBarList)
 //			System.out.println(bar.getHigh());
-		return this.hBarList;
+		return ;
 	}
 
-	public List<IBar> getLowBarList(Instrument instrument, Period period,
+	public void CreateLowBarList(Instrument instrument, Period period,
 			int numberOfCandlesBefore, long time) throws JFException {
 		lBarList = history.getBars(instrument, period, OfferSide.BID,
 				Filter.WEEKENDS, numberOfCandlesBefore, time, 0);
-		Collections.sort(lBarList, new IBarCompareLow());
-		return this.lBarList;
+		
+		return ;
 	}
 
 	public void setHighBar(IBar hBar) {
