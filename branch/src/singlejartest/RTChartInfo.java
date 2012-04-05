@@ -22,7 +22,7 @@ public class RTChartInfo {
 	private IHistory history;
 	private IIndicators indicators;
 	private IChart chart;
-	private CrossPoint crossPoint=null;
+	public  CrossPoint crossPoint=null;
 
 	public RTChartInfo(IContext context) {
 		this.context = context;
@@ -104,8 +104,8 @@ public class RTChartInfo {
 		hBarList = history.getBars(instrument, period, OfferSide.BID,
 				Filter.WEEKENDS, numberOfCandlesBefore, time, 0);
 		Collections.sort(hBarList, new IBarCompareHigh());
-		for (IBar bar : hBarList)
-			System.out.println(bar.getHigh());
+//		for (IBar bar : hBarList)
+//			System.out.println(bar.getHigh());
 		return this.hBarList;
 	}
 

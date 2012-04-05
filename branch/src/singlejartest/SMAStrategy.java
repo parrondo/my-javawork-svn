@@ -32,6 +32,7 @@ public class SMAStrategy implements IStrategy {
 	private IVerticalLineChartObject VLine;
 	private IShortLineChartObject shortLine;
 	private ISignalUpChartObject UpSignal;
+	private ISignalDownChartObject DownSignal;
 	private IChartObjectFactory factory;
 	private int linecount = 0;
 	private Core lib = new Core();
@@ -78,7 +79,10 @@ public class SMAStrategy implements IStrategy {
 		rtChartInfo=new RTChartInfo(context);
 		IBar currBar = history.getBar(this.selectedInstrument, Period.FIFTEEN_MINS, OfferSide.ASK, 0);
 		IBar prevDailyBar1 = history.getBar(this.selectedInstrument, Period.FIFTEEN_MINS, OfferSide.ASK, 1);
-		rtChartInfo.initChart(Instrument.EURUSD,Period.FIFTEEN_MINS,400,currBar.getTime());
+		rtChartInfo.initChart(Instrument.EURUSD,Period.FIFTEEN_MINS,800,currBar.getTime());
+		drawSignalDown(rtChartInfo.crossPoint.crossBar);
+		print("crossBar at " +rtChartInfo.crossPoint.crossBar);
+		
 		
 	}
 
@@ -258,6 +262,14 @@ public class SMAStrategy implements IStrategy {
 		UpSignal.setPrice(0, bar.getHigh()+0.0010);
 		chart.addToMainChart(UpSignal);
 	}
+	
+	public void drawSignalDown(IBar bar){
+		DownSignal=factory.createSignalDown();
+		DownSignal.setTime(0, bar.getTime());
+		DownSignal.setPrice(0, bar.getHigh()+0.0010);
+		chart.addToMainChart(DownSignal);
+	}
+	
 	public void printMarubozu()
 	{
 		if(MarubozuLists.isEmpty()) {
