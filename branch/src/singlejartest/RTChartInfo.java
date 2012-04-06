@@ -47,8 +47,28 @@ public class RTChartInfo {
 		findTrend();
 	}
 	
-	public void findTrend(){
+	public void findTrend()throws JFException{
 		
+		int high1,high2,high3;
+		int low1,low2,low3;
+		high1=searchBarsList(hBarList.get(0).getTime(), rawBarList);
+		high2=searchBarsList(hBarList.get(1).getTime(), rawBarList);
+		high3=searchBarsList(hBarList.get(2).getTime(), rawBarList);
+		
+		low1=searchBarsList(lBarList.get(0).getTime(), rawBarList);
+		low2=searchBarsList(lBarList.get(1).getTime(), rawBarList);
+		low3=searchBarsList(lBarList.get(2).getTime(), rawBarList);	
+	}
+	
+	protected int searchBarsList(long time,List<IBar> barsList)throws JFException{
+		int i=0;
+		for(IBar bar:barsList){
+			if(time==bar.getTime()){
+				return i;
+			}
+			i++;
+		}
+		throw new JFException("can't find the element");
 	}
 
 	public void findFirstCross(Instrument instrument, Period period,
