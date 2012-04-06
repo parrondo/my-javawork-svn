@@ -6,13 +6,12 @@ import singlejartest.CrossPoint.CrossType;
 
 import com.dukascopy.api.*;
 import com.dukascopy.api.IIndicators.AppliedPrice;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 
 public class RTChartInfo {
 	private IBar highBar;
 	private IBar lowBar;
 	
-	private TrendInfo trendInfo;
+	private TrendInfo trendInfo=null;
 	public final int HLBARSHIFT = 40;
 	private IBar crossBar;
 
@@ -28,25 +27,29 @@ public class RTChartInfo {
 		this.context = context;
 		this.engine = context.getEngine();
 		this.console = context.getConsole();
-		this.history = context.getHistory();
+		this.history = context.getHistory();	
 		this.indicators = context.getIndicators();
 	}
 
 	public void initChart(Instrument instrument, Period period,
-			int numberOfCandlesBefore, long time) throws JFException {
+			int initBarNum, long time) throws JFException {
 		crossPoint=new CrossPoint(null);
-		findFirstCross(instrument, period, numberOfCandlesBefore, time);
+		findFirstCross(instrument, period, initBarNum, time);
 		if(crossPoint.getCrossType()==null){
 			System.out.println("bars number is not enough");
 			System.exit(0);
 		}	
 //		CreateHighBarList(instrument,period,numberOfCandlesBefore,time);
 //		CreateLowBarList(instrument,period,numberOfCandlesBefore,time);
-//		findTrend();
+		trendInfo=new TrendInfo(context);
+		trendInfo.findTrend(instrument, period,TrendInfo.TrendLength, time);
 	}
 	
+	public void updateChart(Instrument instrument, Period period,
+			long time)throws JFException{
+		trendInfo.findTrend(instrument, period,TrendInfo.TrendLength, time);
+	}
 	
-
 	public void findFirstCross(Instrument instrument, Period period,
 			int numberOfCandlesBefore, long time) throws JFException {
 		List<IBar> barsList = history.getBars(instrument, period,

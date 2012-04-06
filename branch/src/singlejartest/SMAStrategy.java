@@ -42,6 +42,7 @@ public class SMAStrategy implements IStrategy {
 	private ChartObjectListener ichartobjectlistener;
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(SMAStrategy.class);
+	public  static final int InitBarNum=400;
 
 	private List<IBar> highBarList;
 	private RTChartInfo rtChartInfo;
@@ -79,7 +80,7 @@ public class SMAStrategy implements IStrategy {
 		rtChartInfo=new RTChartInfo(context);
 		IBar currBar = history.getBar(this.selectedInstrument, Period.FIFTEEN_MINS, OfferSide.ASK, 0);
 		IBar prevDailyBar1 = history.getBar(this.selectedInstrument, Period.FIFTEEN_MINS, OfferSide.ASK, 1);
-		rtChartInfo.initChart(Instrument.EURUSD,Period.FIFTEEN_MINS,400,currBar.getTime());
+		rtChartInfo.initChart(Instrument.EURUSD,Period.FIFTEEN_MINS,InitBarNum,currBar.getTime());
 		drawSignalDown(rtChartInfo.crossPoint.crossBar);
 		print("crossBar at " +rtChartInfo.crossPoint.crossBar+" smma: "+
 				CrossPoint.smmaCrossPrice);

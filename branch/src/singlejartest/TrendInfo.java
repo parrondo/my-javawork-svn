@@ -35,9 +35,9 @@ public class TrendInfo {
 	private List<IBar> hBarList = new ArrayList<IBar>();
 	private List<IBar> lBarList = new ArrayList<IBar>();
 	private List<IBar> rawBarList;
-	private final static int RectangleLength=120;
-	private final static int RightInterval=20;
-	private final static int LeftInterval=10;
+	public  final static int TrendLength=120;
+	public final static int RightInterval=20;
+	public final static int LeftInterval=10;
 
 	private IBar lBar1_120period;
 	private IBar lBar2_120period;
@@ -52,8 +52,10 @@ public class TrendInfo {
 		this.indicators = context.getIndicators();
 	}
 
-	public void findTrend() throws JFException {
-
+	public void findTrend(Instrument instrument, Period period,
+			int trendLength, long time) throws JFException {
+		
+		CreateHLBarsList(instrument, period, trendLength, time);
 		hBarLocation.add(searchBarsList(hBarList.get(0).getTime(), rawBarList));
 		hBarLocation.add(searchBarsList(hBarList.get(1).getTime(), rawBarList));
 		hBarLocation.add(searchBarsList(hBarList.get(2).getTime(), rawBarList));
@@ -62,17 +64,17 @@ public class TrendInfo {
 		lBarLocation.add(searchBarsList(lBarList.get(1).getTime(), rawBarList));
 		lBarLocation.add(searchBarsList(lBarList.get(2).getTime(), rawBarList));
 		
-		if(hBarLocation.get(0)>RectangleLength-RightInterval&&hBarLocation.get(1)>RectangleLength-RightInterval
-				&&hBarLocation.get(2)>RectangleLength-RightInterval&&hBarList.get(0).getClose()-lBarList.get(0).getClose()>0.0080){
-			TrendInfo.trendType=TrendType.UpTrend;
-			return;
+		if(hBarLocation.get(0)>TrendLength-RightInterval&&hBarLocation.get(1)>TrendLength-RightInterval
+				&&hBarLocation.get(2)>TrendLength-RightInterval&&hBarList.get(0).getClose()-lBarList.get(0).getClose()>0.0080){
+			TrendInfo.trendType=TrendType.UpTrend;		
 		}
-		if(hBarLocation.get(0)<LeftInterval&&hBarLocation.get(1)<LeftInterval&&hBarLocation.get(2)<LeftInterval
+		else if(hBarLocation.get(0)<LeftInterval&&hBarLocation.get(1)<LeftInterval&&hBarLocation.get(2)<LeftInterval
 				&&hBarList.get(0).getClose()-lBarList.get(0).getClose()>0.0080){
-			TrendInfo.trendType=TrendType.DownTrend;
-			return;
+			TrendInfo.trendType=TrendType.DownTrend;	
 		}
-		
+		else if(hBarList.get(0).getClose()-lBarList.get(0).getClose()<0.0050){
+			TrendInfo.trendType=TrendType.Rectangle;
+		}
 		
 	}
 
@@ -88,10 +90,10 @@ public class TrendInfo {
 		throw new JFException("can't find the element");
 	}
 
-	public void CreateHighBarList(Instrument instrument, Period period,
-			int numberOfCandlesBefore, long time) throws JFException {
+	public void CreateHLBarsList(Instrument instrument, Period period,
+			int trendLength, long time) throws JFException {
 		rawBarList = history.getBars(instrument, period, OfferSide.BID,
-				Filter.WEEKENDS, numberOfCandlesBefore, time, 0);
+				Filter.WEEKENDS, trendLength, time, 0);
 		hBarList.addAll(rawBarList);
 		lBarList.addAll(rawBarList);
 		Collections.sort(hBarList, new IBarCompareHigh());
@@ -102,9 +104,9 @@ public class TrendInfo {
 	}
 
 	public void CreateLowBarList(Instrument instrument, Period period,
-			int numberOfCandlesBefore, long time) throws JFException {
+			int trendLength, long time) throws JFException {
 		lBarList = history.getBars(instrument, period, OfferSide.BID,
-				Filter.WEEKENDS, numberOfCandlesBefore, time, 0);
+				Filter.WEEKENDS, trendLength, time, 0);
 
 		return;
 	}
