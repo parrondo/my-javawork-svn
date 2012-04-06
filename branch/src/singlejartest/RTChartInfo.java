@@ -11,9 +11,7 @@ import com.sun.org.apache.bcel.internal.generic.NEW;
 public class RTChartInfo {
 	private IBar highBar;
 	private IBar lowBar;
-	private List<IBar> hBarList=new ArrayList<IBar>();
-	private List<IBar> lBarList=new ArrayList<IBar>();
-	private List<IBar> rawBarList;
+	
 	private TrendInfo trendInfo;
 	public final int HLBARSHIFT = 40;
 	private IBar crossBar;
@@ -42,34 +40,12 @@ public class RTChartInfo {
 			System.out.println("bars number is not enough");
 			System.exit(0);
 		}	
-		CreateHighBarList(instrument,period,numberOfCandlesBefore,time);
-		CreateLowBarList(instrument,period,numberOfCandlesBefore,time);
-		findTrend();
+//		CreateHighBarList(instrument,period,numberOfCandlesBefore,time);
+//		CreateLowBarList(instrument,period,numberOfCandlesBefore,time);
+//		findTrend();
 	}
 	
-	public void findTrend()throws JFException{
-		
-		int high1,high2,high3;
-		int low1,low2,low3;
-		high1=searchBarsList(hBarList.get(0).getTime(), rawBarList);
-		high2=searchBarsList(hBarList.get(1).getTime(), rawBarList);
-		high3=searchBarsList(hBarList.get(2).getTime(), rawBarList);
-		
-		low1=searchBarsList(lBarList.get(0).getTime(), rawBarList);
-		low2=searchBarsList(lBarList.get(1).getTime(), rawBarList);
-		low3=searchBarsList(lBarList.get(2).getTime(), rawBarList);	
-	}
 	
-	protected int searchBarsList(long time,List<IBar> barsList)throws JFException{
-		int i=0;
-		for(IBar bar:barsList){
-			if(time==bar.getTime()){
-				return i;
-			}
-			i++;
-		}
-		throw new JFException("can't find the element");
-	}
 
 	public void findFirstCross(Instrument instrument, Period period,
 			int numberOfCandlesBefore, long time) throws JFException {
@@ -118,26 +94,7 @@ public class RTChartInfo {
 			return false;
 	}
 
-	public void CreateHighBarList(Instrument instrument, Period period,
-			int numberOfCandlesBefore, long time) throws JFException {
-		rawBarList = history.getBars(instrument, period, OfferSide.BID,
-				Filter.WEEKENDS, numberOfCandlesBefore, time, 0);
-		hBarList.addAll(rawBarList);
-		lBarList.addAll(rawBarList);
-		Collections.sort(hBarList, new IBarCompareHigh());
-		Collections.sort(lBarList, new IBarCompareLow());
-//		for (IBar bar : hBarList)
-//			System.out.println(bar.getHigh());
-		return ;
-	}
 
-	public void CreateLowBarList(Instrument instrument, Period period,
-			int numberOfCandlesBefore, long time) throws JFException {
-		lBarList = history.getBars(instrument, period, OfferSide.BID,
-				Filter.WEEKENDS, numberOfCandlesBefore, time, 0);
-		
-		return ;
-	}
 
 	public void setHighBar(IBar hBar) {
 		this.highBar = hBar;

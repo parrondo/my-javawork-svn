@@ -131,7 +131,7 @@ public class SMAStrategy implements IStrategy {
 		if (isFilterhey(currBar.getTime())) {
 			return; 
 		}
-		highBarList=rtChartInfo.getHighBarList(instrument, period, 120, prevBar.getTime());
+//		highBarList=rtChartInfo.getHighBarList(instrument, period, 120, prevBar.getTime());
 		
 		List<IBar> bars = history.getBars(instrument, Period.FIFTEEN_MINS,
 				OfferSide.BID, indicatorFilter, 10 + 1, prevBar.getTime(), 0);
