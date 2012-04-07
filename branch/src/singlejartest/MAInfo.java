@@ -30,7 +30,7 @@ public class MAInfo {
 	private IIndicators indicators;
 	private IChart chart;
 
-	public  static CrossPoint smma1030Cross = null;
+	private CrossPoint smma1030Cross = null;
 	private List<CrossPoint> sma510CrossList= new ArrayList<CrossPoint>();
 	private static final Logger LOGGER = LoggerFactory.getLogger(MAInfo.class);
 
@@ -72,7 +72,7 @@ public class MAInfo {
 
 	public void findSMA510Cross(Instrument instrument, Period period,
 			int initBarNum, long time) throws JFException {
-		if (MAInfo.smma1030Cross == null) {
+		if (smma1030Cross == null) {
 			LOGGER.error("smma1030Croos was not init!");
 			System.exit(0);
 		}
@@ -126,6 +126,13 @@ public class MAInfo {
 			return true;
 		} else
 			return false;
+	}
+	public CrossPoint getSmma1030Cross() {
+		return smma1030Cross;
+	}
+
+	public void setSmma1030Cross(CrossPoint smma1030Cross) {
+		this.smma1030Cross = smma1030Cross;
 	}
 
 }

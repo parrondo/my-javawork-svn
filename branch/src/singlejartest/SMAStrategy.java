@@ -48,7 +48,9 @@ public class SMAStrategy implements IStrategy {
 
 	private List<IBar> highBarList;
 	private RTChartInfo rtChartInfo;
-	
+	private TrendInfo trendInfo=null;
+	private MAInfo maInfo=null;
+
 	@Configurable("Instrument")
 	public Instrument selectedInstrument = Instrument.EURUSD;
 	@Configurable("Period")
@@ -69,6 +71,20 @@ public class SMAStrategy implements IStrategy {
 			return null;
 		}
 	}
+	
+	public void initChart(Instrument instrument, Period period,
+			int initBarNum, long time) throws JFException {
+		maInfo=new MAInfo(context);
+		maInfo.findFirstSMMA1030Cross(instrument, period, initBarNum, time);
+		if(maInfo.getSmma1030Cross().getCrossType()==null){
+			System.out.println("bars number is not enough");
+			System.exit(0);
+		}	
+//		CreateHighBarList(instrument,period,numberOfCandlesBefore,time);
+//		CreateLowBarList(instrument,period,numberOfCandlesBefore,time);
+		trendInfo=new TrendInfo(context);
+		trendInfo.findTrend(instrument, period,TrendInfo.TrendLength, time);
+	}
 	public void onStart(IContext context) throws JFException {
 		this.context = context;
 		this.engine = context.getEngine();
@@ -82,7 +98,7 @@ public class SMAStrategy implements IStrategy {
 		rtChartInfo=new RTChartInfo(context);
 		IBar currBar = history.getBar(this.selectedInstrument, Period.FIFTEEN_MINS, OfferSide.ASK, 0);
 		IBar prevDailyBar1 = history.getBar(this.selectedInstrument, Period.FIFTEEN_MINS, OfferSide.ASK, 1);
-		rtChartInfo.initChart(Instrument.EURUSD,Period.FIFTEEN_MINS,InitBarNum,currBar.getTime());
+		initChart(Instrument.EURUSD,Period.FIFTEEN_MINS,InitBarNum,currBar.getTime());
 		drawSignalDown(rtChartInfo.crossPoint.getCrossBar());
 		print("crossBar at " +rtChartInfo.crossPoint.getCrossBar()+" smma: "+
 				rtChartInfo.crossPoint.getCrossPrice());
@@ -168,7 +184,7 @@ public class SMAStrategy implements IStrategy {
 
 		// SMA10 crossover SMA90 from UP to DOWN ÏÂ´©
 		if(rtChartInfo.crossPoint.getCrossType()==CrossType.DownCross){
-			
+			if
 		}
 		if ((filteredSmma10[1] < filteredSmma10[0])
 				&& (filteredSmma10[1] < filteredSmma30[1])
