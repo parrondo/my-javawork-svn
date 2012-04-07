@@ -12,6 +12,7 @@ public class RTChartInfo {
 	private IBar lowBar;
 	
 	private TrendInfo trendInfo=null;
+	private MAInfo maInfo=null;
 	public final int HLBARSHIFT = 40;
 	private IBar crossBar;
 
@@ -34,7 +35,8 @@ public class RTChartInfo {
 	public void initChart(Instrument instrument, Period period,
 			int initBarNum, long time) throws JFException {
 		crossPoint=new CrossPoint(null);
-		findFirstCross(instrument, period, initBarNum, time);
+		maInfo=new MAInfo(context);
+		maInfo.findFirstSMMA1030Cross(instrument, period, initBarNum, time);
 		if(crossPoint.getCrossType()==null){
 			System.out.println("bars number is not enough");
 			System.exit(0);
@@ -50,52 +52,7 @@ public class RTChartInfo {
 		trendInfo.findTrend(instrument, period,TrendInfo.TrendLength, time);
 	}
 	
-	public void findFirstCross(Instrument instrument, Period period,
-			int numberOfCandlesBefore, long time) throws JFException {
-		List<IBar> barsList = history.getBars(instrument, period,
-				OfferSide.BID, Filter.WEEKENDS, numberOfCandlesBefore, time, 0);
-		
-		for (IBar bar : barsList) {
-			double[] Smma30 = indicators.smma(instrument, period, OfferSide.BID,
-					AppliedPrice.CLOSE, 30, Filter.WEEKENDS, 2, bar.getTime(), 0);
-			double[] Smma10 = indicators.smma(instrument, period, OfferSide.BID,
-					AppliedPrice.CLOSE, 10, Filter.WEEKENDS, 2, bar.getTime(), 0);
-			double[] Sma5 = indicators.sma(instrument, period, OfferSide.BID,
-					AppliedPrice.CLOSE, 5, Filter.WEEKENDS, 2, bar.getTime(), 0);
-			
-			if(isUpCrossOver(Smma30, Smma10)){
-				crossPoint.setCrossType(CrossType.UpCross);
-				crossPoint.setTime(bar.getTime());
-				CrossPoint.crossBar=bar;
-				CrossPoint.smmaCrossPrice=Smma30[1];
-			}
-			if(isDownCrossOver(Smma30, Smma10)){
-				crossPoint.setCrossType(CrossType.DownCross);
-				crossPoint.setTime(bar.getTime());
-				CrossPoint.crossBar=bar;
-				CrossPoint.smmaCrossPrice=Smma10[1];
-			}
-		}
-	}
 
-	public boolean isDownCrossOver(double[] slow, double[] fast)
-			throws JFException {
-		if ((fast[1] < fast[0]) && (fast[1] < slow[1])
-				&& (fast[0] >= slow[0])) {		
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public boolean isUpCrossOver(double[] slow, double[] fast) 
-			throws JFException {
-		if ((fast[1] > fast[0]) && (fast[1] > slow[1])
-				&& (fast[0] <= slow[0])) {
-			return true;
-		} else
-			return false;
-	}
 
 
 

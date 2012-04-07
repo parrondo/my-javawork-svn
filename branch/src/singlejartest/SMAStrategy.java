@@ -14,6 +14,8 @@ import java.text.*;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
+import singlejartest.CrossPoint.CrossType;
+
 import com.sun.org.apache.xml.internal.serializer.ElemDesc;
 import com.tictactec.ta.lib.*;
 
@@ -81,9 +83,9 @@ public class SMAStrategy implements IStrategy {
 		IBar currBar = history.getBar(this.selectedInstrument, Period.FIFTEEN_MINS, OfferSide.ASK, 0);
 		IBar prevDailyBar1 = history.getBar(this.selectedInstrument, Period.FIFTEEN_MINS, OfferSide.ASK, 1);
 		rtChartInfo.initChart(Instrument.EURUSD,Period.FIFTEEN_MINS,InitBarNum,currBar.getTime());
-		drawSignalDown(rtChartInfo.crossPoint.crossBar);
-		print("crossBar at " +rtChartInfo.crossPoint.crossBar+" smma: "+
-				CrossPoint.smmaCrossPrice);
+		drawSignalDown(rtChartInfo.crossPoint.getCrossBar());
+		print("crossBar at " +rtChartInfo.crossPoint.getCrossBar()+" smma: "+
+				rtChartInfo.crossPoint.getCrossPrice());
 		
 		
 	}
@@ -165,6 +167,9 @@ public class SMAStrategy implements IStrategy {
 				prevBar.getTime(), 0);
 
 		// SMA10 crossover SMA90 from UP to DOWN ÏÂ´©
+		if(rtChartInfo.crossPoint.getCrossType()==CrossType.DownCross){
+			
+		}
 		if ((filteredSmma10[1] < filteredSmma10[0])
 				&& (filteredSmma10[1] < filteredSmma30[1])
 				&& (filteredSmma10[0] >= filteredSmma30[0])) {
