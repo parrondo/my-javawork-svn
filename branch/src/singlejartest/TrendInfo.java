@@ -34,6 +34,8 @@ public class TrendInfo {
 
 	private List<IBar> hBarList = new ArrayList<IBar>();
 	private List<IBar> lBarList = new ArrayList<IBar>();
+
+
 	private List<IBar> rawBarList;
 	public  final static int TrendLength=120;
 	public final static int RightInterval=20;
@@ -109,6 +111,22 @@ public class TrendInfo {
 				Filter.WEEKENDS, trendLength, time, 0);
 
 		return;
+	}
+	
+	public List<IBar> gethBarList() {
+		return hBarList;
+	}
+
+	public void sethBarList(List<IBar> hBarList) {
+		this.hBarList = hBarList;
+	}
+	
+	public List<IBar> getlBarList() {
+		return lBarList;
+	}
+
+	public void setlBarList(List<IBar> lBarList) {
+		this.lBarList = lBarList;
 	}
 
 }

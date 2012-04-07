@@ -22,7 +22,7 @@ import com.tictactec.ta.lib.*;
 public class SMAStrategy implements IStrategy {
 	private IEngine engine;
 	private IConsole console;
-	private IContext context=null;
+	private IContext context = null;
 	private IHistory history;
 	private IChart chart;
 	private IIndicators indicators;
@@ -44,12 +44,12 @@ public class SMAStrategy implements IStrategy {
 	private ChartObjectListener ichartobjectlistener;
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(SMAStrategy.class);
-	public  static final int InitBarNum=400;
+	public static final int InitBarNum = 400;
 
 	private List<IBar> highBarList;
 	private RTChartInfo rtChartInfo;
-	private TrendInfo trendInfo=null;
-	private MAInfo maInfo=null;
+	private TrendInfo trendInfo = null;
+	private MAInfo maInfo = null;
 
 	@Configurable("Instrument")
 	public Instrument selectedInstrument = Instrument.EURUSD;
@@ -57,34 +57,38 @@ public class SMAStrategy implements IStrategy {
 	public Period selectedPeriod = Period.FIFTEEN_MINS;
 	@Configurable("SMA filter")
 	public Filter indicatorFilter = Filter.WEEKENDS;
-	
-	public void setInstance(MyChartObjectAdapter instance)
-	{
-		this.ichartobjectlistener=instance;
+
+	public void setInstance(MyChartObjectAdapter instance) {
+		this.ichartobjectlistener = instance;
 	}
-	
-	public IContext getContext(){
-		if(this.context!=null){
+
+	public IContext getContext() {
+		if (this.context != null) {
 			return this.context;
-		}
-		else {
+		} else {
 			return null;
 		}
 	}
-	
-	public void initChart(Instrument instrument, Period period,
-			int initBarNum, long time) throws JFException {
-		maInfo=new MAInfo(context);
+
+	public void initChart(Instrument instrument, Period period, int initBarNum,
+			long time) throws JFException {
+		maInfo = new MAInfo(context);
 		maInfo.findFirstSMMA1030Cross(instrument, period, initBarNum, time);
-		if(maInfo.getSmma1030Cross().getCrossType()==null){
+		if (maInfo.getSmma1030Cross().getCrossType() == null) {
 			System.out.println("bars number is not enough");
 			System.exit(0);
-		}	
-//		CreateHighBarList(instrument,period,numberOfCandlesBefore,time);
-//		CreateLowBarList(instrument,period,numberOfCandlesBefore,time);
-		trendInfo=new TrendInfo(context);
-		trendInfo.findTrend(instrument, period,TrendInfo.TrendLength, time);
+		}
+		maInfo.findSMA510Cross(instrument, period, initBarNum, time);
+
+		trendInfo = new TrendInfo(context);
+		trendInfo.findTrend(instrument, period, TrendInfo.TrendLength, time);
 	}
+
+	public void updateChart(Instrument instrument, Period period, long time)
+			throws JFException {
+		trendInfo.findTrend(instrument, period, TrendInfo.TrendLength, time);
+	}
+
 	public void onStart(IContext context) throws JFException {
 		this.context = context;
 		this.engine = context.getEngine();
@@ -95,15 +99,17 @@ public class SMAStrategy implements IStrategy {
 		factory = chart.getChartObjectFactory();
 		MarubozuLists = new ArrayList<IBar>();
 		cdlPattern = new CandlePattern();
-		rtChartInfo=new RTChartInfo(context);
-		IBar currBar = history.getBar(this.selectedInstrument, Period.FIFTEEN_MINS, OfferSide.ASK, 0);
-		IBar prevDailyBar1 = history.getBar(this.selectedInstrument, Period.FIFTEEN_MINS, OfferSide.ASK, 1);
-		initChart(Instrument.EURUSD,Period.FIFTEEN_MINS,InitBarNum,currBar.getTime());
+		rtChartInfo = new RTChartInfo(context);
+		IBar currBar = history.getBar(this.selectedInstrument,
+				Period.FIFTEEN_MINS, OfferSide.ASK, 0);
+		IBar prevDailyBar1 = history.getBar(this.selectedInstrument,
+				Period.FIFTEEN_MINS, OfferSide.ASK, 1);
+		initChart(Instrument.EURUSD, Period.FIFTEEN_MINS, InitBarNum,
+				currBar.getTime());
 		drawSignalDown(rtChartInfo.crossPoint.getCrossBar());
-		print("crossBar at " +rtChartInfo.crossPoint.getCrossBar()+" smma: "+
-				rtChartInfo.crossPoint.getCrossPrice());
-		
-		
+		print("crossBar at " + rtChartInfo.crossPoint.getCrossBar() + " smma: "
+				+ rtChartInfo.crossPoint.getCrossPrice());
+
 	}
 
 	public void onAccount(IAccount account) throws JFException {
@@ -125,7 +131,7 @@ public class SMAStrategy implements IStrategy {
 		}
 		printMarubozu();
 		print("version three");
-//		chart.addIndicator(indicators.getIndicator("ZIGZAG"));
+		// chart.addIndicator(indicators.getIndicator("ZIGZAG"));
 	}
 
 	public void onTick(Instrument instrument, ITick tick) throws JFException {
@@ -134,9 +140,12 @@ public class SMAStrategy implements IStrategy {
 
 	public void onBar(Instrument instrument, Period period, IBar askBar,
 			IBar bidBar) throws JFException {
-		if (!instrument.equals(selectedInstrument)||!period.equals(Period.FIFTEEN_MINS)) {
+		if (!instrument.equals(selectedInstrument)
+				|| !period.equals(Period.FIFTEEN_MINS)) {
 			return;
 		}
+		List<IBar> hBarList = trendInfo.gethBarList();
+		List<IBar> lBarList = trendInfo.getlBarList();
 		Date prevBarTime = new Date();
 		Date currBarTime = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -148,10 +157,11 @@ public class SMAStrategy implements IStrategy {
 		IBar currBar = history.getBar(instrument, selectedPeriod,
 				OfferSide.BID, 0);
 		if (isFilterhey(currBar.getTime())) {
-			return; 
+			return;
 		}
-//		highBarList=rtChartInfo.getHighBarList(instrument, period, 120, prevBar.getTime());
-		
+		// highBarList=rtChartInfo.getHighBarList(instrument, period, 120,
+		// prevBar.getTime());
+
 		List<IBar> bars = history.getBars(instrument, Period.FIFTEEN_MINS,
 				OfferSide.BID, indicatorFilter, 10 + 1, prevBar.getTime(), 0);
 		RetCode retCode = cdlPattern.addMarubozu(MarubozuLists, bars);
@@ -160,9 +170,10 @@ public class SMAStrategy implements IStrategy {
 			return;
 		}
 		if (!MarubozuLists.isEmpty()) {
-			if (MarubozuLists.get(MarubozuLists.size() - 1).getTime() == prevBar.getTime()){
-//				drawshortLine(prevBar);
-//				drawVLine(prevBar);
+			if (MarubozuLists.get(MarubozuLists.size() - 1).getTime() == prevBar
+					.getTime()) {
+				// drawshortLine(prevBar);
+				// drawVLine(prevBar);
 				drawSignalUp(prevBar);
 				;
 			}
@@ -182,55 +193,72 @@ public class SMAStrategy implements IStrategy {
 				OfferSide.BID, AppliedPrice.CLOSE, 5, indicatorFilter, 2,
 				prevBar.getTime(), 0);
 
-		// SMA10 crossover SMA90 from UP to DOWN 下穿
-		if(rtChartInfo.crossPoint.getCrossType()==CrossType.DownCross){
-			if
-		}
-		if ((filteredSmma10[1] < filteredSmma10[0])
-				&& (filteredSmma10[1] < filteredSmma30[1])
-				&& (filteredSmma10[0] >= filteredSmma30[0])) {
-			if (engine.getOrders().size() > 0) {
-				for (IOrder orderInMarket : engine.getOrders()) {
-					if (!orderInMarket.isLong()) {
-						print("Closing Short position");
-						orderInMarket.close();
-					}
+		// *************************10日线下穿30日线*****************************
+		if (maInfo.getSmma1030Cross().getCrossType() == CrossType.DownCross) {
+			if (maInfo.getSma510CrossList().size() > 0) {
+				if (currBar.getClose() < lBarList.get(0).getClose()) {
+					doShort(instrument);
+				}
+			} else if (maInfo.getSma510CrossList().size() == 0) {
+				if (maInfo.isUpCrossOver(filteredSma5, filteredSmma10)) {
+					doLong(instrument);
 				}
 			}
-			if ((order == null)
-					|| (!order.isLong() && order.getState().equals(
-							IOrder.State.CLOSED))) {
-				print("Create Buy");
-				order = engine.submitOrder(getLabel(instrument), instrument,
-						OrderCommand.BUY, 0.001);
+		}
+		// ***********************10日线上穿30日线**************************
+		if (maInfo.getSmma1030Cross().getCrossType() == CrossType.UpCross) {
+			if (maInfo.getSma510CrossList().size() > 0) {
+				if (currBar.getClose() > hBarList.get(0).getClose()) {
+					doLong(instrument);
+				}
+			} else if (maInfo.getSma510CrossList().size() == 0) {
+				if (maInfo.isDownCrossOver(filteredSma5, filteredSmma10)) {
+					doShort(instrument);
+				}
 			}
+		}
+		
+		updateChart(instrument, period, currBar.getTime());
 
-		}
-		// SMA10 crossover SMA90 from DOWN to UP 上穿
-		if ((filteredSmma10[1] > filteredSmma10[0])
-				&& (filteredSmma10[1] > filteredSmma30[1])
-				&& (filteredSmma10[0] <= filteredSmma30[0])) {
-			if ((filteredSma5[1] > filteredSma5[0])
-					&& (filteredSma5[1] > filteredSmma10[1])
-					&& (filteredSma5[0] <= filteredSmma10[0])) {
-				if (engine.getOrders().size() > 0) {
-					for (IOrder orderInMarket : engine.getOrders()) {
-						if (orderInMarket.isLong()) {
-							print("Closing Long position");
-							orderInMarket.close();
-						}
-					}
-				}
-				if ((order == null)
-						|| (order.isLong() && order.getState().equals(
-								IOrder.State.CLOSED))) {
-					print("Create Sell");
-					order = engine.submitOrder(getLabel(instrument),
-							instrument, OrderCommand.SELL, 0.001);
+	}
+
+	protected boolean doShort(Instrument instrument) throws JFException {
+		if (engine.getOrders().size() > 0) {
+			for (IOrder orderInMarket : engine.getOrders()) {
+				if (orderInMarket.isLong()) {
+					print("Closing Long position");
+					orderInMarket.close();
 				}
 			}
-
 		}
+		if ((order == null)
+				|| (order.isLong() && order.getState().equals(
+						IOrder.State.CLOSED))) {
+			print("Create Sell");
+			order = engine.submitOrder(getLabel(instrument), instrument,
+					OrderCommand.SELL, 0.01);
+		}
+
+		return true;
+	}
+
+	protected boolean doLong(Instrument instrument) throws JFException {
+		if (engine.getOrders().size() > 0) {
+			for (IOrder orderInMarket : engine.getOrders()) {
+				if (!orderInMarket.isLong()) {
+					print("Closing Short position");
+					orderInMarket.close();
+				}
+			}
+		}
+		if ((order == null)
+				|| (!order.isLong() && order.getState().equals(
+						IOrder.State.CLOSED))) {
+			print("Create Buy");
+			order = engine.submitOrder(getLabel(instrument), instrument,
+					OrderCommand.BUY, 0.001);
+		}
+		return true;
 	}
 
 	protected String getLabel(Instrument instrument) {
@@ -244,64 +272,70 @@ public class SMAStrategy implements IStrategy {
 		console.getOut().println(message);
 	}
 
-	/*
-	 * public void writetofile() { File dirFile = context.getFilesDir(); if
-	 * (!dirFile.exists()) { console.getErr().println(
-	 * "Please create files directory in My Strategies"); context.stop(); } File
-	 * file = new File(dirFile, "last10bars.txt");
-	 * console.getOut().println("Writing to file " + file); try { PrintWriter pw
-	 * = new PrintWriter(new FileOutputStream( file.toString(), true));
-	 * prevBarTime.setTime(prevBar.getTime());
-	 * currBarTime.setTime(currBar.getTime());
-	 * pw.println(sdf.format(prevBarTime) + "," + sdf.format(currBarTime) + ","
-	 * + (order == null) + "," + order.isLong() + "," +
-	 * order.getState().equals(IOrder.State.CLOSED));
-	 * 
-	 * pw.close(); } catch (IOException e) {
-	 * e.printStackTrace(console.getErr()); }
-	 * 
-	 * }
-	 */
+	public void writetofile() {
+		File dirFile = context.getFilesDir();
+		if (!dirFile.exists()) {
+			console.getErr().println(
+					"Please create files directory in My Strategies");
+			context.stop();
+		}
+		File file = new File(dirFile, "last10bars.txt");
+		console.getOut().println("Writing to file " + file);
+		try {
+			PrintWriter pw = new PrintWriter(new FileOutputStream(
+					file.toString(), true));
+//			prevBarTime.setTime(prevBar.getTime());
+//			currBarTime.setTime(currBar.getTime());
+//			pw.println(sdf.format(prevBarTime) + "," + sdf.format(currBarTime)
+//					+ "," + (order == null) + "," + order.isLong() + ","
+//					+ order.getState().equals(IOrder.State.CLOSED));
+
+			pw.close();
+		} catch (IOException e) {
+			e.printStackTrace(console.getErr());
+		}
+
+	}
 
 	protected void drawshortLine(IBar bar) {
-		shortLine = factory.createShortLine(new Date(bar.getTime()).toString(),bar.getTime(),
-				bar.getHigh()+0.0006,bar.getTime(),bar.getHigh()+0.0020);
-//		shortLine = factory.createShortLine(new Date(bar.getTime()).toString());
-//		shortLine.setTime(0, bar.getTime());
-//		shortLine.setPrice(0, bar.getHigh());
+		shortLine = factory.createShortLine(new Date(bar.getTime()).toString(),
+				bar.getTime(), bar.getHigh() + 0.0006, bar.getTime(),
+				bar.getHigh() + 0.0020);
+		// shortLine = factory.createShortLine(new
+		// Date(bar.getTime()).toString());
+		// shortLine.setTime(0, bar.getTime());
+		// shortLine.setPrice(0, bar.getHigh());
 		chart.addToMainChart(shortLine);
 	}
-	
+
 	protected void drawVLine(IBar bar) {
 		VLine = factory.createVerticalLine(new Date(bar.getTime()).toString());
 		VLine.setTime(0, bar.getTime());
-//		shortLine.setPrice(0, bar.getHigh());
+		// shortLine.setPrice(0, bar.getHigh());
 		chart.addToMainChart(VLine);
 	}
-	
-	public void drawSignalUp(IBar bar){
-		UpSignal=factory.createSignalUp();
+
+	public void drawSignalUp(IBar bar) {
+		UpSignal = factory.createSignalUp();
 		UpSignal.setTime(0, bar.getTime());
-		UpSignal.setPrice(0, bar.getHigh()+0.0010);
+		UpSignal.setPrice(0, bar.getHigh() + 0.0010);
 		chart.addToMainChart(UpSignal);
 	}
-	
-	public void drawSignalDown(IBar bar){
-		DownSignal=factory.createSignalDown();
+
+	public void drawSignalDown(IBar bar) {
+		DownSignal = factory.createSignalDown();
 		DownSignal.setTime(0, bar.getTime());
-		DownSignal.setPrice(0, bar.getHigh()+0.0010);
+		DownSignal.setPrice(0, bar.getHigh() + 0.0010);
 		chart.addToMainChart(DownSignal);
 	}
-	
-	public void printMarubozu()
-	{
-		if(MarubozuLists.isEmpty()) {
+
+	public void printMarubozu() {
+		if (MarubozuLists.isEmpty()) {
 			print("The Marub is empty");
 			return;
 		}
-		for(IBar bar:MarubozuLists)
-		{
-			print("The Marub is at:" +bar.getTime());
+		for (IBar bar : MarubozuLists) {
+			print("The Marub is at:" + bar.getTime());
 		}
 	}
 
@@ -317,18 +351,18 @@ public class SMAStrategy implements IStrategy {
 			hour = cal.get(GregorianCalendar.HOUR_OF_DAY);
 
 			if (hour >= 22) {
-//				print(sdf.format(currBarTime) + " filterd OK");
+				// print(sdf.format(currBarTime) + " filterd OK");
 				return true;
 			} else
 				return false;
 
 		} else if (cal.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SATURDAY) {
-//			print(sdf.format(currBarTime) + " filterd OK");
+			// print(sdf.format(currBarTime) + " filterd OK");
 			return true;
 		} else if (cal.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SUNDAY) {
 			hour = cal.get(GregorianCalendar.HOUR_OF_DAY);
 			if (hour < 22) {
-//				print(sdf.format(currBarTime) + " filterd OK");
+				// print(sdf.format(currBarTime) + " filterd OK");
 				return true;
 			} else
 				return false;
@@ -337,14 +371,14 @@ public class SMAStrategy implements IStrategy {
 		}
 
 	}
-	
-public	class MyChartObjectAdapter extends ChartObjectAdapter {
-		
+
+	public class MyChartObjectAdapter extends ChartObjectAdapter {
+
 		@Override
 		public void deleted(ChartObjectEvent e) {
 			print("deleted " + VLine.getKey());
 			// remove label as well
-//			chart.remove(label);
+			// chart.remove(label);
 		}
 
 		@Override
@@ -355,14 +389,16 @@ public	class MyChartObjectAdapter extends ChartObjectAdapter {
 		@Override
 		public void moved(ChartObjectEvent e) {
 			// move the label to the middle of the rectangle
-//			label.setPrice(0, getLabelPrice());
-//			label.setTime(0, getLabelTime());
+			// label.setPrice(0, getLabelPrice());
+			// label.setTime(0, getLabelTime());
 		}
+
 		@Override
-		public void attrChanged(ChartObjectEvent e){
+		public void attrChanged(ChartObjectEvent e) {
 			print("attrChanged OK");
-			
+
 		}
+
 		@Override
 		public void deselected(ChartObjectEvent e) {
 			print("deselected OK");

@@ -20,6 +20,7 @@ import com.dukascopy.api.JFException;
 import com.dukascopy.api.OfferSide;
 import com.dukascopy.api.Period;
 import com.dukascopy.api.IIndicators.AppliedPrice;
+import com.sun.org.apache.bcel.internal.generic.NEW;
 
 public class MAInfo {
 
@@ -30,8 +31,9 @@ public class MAInfo {
 	private IIndicators indicators;
 	private IChart chart;
 
-	private CrossPoint smma1030Cross = null;
+	private CrossPoint smma1030Cross =new CrossPoint(null);
 	private List<CrossPoint> sma510CrossList= new ArrayList<CrossPoint>();
+	
 	private static final Logger LOGGER = LoggerFactory.getLogger(MAInfo.class);
 
 	public MAInfo(IContext context) {
@@ -74,7 +76,7 @@ public class MAInfo {
 			int initBarNum, long time) throws JFException {
 		if (smma1030Cross == null) {
 			LOGGER.error("smma1030Croos was not init!");
-			System.exit(0);
+			throw new JFException("smma1030Croos was not init!");
 		}
 		
 		List<IBar> barsList = history.getBars(instrument, period,
@@ -133,6 +135,15 @@ public class MAInfo {
 
 	public void setSmma1030Cross(CrossPoint smma1030Cross) {
 		this.smma1030Cross = smma1030Cross;
+	}
+	
+
+	public List<CrossPoint> getSma510CrossList() {
+		return sma510CrossList;
+	}
+
+	public void setSma510CrossList(List<CrossPoint> sma510CrossList) {
+		this.sma510CrossList = sma510CrossList;
 	}
 
 }
