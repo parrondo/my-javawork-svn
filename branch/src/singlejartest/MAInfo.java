@@ -32,7 +32,6 @@ public class MAInfo {
 	private IChart chart;
 
 	private CrossPoint smma1030Cross = new CrossPoint(null);
-	private boolean smma1030CPUpdated=false;
 
 	private List<CrossPoint> sma510CrossList = new ArrayList<CrossPoint>();
 
@@ -56,7 +55,7 @@ public class MAInfo {
 		}
 	}
 
-	public void updateSMMA1030Cross(Instrument instrument, Period period,
+	public boolean updateSMMA1030Cross(Instrument instrument, Period period,
 			IBar bar) throws JFException {
 
 		double[] smma30 = indicators.smma(instrument, period, OfferSide.BID,
@@ -64,7 +63,7 @@ public class MAInfo {
 		double[] smma10 = indicators.smma(instrument, period, OfferSide.BID,
 				AppliedPrice.CLOSE, 10, Filter.WEEKENDS, 2, bar.getTime(), 0);
 
-		smma1030CPUpdated=updateCrossPoint(smma1030Cross, smma10, smma30, bar);
+		return updateCrossPoint(smma1030Cross, smma10, smma30, bar);
 
 	}
 
@@ -94,7 +93,7 @@ public class MAInfo {
 				AppliedPrice.CLOSE, 5, Filter.WEEKENDS, 2, bar.getTime(), 0);
 
 		CrossPoint sma510Cross = new CrossPoint(null);
-		if(smma1030CPUpdated){
+		if(updateSMMA1030Cross(instrument,period,bar)){
 			sma510CrossList.clear();
 		}
 		if (updateCrossPoint(sma510Cross, sma5, smma10, bar)) {
@@ -102,7 +101,7 @@ public class MAInfo {
 		}
 	}
 
-	public boolean updateCrossPoint(CrossPoint crossPoint, double[] fast,
+	protected boolean updateCrossPoint(CrossPoint crossPoint, double[] fast,
 			double[] slow, IBar bar) throws JFException {
 		if (isUpCrossOver(fast, slow)) {
 			crossPoint.setCrossType(CrossType.UpCross);

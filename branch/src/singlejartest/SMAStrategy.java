@@ -134,9 +134,11 @@ public class SMAStrategy implements IStrategy {
 		trendInfo.findTrend(instrument, period, TrendInfo.TrendLength, time);
 	}
 
-	public void updateChart(Instrument instrument, Period period, long time)
+	public void updateChart(Instrument instrument, Period period, IBar bar)
 			throws JFException {
-		trendInfo.findTrend(instrument, period, TrendInfo.TrendLength, time);
+		trendInfo.findTrend(instrument, period, TrendInfo.TrendLength, bar.getTime());
+		maInfo.updateSMMA1030Cross(instrument, period, bar);
+		maInfo.updateSMA510CPList(instrument, period, bar);
 	}
 
 	public void onBar(Instrument instrument, Period period, IBar askBar,
@@ -219,7 +221,7 @@ public class SMAStrategy implements IStrategy {
 			}
 		}
 		
-		updateChart(instrument, period, currBar.getTime());
+		updateChart(instrument, period, currBar);
 
 	}
 
