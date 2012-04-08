@@ -128,7 +128,7 @@ public class SMAStrategy implements IStrategy {
 			System.out.println("bars number is not enough");
 			System.exit(0);
 		}
-		maInfo.initSMA510Cross(instrument, period, initBarNum, time);
+		maInfo.initSMA510CPList(instrument, period, initBarNum, time);
 
 		trendInfo = new TrendInfo(context);
 		trendInfo.findTrend(instrument, period, TrendInfo.TrendLength, time);
