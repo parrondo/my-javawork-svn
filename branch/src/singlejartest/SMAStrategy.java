@@ -70,25 +70,7 @@ public class SMAStrategy implements IStrategy {
 		}
 	}
 
-	public void initChart(Instrument instrument, Period period, int initBarNum,
-			long time) throws JFException {
-		maInfo = new MAInfo(context);
-		maInfo.findFirstSMMA1030Cross(instrument, period, initBarNum, time);
-		if (maInfo.getSmma1030Cross().getCrossType() == null) {
-			System.out.println("bars number is not enough");
-			System.exit(0);
-		}
-		maInfo.findSMA510Cross(instrument, period, initBarNum, time);
-
-		trendInfo = new TrendInfo(context);
-		trendInfo.findTrend(instrument, period, TrendInfo.TrendLength, time);
-	}
-
-	public void updateChart(Instrument instrument, Period period, long time)
-			throws JFException {
-		trendInfo.findTrend(instrument, period, TrendInfo.TrendLength, time);
-	}
-
+	
 	public void onStart(IContext context) throws JFException {
 		this.context = context;
 		this.engine = context.getEngine();
@@ -136,6 +118,25 @@ public class SMAStrategy implements IStrategy {
 
 	public void onTick(Instrument instrument, ITick tick) throws JFException {
 
+	}
+	
+	public void initChart(Instrument instrument, Period period, int initBarNum,
+			long time) throws JFException {
+		maInfo = new MAInfo(context);
+		maInfo.initSMMA1030Cross(instrument, period, initBarNum, time);
+		if (maInfo.getSmma1030Cross().getCrossType() == null) {
+			System.out.println("bars number is not enough");
+			System.exit(0);
+		}
+		maInfo.initSMA510Cross(instrument, period, initBarNum, time);
+
+		trendInfo = new TrendInfo(context);
+		trendInfo.findTrend(instrument, period, TrendInfo.TrendLength, time);
+	}
+
+	public void updateChart(Instrument instrument, Period period, long time)
+			throws JFException {
+		trendInfo.findTrend(instrument, period, TrendInfo.TrendLength, time);
 	}
 
 	public void onBar(Instrument instrument, Period period, IBar askBar,

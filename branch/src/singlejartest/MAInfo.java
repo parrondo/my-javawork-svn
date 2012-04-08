@@ -31,9 +31,10 @@ public class MAInfo {
 	private IIndicators indicators;
 	private IChart chart;
 
-	private CrossPoint smma1030Cross =new CrossPoint(null);
-	private List<CrossPoint> sma510CrossList= new ArrayList<CrossPoint>();
-	
+	private CrossPoint smma1030Cross = new CrossPoint(null);
+
+	private List<CrossPoint> sma510CrossList = new ArrayList<CrossPoint>();
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(MAInfo.class);
 
 	public MAInfo(IContext context) {
@@ -44,76 +45,74 @@ public class MAInfo {
 		this.indicators = context.getIndicators();
 	}
 
-	public void findFirstSMMA1030Cross(Instrument instrument, Period period,
+	public void initSMMA1030Cross(Instrument instrument, Period period,
 			int initBarNum, long time) throws JFException {
 		List<IBar> barsList = history.getBars(instrument, period,
 				OfferSide.BID, Filter.WEEKENDS, initBarNum, time, 0);
 
 		for (IBar bar : barsList) {
-			double[] smma30 = indicators.smma(instrument, period,
-					OfferSide.BID, AppliedPrice.CLOSE, 30, Filter.WEEKENDS, 2,
-					bar.getTime(), 0);
-			double[] smma10 = indicators.smma(instrument, period,
-					OfferSide.BID, AppliedPrice.CLOSE, 10, Filter.WEEKENDS, 2,
-					bar.getTime(), 0);
-
-			if (isUpCrossOver(smma10, smma30)) {
-				smma1030Cross.setCrossType(CrossType.UpCross);
-				smma1030Cross.setTime(bar.getTime());
-				smma1030Cross.setCrossBar(bar);
-				smma1030Cross.setCrossPrice(smma30[1]);
-			}
-			if (isDownCrossOver(smma10, smma30)) {
-				smma1030Cross.setCrossType(CrossType.DownCross);
-				smma1030Cross.setTime(bar.getTime());
-				smma1030Cross.setCrossBar(bar);
-				smma1030Cross.setCrossPrice(smma10[1]);
-			}
+			updateSMMA1030Cross(instrument, period, bar);
 		}
 	}
 
-	public void findSMA510Cross(Instrument instrument, Period period,
+	public void updateSMMA1030Cross(Instrument instrument, Period period,
+			IBar bar) throws JFException {
+
+		double[] smma30 = indicators.smma(instrument, period, OfferSide.BID,
+				AppliedPrice.CLOSE, 30, Filter.WEEKENDS, 2, bar.getTime(), 0);
+		double[] smma10 = indicators.smma(instrument, period, OfferSide.BID,
+				AppliedPrice.CLOSE, 10, Filter.WEEKENDS, 2, bar.getTime(), 0);
+
+		updateCrossPoint(smma1030Cross, smma10, smma30, bar);
+
+	}
+
+	public void initSMA510CPList(Instrument instrument, Period period,
 			int initBarNum, long time) throws JFException {
 		if (smma1030Cross == null) {
 			LOGGER.error("smma1030Croos was not init!");
 			throw new JFException("smma1030Croos was not init!");
 		}
-		
+
 		List<IBar> barsList = history.getBars(instrument, period,
 				OfferSide.BID, Filter.WEEKENDS, initBarNum, time, 0);
 
 		for (IBar bar : barsList) {
 			if (bar.getTime() < smma1030Cross.getCrossBar().getTime())
 				continue;
-
-			double[] smma10 = indicators.smma(instrument, period,
-					OfferSide.BID, AppliedPrice.CLOSE, 10, Filter.WEEKENDS, 2,
-					bar.getTime(), 0);
-			double[] sma5 = indicators
-					.sma(instrument, period, OfferSide.BID, AppliedPrice.CLOSE,
-							5, Filter.WEEKENDS, 2, bar.getTime(), 0);
-			
-			if (isUpCrossOver(sma5, smma10)) {
-				CrossPoint sma510UpCross=new CrossPoint(null);
-				sma510UpCross.setCrossType(CrossType.UpCross);
-				sma510UpCross.setTime(bar.getTime());
-				sma510UpCross.setCrossBar(bar);
-				sma510UpCross.setCrossPrice(smma10[1]);
-				sma510CrossList.add(sma510UpCross);
-			}
-			if (isDownCrossOver(sma5, smma10)) {
-				CrossPoint sma510DownCross=new CrossPoint(null);
-				sma510DownCross.setCrossType(CrossType.DownCross);
-				sma510DownCross.setTime(bar.getTime());
-				sma510DownCross.setCrossBar(bar);
-				sma510DownCross.setCrossPrice(sma5[1]);
-				sma510CrossList.add(sma510DownCross);
-			}
+			updateSMA510CPList(instrument, period, bar);
 		}
-
 	}
 
-	public boolean isDownCrossOver(double[] fast, double[] slow )
+	public void updateSMA510CPList(Instrument instrument, Period period,
+			IBar bar) throws JFException {
+		double[] smma10 = indicators.smma(instrument, period, OfferSide.BID,
+				AppliedPrice.CLOSE, 10, Filter.WEEKENDS, 2, bar.getTime(), 0);
+		double[] sma5 = indicators.sma(instrument, period, OfferSide.BID,
+				AppliedPrice.CLOSE, 5, Filter.WEEKENDS, 2, bar.getTime(), 0);
+
+		CrossPoint sma510Cross = new CrossPoint(null);
+		updateCrossPoint(sma510Cross, sma5, smma10, bar);
+		sma510CrossList.add(sma510Cross);
+	}
+
+	public void updateCrossPoint(CrossPoint crossPoint, double[] fast,
+			double[] slow, IBar bar) throws JFException {
+		if (isUpCrossOver(fast, slow)) {
+			crossPoint.setCrossType(CrossType.UpCross);
+			crossPoint.setTime(bar.getTime());
+			crossPoint.setCrossBar(bar);
+			crossPoint.setCrossPrice(slow[1]);
+		}
+		if (isDownCrossOver(fast, slow)) {
+			crossPoint.setCrossType(CrossType.DownCross);
+			crossPoint.setTime(bar.getTime());
+			crossPoint.setCrossBar(bar);
+			crossPoint.setCrossPrice(fast[1]);
+		}
+	}
+
+	public boolean isDownCrossOver(double[] fast, double[] slow)
 			throws JFException {
 		if ((fast[1] < fast[0]) && (fast[1] < slow[1]) && (fast[0] >= slow[0])) {
 			return true;
@@ -122,13 +121,14 @@ public class MAInfo {
 		}
 	}
 
-	public boolean isUpCrossOver(double[] fast,double[] slow )
+	public boolean isUpCrossOver(double[] fast, double[] slow)
 			throws JFException {
 		if ((fast[1] > fast[0]) && (fast[1] > slow[1]) && (fast[0] <= slow[0])) {
 			return true;
 		} else
 			return false;
 	}
+
 	public CrossPoint getSmma1030Cross() {
 		return smma1030Cross;
 	}
@@ -136,7 +136,6 @@ public class MAInfo {
 	public void setSmma1030Cross(CrossPoint smma1030Cross) {
 		this.smma1030Cross = smma1030Cross;
 	}
-	
 
 	public List<CrossPoint> getSma510CrossList() {
 		return sma510CrossList;

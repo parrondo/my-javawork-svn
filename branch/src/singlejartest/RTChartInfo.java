@@ -36,7 +36,7 @@ public class RTChartInfo {
 			int initBarNum, long time) throws JFException {
 		crossPoint=new CrossPoint(null);
 		maInfo=new MAInfo(context);
-		maInfo.findFirstSMMA1030Cross(instrument, period, initBarNum, time);
+		maInfo.initSMMA1030Cross(instrument, period, initBarNum, time);
 		if(crossPoint.getCrossType()==null){
 			System.out.println("bars number is not enough");
 			System.exit(0);
@@ -52,10 +52,6 @@ public class RTChartInfo {
 		trendInfo.findTrend(instrument, period,TrendInfo.TrendLength, time);
 	}
 	
-
-
-
-
 	public void setHighBar(IBar hBar) {
 		this.highBar = hBar;
 	}
