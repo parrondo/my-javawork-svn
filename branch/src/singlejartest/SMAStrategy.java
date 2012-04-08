@@ -47,7 +47,7 @@ public class SMAStrategy implements IStrategy {
 	public static final int InitBarNum = 400;
 
 	private List<IBar> highBarList;
-	private RTChartInfo rtChartInfo;
+//	private RTChartInfo rtChartInfo;
 	private TrendInfo trendInfo = null;
 	private MAInfo maInfo = null;
 
@@ -81,16 +81,16 @@ public class SMAStrategy implements IStrategy {
 		factory = chart.getChartObjectFactory();
 		MarubozuLists = new ArrayList<IBar>();
 		cdlPattern = new CandlePattern();
-		rtChartInfo = new RTChartInfo(context);
+//		rtChartInfo = new RTChartInfo(context);
 		IBar currBar = history.getBar(this.selectedInstrument,
 				Period.FIFTEEN_MINS, OfferSide.ASK, 0);
 		IBar prevDailyBar1 = history.getBar(this.selectedInstrument,
 				Period.FIFTEEN_MINS, OfferSide.ASK, 1);
-		initChart(Instrument.EURUSD, Period.FIFTEEN_MINS, InitBarNum,
+		initChart(Instrument.EURUSD, Period.FIFTEEN_MINS, SMAStrategy.InitBarNum,
 				currBar.getTime());
-		drawSignalDown(rtChartInfo.crossPoint.getCrossBar());
-		print("crossBar at " + rtChartInfo.crossPoint.getCrossBar() + " smma: "
-				+ rtChartInfo.crossPoint.getCrossPrice());
+		drawSignalDown(maInfo.getSmma1030CP().getCrossBar());
+		print("crossBar at " + maInfo.getSmma1030CP().getCrossBar() + " smma: "
+				+ maInfo.getSmma1030CP().getCrossPrice());
 
 	}
 
@@ -124,7 +124,7 @@ public class SMAStrategy implements IStrategy {
 			long time) throws JFException {
 		maInfo = new MAInfo(context);
 		maInfo.initSMMA1030Cross(instrument, period, initBarNum, time);
-		if (maInfo.getSmma1030Cross().getCrossType() == null) {
+		if (maInfo.getSmma1030CP().getCrossType() == null) {
 			System.out.println("bars number is not enough");
 			System.exit(0);
 		}
@@ -197,24 +197,24 @@ public class SMAStrategy implements IStrategy {
 				prevBar.getTime(), 0);
 
 		// *************************10日线下穿30日线*****************************
-		if (maInfo.getSmma1030Cross().getCrossType() == CrossType.DownCross) {
-			if (maInfo.getSma510CrossList().size() > 0) {
+		if (maInfo.getSmma1030CP().getCrossType() == CrossType.DownCross) {
+			if (maInfo.getSma510CPList().size() > 0) {
 				if (currBar.getClose() < lBarList.get(0).getClose()) {
 					doShort(instrument);
 				}
-			} else if (maInfo.getSma510CrossList().size() == 0) {
+			} else if (maInfo.getSma510CPList().size() == 0) {
 				if (maInfo.isUpCrossOver(filteredSma5, filteredSmma10)) {
 					doLong(instrument);
 				}
 			}
 		}
 		// ***********************10日线上穿30日线**************************
-		if (maInfo.getSmma1030Cross().getCrossType() == CrossType.UpCross) {
-			if (maInfo.getSma510CrossList().size() > 0) {
+		if (maInfo.getSmma1030CP().getCrossType() == CrossType.UpCross) {
+			if (maInfo.getSma510CPList().size() > 0) {
 				if (currBar.getClose() > hBarList.get(0).getClose()) {
 					doLong(instrument);
 				}
-			} else if (maInfo.getSma510CrossList().size() == 0) {
+			} else if (maInfo.getSma510CPList().size() == 0) {
 				if (maInfo.isDownCrossOver(filteredSma5, filteredSmma10)) {
 					doShort(instrument);
 				}

@@ -137,19 +137,19 @@ public class MAInfo {
 			return false;
 	}
 
-	public CrossPoint getSmma1030Cross() {
+	public CrossPoint getSmma1030CP() {
 		return smma1030Cross;
 	}
 
-	public void setSmma1030Cross(CrossPoint smma1030Cross) {
+	public void setSmma1030CP(CrossPoint smma1030Cross) {
 		this.smma1030Cross = smma1030Cross;
 	}
 
-	public List<CrossPoint> getSma510CrossList() {
+	public List<CrossPoint> getSma510CPList() {
 		return sma510CrossList;
 	}
 
-	public void setSma510CrossList(List<CrossPoint> sma510CrossList) {
+	public void setSma510CPList(List<CrossPoint> sma510CrossList) {
 		this.sma510CrossList = sma510CrossList;
 	}
 

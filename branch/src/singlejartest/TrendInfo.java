@@ -57,15 +57,14 @@ public class TrendInfo {
 	public void findTrend(Instrument instrument, Period period,
 			int trendLength, long time) throws JFException {
 		
-		CreateHLBarsList(instrument, period, trendLength, time);
-		hBarLocation.add(searchBarsList(hBarList.get(0).getTime(), rawBarList));
-		hBarLocation.add(searchBarsList(hBarList.get(1).getTime(), rawBarList));
-		hBarLocation.add(searchBarsList(hBarList.get(2).getTime(), rawBarList));
-
-		lBarLocation.add(searchBarsList(lBarList.get(0).getTime(), rawBarList));
-		lBarLocation.add(searchBarsList(lBarList.get(1).getTime(), rawBarList));
-		lBarLocation.add(searchBarsList(lBarList.get(2).getTime(), rawBarList));
+		hBarList=CreateHighBarsList(instrument, period, trendLength, time);
+		lBarList=CreateLowBarList(instrument, period, trendLength, time);
 		
+		for(int i=0;i<3;i++){
+			hBarLocation.add(searchBarsList(hBarList.get(i).getTime(), rawBarList));
+			lBarLocation.add(searchBarsList(hBarList.get(i).getTime(), rawBarList));
+		}
+	
 		if(hBarLocation.get(0)>TrendLength-RightInterval&&hBarLocation.get(1)>TrendLength-RightInterval
 				&&hBarLocation.get(2)>TrendLength-RightInterval&&hBarList.get(0).getClose()-lBarList.get(0).getClose()>0.0080){
 			TrendInfo.trendType=TrendType.UpTrend;		
@@ -89,28 +88,29 @@ public class TrendInfo {
 			}
 			i++;
 		}
-		throw new JFException("can't find the element");
+		throw new JFException("can't find the element"); 
 	}
 
-	public void CreateHLBarsList(Instrument instrument, Period period,
+	public List<IBar>  CreateHighBarsList(Instrument instrument, Period period,
 			int trendLength, long time) throws JFException {
 		rawBarList = history.getBars(instrument, period, OfferSide.BID,
 				Filter.WEEKENDS, trendLength, time, 0);
-		hBarList.addAll(rawBarList);
-		lBarList.addAll(rawBarList);
-		Collections.sort(hBarList, new IBarCompareHigh());
-		Collections.sort(lBarList, new IBarCompareLow());
+		List<IBar> hBars=new ArrayList<IBar>();
+		hBars.addAll(rawBarList);
+		Collections.sort(hBars, new IBarCompareHigh());
 		// for (IBar bar : hBarList)
 		// System.out.println(bar.getHigh());
-		return;
+		return hBars;
 	}
 
-	public void CreateLowBarList(Instrument instrument, Period period,
+	public List<IBar> CreateLowBarList(Instrument instrument, Period period,
 			int trendLength, long time) throws JFException {
-		lBarList = history.getBars(instrument, period, OfferSide.BID,
+		rawBarList = history.getBars(instrument, period, OfferSide.BID,
 				Filter.WEEKENDS, trendLength, time, 0);
-
-		return;
+		List<IBar> lBars=new ArrayList<IBar>();
+		lBars.addAll(rawBarList);
+		Collections.sort(lBars, new IBarCompareLow());
+		return lBars;
 	}
 	
 	public List<IBar> gethBarList() {
