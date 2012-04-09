@@ -274,7 +274,7 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 				50000);
 
 		dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-		Date dateFrom = dateFormat.parse("2012.02.27 00:00:00");
+		Date dateFrom = dateFormat.parse("2012.03.27 00:00:00");
 		Date dateTo = dateFormat.parse("2012.03.30 00:00:00");
 		client.setDataInterval(DataLoadingMethod.ALL_TICKS, dateFrom.getTime(),
 				dateTo.getTime());

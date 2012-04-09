@@ -43,6 +43,8 @@ public class SMAStrategy implements IStrategy {
 	private CandlePattern cdlPattern;
 	private ChartObjectListener ichartobjectlistener;
 	private static final Logger LOGGER = LoggerFactory
+			.getLogger("cus");
+	private static final Logger LOGGER1 = LoggerFactory
 			.getLogger(SMAStrategy.class);
 	public static final int InitBarNum = 400;
 
@@ -89,7 +91,7 @@ public class SMAStrategy implements IStrategy {
 		initChart(Instrument.EURUSD, Period.FIFTEEN_MINS, SMAStrategy.InitBarNum,
 				currBar.getTime());
 		drawSignalDown(maInfo.getSmma1030CP().getCrossBar());
-		print("crossBar at " + maInfo.getSmma1030CP().getCrossBar() + " smma: "
+		LOGGER.info("crossBar at " + maInfo.getSmma1030CP().getCrossBar() + " smma: "
 				+ maInfo.getSmma1030CP().getCrossPrice());
 
 	}
@@ -100,7 +102,7 @@ public class SMAStrategy implements IStrategy {
 	public void onMessage(IMessage message) throws JFException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-		print(sdf.format(new Date(message.getCreationTime())) + " "
+		LOGGER1.info(sdf.format(new Date(message.getCreationTime())) + " "
 				+ message.getType() + message.getContent() + " "
 				+ message.getOrder());
 
@@ -113,6 +115,7 @@ public class SMAStrategy implements IStrategy {
 		}
 		printMarubozu();
 		print("version three");
+	
 		// chart.addIndicator(indicators.getIndicator("ZIGZAG"));
 	}
 
