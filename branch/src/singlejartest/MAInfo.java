@@ -92,12 +92,18 @@ public class MAInfo {
 		double[] sma5 = indicators.sma(instrument, period, OfferSide.BID,
 				AppliedPrice.CLOSE, 5, Filter.WEEKENDS, 2, bar.getTime(), 0);
 
-		CrossPoint sma510Cross = new CrossPoint(null);
-		if(updateSMMA1030Cross(instrument,period,bar)){
+		CrossPoint lc_sma510Cross = new CrossPoint(null);
+		if (updateSMMA1030Cross(instrument, period, bar)) {
 			sma510CrossList.clear();
 		}
-		if (updateCrossPoint(sma510Cross, sma5, smma10, bar)) {
-			sma510CrossList.add(sma510Cross);
+		if (updateCrossPoint(lc_sma510Cross, sma5, smma10, bar)) {
+			sma510CrossList.add(lc_sma510Cross);
+		}
+		// 1030 510½»²æÍ¬ÏòºöÂÔ
+		if (sma510CrossList.size() > 0) {
+			if (smma1030Cross.getCrossType() == sma510CrossList.get(0).getCrossType()) {
+				sma510CrossList.remove(0);
+			}
 		}
 	}
 
