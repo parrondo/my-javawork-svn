@@ -46,6 +46,7 @@ public class SMAStrategy implements IStrategy {
 	private static final Logger LOGGER1 = LoggerFactory
 			.getLogger(SMAStrategy.class);
 	public static final int InitBarNum = 400;
+	public static final int TIMEOUT = 1000;
 
 	private List<IBar> highBarList;
 	// private RTChartInfo rtChartInfo;
@@ -198,6 +199,8 @@ public class SMAStrategy implements IStrategy {
 		filteredSma5 = indicators.sma(instrument, selectedPeriod,
 				OfferSide.BID, AppliedPrice.CLOSE, 5, indicatorFilter, 2,
 				prevBar.getTime(), 0);
+		
+		updateChart(instrument, period, currBar);
 
 		// *************************10日线下穿30日线*****************************
 		if (maInfo.getSmma1030CP().getCrossType() == CrossType.DownCross) {
@@ -228,24 +231,22 @@ public class SMAStrategy implements IStrategy {
 			}
 		}
 
-		updateChart(instrument, period, currBar);
+		
 
 	}
 
 	protected boolean doShort(Instrument instrument) throws JFException {
+		print("do Short");
 		if (engine.getOrders().size() > 0) {
 			for (IOrder orderInMarket : engine.getOrders()) {
 				if (orderInMarket.isLong()) {
 					print("Closing Long position");
-					
 					orderInMarket.close();
-					try {
-			//			Thread.sleep(5000);
-					} catch (Exception e) {
-						// TODO: handle exception
+					orderInMarket.waitForUpdate(TIMEOUT);
+					print("the order state is "+orderInMarket.getState()+"");
+					if(!orderInMarket.getState().equals(IOrder.State.CLOSED)){
+						throw new JFException("order state is not correct!"+" the order state is "+orderInMarket.getState()+"");
 					}
-					orderInMarket.waitForUpdate(2000);
-					print("the order is "+orderInMarket.getState()+"");
 				}
 			}
 		}
@@ -263,11 +264,17 @@ public class SMAStrategy implements IStrategy {
 	}
 
 	protected boolean doLong(Instrument instrument) throws JFException {
+		print("do Long");
 		if (engine.getOrders().size() > 0) {
 			for (IOrder orderInMarket : engine.getOrders()) {
 				if (!orderInMarket.isLong()) {
-					print("Closing Short position");
+					print("Closing Long position");
 					orderInMarket.close();
+					orderInMarket.waitForUpdate(TIMEOUT);
+					print("the order state is "+orderInMarket.getState()+"");
+					if(!orderInMarket.getState().equals(IOrder.State.CLOSED)){
+						throw new JFException("order state is not correct!"+" the order state is "+orderInMarket.getState()+"");
+					}
 				}
 			}
 		}

@@ -599,6 +599,15 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 			}
 		});
 		controlPanel.add(MoveButton);
+		
+		controlPanel.add(new JButton("add OHLC Index") {{
+	        	addActionListener(new ActionListener() {
+	                @Override
+	                public void actionPerformed(ActionEvent e) {                
+	                	chartController.addOHLCInformer();
+	                }
+	            });
+	        }});
 
 		JButton MA1030Button = new JButton("Add MA1030");
 		MA1030Button.addActionListener(new ActionListener() {
