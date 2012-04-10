@@ -143,6 +143,16 @@ public class SMAStrategy implements IStrategy {
 		maInfo.updateSMMA1030Cross(instrument, period, bar);
 		maInfo.updateSMA510CPList(instrument, period, bar);
 	}
+	
+	public void  printChartInfo(long par_time){
+//		List<IBar> lc_hBarList = trendInfo.gethBarList();
+//		List<IBar> lc_lBarList = trendInfo.getlBarList();
+//		List<CrossPoint> lc_sma510CPList = maInfo.getSma510CPList();
+		LOGGER.debug("//------------------"+TimeZoneFormat.GMTFormat(par_time)+"--------------//");
+		trendInfo.printTrendInfo();
+		maInfo.printMAInfo();
+		
+	}
 
 	public void onBar(Instrument instrument, Period period, IBar askBar,
 			IBar bidBar) throws JFException {
@@ -200,7 +210,9 @@ public class SMAStrategy implements IStrategy {
 				OfferSide.BID, AppliedPrice.CLOSE, 5, indicatorFilter, 2,
 				prevBar.getTime(), 0);
 		
-		updateChart(instrument, period, currBar);
+		updateChart(instrument, period, prevBar);
+		printChartInfo(prevBar.getTime());
+		
 
 		// *************************10日线下穿30日线*****************************
 		if (maInfo.getSmma1030CP().getCrossType() == CrossType.DownCross) {

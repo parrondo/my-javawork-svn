@@ -224,7 +224,7 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 				LOGGER.info("Strategy stoped at startStrategy()");
 				resetButtons();
 
-				File reportFile = new File("C:\\report.html");
+				File reportFile = new File("c:\\jforexlog\\report.html");
 				try {
 					client.createReport(processId, reportFile);
 				} catch (Exception e) {

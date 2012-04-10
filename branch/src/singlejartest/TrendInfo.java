@@ -2,6 +2,9 @@ package singlejartest;
 
 import java.util.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.dukascopy.api.Filter;
 import com.dukascopy.api.IBar;
 import com.dukascopy.api.IChart;
@@ -45,6 +48,7 @@ public class TrendInfo {
 	private IBar lBar2_120period;
 	private IBar lBar3_120period;
 	public static TrendType trendType=null;
+	private static final Logger LOGGER = LoggerFactory.getLogger(TrendInfo.class);
 	
 	public TrendInfo(IContext context) {
 		this.context = context;
@@ -77,6 +81,11 @@ public class TrendInfo {
 			TrendInfo.trendType=TrendType.Rectangle;
 		}
 		
+	}
+	public void printTrendInfo(){
+		LOGGER.debug("CurrentTrend:"+TrendInfo.trendType);
+		LOGGER.debug("Highest:"+TimeZoneFormat.GMTFormat(hBarList.get(0).getTime()));
+		LOGGER.debug("Lowest :"+TimeZoneFormat.GMTFormat(lBarList.get(0).getTime()));		
 	}
 
 	protected int searchBarsList(long time, List<IBar> barsList)

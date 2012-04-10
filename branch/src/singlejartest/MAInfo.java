@@ -1,5 +1,6 @@
 package singlejartest;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import org.slf4j.Logger;
@@ -54,7 +55,19 @@ public class MAInfo {
 			updateSMMA1030Cross(instrument, period, bar);
 		}
 	}
-
+	
+	public void printMAInfo(){
+		
+		 LOGGER.debug("SMMA1030CP:"+TimeZoneFormat.GMTFormat(smma1030Cross.getCrossBar().getTime()));
+		 LOGGER.debug("SMA510CPNUM:"+sma510CrossList.size());
+		 if(sma510CrossList.size()>0){
+			 LOGGER.debug("FirstSMMA5010CP:"+TimeZoneFormat.GMTFormat(sma510CrossList.get(0).getCrossBar().getTime()));
+		 }
+		 else {
+			 LOGGER.debug("FirstSMMA5010CP: NULL");
+		}
+	}
+	
 	public boolean updateSMMA1030Cross(Instrument instrument, Period period,
 			IBar bar) throws JFException {
 
