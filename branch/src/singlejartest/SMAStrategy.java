@@ -237,11 +237,20 @@ public class SMAStrategy implements IStrategy {
 			for (IOrder orderInMarket : engine.getOrders()) {
 				if (orderInMarket.isLong()) {
 					print("Closing Long position");
-					print(orderInMarket.getState()+"");
+					
 					orderInMarket.close();
+					try {
+			//			Thread.sleep(5000);
+					} catch (Exception e) {
+						// TODO: handle exception
+					}
+					orderInMarket.waitForUpdate(2000);
+					print("the order is "+orderInMarket.getState()+"");
 				}
 			}
 		}
+	
+		
 		if ((order == null)
 				|| (order.isLong() && order.getState().equals(
 						IOrder.State.CLOSED))) {
