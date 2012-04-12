@@ -7,12 +7,12 @@
 	<classpathentry kind="src" path="JFUtil/test"/>
 	<classpathentry excluding="src/|test/" kind="src" path="JFUtil"/>
 	<classpathentry kind="src" path="Jfreechart"/>
-	<classpathentry kind="lib" path="D:/javaworksvn/JForexClientLibrary_branch/libs/DDS2-jClient-JForex-2.15.1.jar"/>
-	<classpathentry kind="lib" path="D:/javaworksvn/JForexClientLibrary_branch/libs/JForex-API-2.6.64.jar" sourcepath="libs/JForex-API-2.6.60-sources.jar"/>
-	<classpathentry kind="lib" path="D:/javaworksvn/JForexClientLibrary_branch/libs/DDS2-Charts-5.58.jar"/>
-	<classpathentry kind="lib" path="D:/javaworksvn/JForexClientLibrary_branch/libs/greed-common-185.jar"/>
-	<classpathentry kind="lib" path="D:/javaworksvn/JForexClientLibrary_branch/libs/dds2-common-2.3.87.jar"/>
-	<classpathentry kind="lib" path="D:/javaworksvn/JForexClientLibrary_branch/libs/transport-client-2.3.87.jar"/>
+	<classpathentry kind="lib" path="G:/javaworksvn/JForexClientLibrary_branch/libs/DDS2-jClient-JForex-2.15.1.jar"/>
+	<classpathentry kind="lib" path="G:/javaworksvn/JForexClientLibrary_branch/libs/JForex-API-2.6.64.jar" sourcepath="libs/JForex-API-2.6.60-sources.jar"/>
+	<classpathentry kind="lib" path="G:/javaworksvn/JForexClientLibrary_branch/libs/DDS2-Charts-5.58.jar"/>
+	<classpathentry kind="lib" path="G:/javaworksvn/JForexClientLibrary_branch/libs/greed-common-185.jar"/>
+	<classpathentry kind="lib" path="G:/javaworksvn/JForexClientLibrary_branch/libs/dds2-common-2.3.87.jar"/>
+	<classpathentry kind="lib" path="G:/javaworksvn/JForexClientLibrary_branch/libs/transport-client-2.3.87.jar"/>
 	<classpathentry kind="lib" path="libs/log4j-1.2.14.jar"/>
 	<classpathentry kind="lib" path="libs/mina-core-1.1.7.jar"/>
 	<classpathentry kind="lib" path="libs/mina-filter-ssl-1.1.7dc.1.jar"/>
