@@ -199,6 +199,7 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 			@Override
 			public void onStop(long processId) {
 				LOGGER.info("Strategy stopped: " + processId);
+				/*
 				Method method = null;
 				try {
 					method = ClassStrategy.getMethod("getContext");
@@ -220,7 +221,7 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 				} catch (InvocationTargetException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				}
+				}*/
 				LOGGER.info("Strategy stoped at startStrategy()");
 				resetButtons();
 
@@ -326,7 +327,7 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 		/*
 		 * client.startStrategy( new SMAStrategy() );
 		 */
-
+/*
 		try {
 			CLoaderStrategy = new CustomCL("bin", new String[] {
 					"singlejartest.SMAStrategy",
@@ -346,8 +347,12 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+*/
 
-		client.startStrategy(strategy, new LoadingProgressListener() {
+		SMAStrategy stragegy=new SMAStrategy();
+		context=stragegy.getContext();
+		Thread.sleep(3000);
+		client.startStrategy(stragegy, new LoadingProgressListener() {
 			@Override
 			public void dataLoaded(long startTime, long endTime,
 					long currentTime, String information) {
