@@ -83,6 +83,7 @@ public class SMAStrategy implements IStrategy {
 		MarubozuLists = new ArrayList<IBar>();
 		cdlPattern = new CandlePattern();
 		// rtChartInfo = new RTChartInfo(context);
+		selectedInstrument=context.getSubscribedInstruments();
 		IBar currBar = history.getBar(this.selectedInstrument,
 				Period.FIFTEEN_MINS, OfferSide.ASK, 0);
 		IBar prevDailyBar1 = history.getBar(this.selectedInstrument,
