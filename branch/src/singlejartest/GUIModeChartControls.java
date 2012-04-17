@@ -103,9 +103,9 @@ public class GUIModeChartControls extends JFrame implements ITesterUserInterface
     //url of the DEMO jnlp
     private static String jnlpUrl = "https://www.dukascopy.com/client/demo/jclient/jforex.jnlp";
     //user name
-    private static String userName = "DEMO2FZnlc";
+    private static String userName = "DEMO2nwXyg";
     //password
-    private static String password = "FZnlc";
+    private static String password = "nwXyg";
     
     public GUIModeChartControls(){
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -233,7 +233,7 @@ public class GUIModeChartControls extends JFrame implements ITesterUserInterface
    
         // Start strategy
         client.startStrategy(
-            new MA_Play(),
+            new SMAStrategy(),
             new LoadingProgressListener() {
                 @Override
                 public void dataLoaded(long startTime, long endTime, long currentTime, String information) {
