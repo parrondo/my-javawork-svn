@@ -18,7 +18,6 @@
 	<classpathentry kind="lib" path="Jfreechartlibs/jfreechart-1.0.13-swt.jar"/>
 	<classpathentry kind="lib" path="Jfreechartlibs/jfreechart-1.0.13.jar"/>
 	<classpathentry kind="lib" path="Jfreechartlibs/junit.jar"/>
-	<classpathentry kind="lib" path="libs/log4j.properties"/>
 	<classpathentry kind="lib" path="libs/7zip-4.65.jar"/>
 	<classpathentry kind="lib" path="libs/commons-lang3-3.0.1.jar"/>
 	<classpathentry kind="lib" path="libs/DDS2-Charts-5.64.jar"/>
