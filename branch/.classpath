@@ -34,7 +34,6 @@
 	<classpathentry kind="lib" path="libs/dds2-common-2.3.87.jar"/>
 	<classpathentry kind="lib" path="libs/DDS2-jClient-JForex-2.15.1.jar"/>
 	<classpathentry kind="lib" path="libs/greed-common-185.jar"/>
-	<classpathentry kind="lib" path="libs/JForex-API-2.6.64.jar"/>
 	<classpathentry kind="lib" path="libs/transport-client-2.3.87.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
