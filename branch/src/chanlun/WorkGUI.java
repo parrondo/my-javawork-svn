@@ -65,7 +65,6 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
-import org.eclipse.jdt.internal.compiler.ast.ThisReference;
 import org.jfree.ui.RefineryUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -99,8 +98,6 @@ import com.dukascopy.api.drawings.*;
 import com.dukascopy.api.IStrategy;
 import com.dukascopy.charts.persistence.ITheme.ChartElement;
 import com.dukascopy.dds2.greed.agent.Strategies;
-import com.sun.org.apache.bcel.internal.generic.NEW;
-
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
 
