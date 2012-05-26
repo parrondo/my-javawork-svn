@@ -1,4 +1,4 @@
-package singlejartest;
+package chanlun;
 
 import com.dukascopy.api.IBar;
 import java.util.*;

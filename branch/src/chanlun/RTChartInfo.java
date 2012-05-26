@@ -1,8 +1,10 @@
-package singlejartest;
+package chanlun;
 
 import java.util.*;
 
-import singlejartest.CrossPoint.CrossType;
+
+
+import chanlun.CrossPoint.CrossType;
 
 import com.dukascopy.api.*;
 import com.dukascopy.api.IIndicators.AppliedPrice;

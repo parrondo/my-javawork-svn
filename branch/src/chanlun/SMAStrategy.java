@@ -1,5 +1,6 @@
-package singlejartest;
+package chanlun;
 
+import chanlun.CrossPoint.CrossType;
 import charts.test.InteractiveRectangleDrawer.MyChartObjectAdapter;
 
 import com.dukascopy.api.*;
@@ -14,7 +15,7 @@ import java.text.*;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
-import singlejartest.CrossPoint.CrossType;
+import singlejartest.CandlePattern;
 
 import com.sun.org.apache.xml.internal.serializer.ElemDesc;
 import com.tictactec.ta.lib.*;

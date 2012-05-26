@@ -1,9 +1,10 @@
-package singlejartest;
+package chanlun;
 
 import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 import com.dukascopy.api.Filter;
 import com.dukascopy.api.IBar;

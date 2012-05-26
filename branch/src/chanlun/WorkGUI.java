@@ -27,7 +27,7 @@
  * OF LIABILITY, ARISING OUT OF THE USE OF OR INABILITY TO USE THIS SOFTWARE,
  * EVEN IF DUKASCOPY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
  */
-package singlejartest;
+package chanlun;
 
 import charts.test.*;
 
@@ -69,6 +69,8 @@ import org.eclipse.jdt.internal.compiler.ast.ThisReference;
 import org.jfree.ui.RefineryUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import singlejartest.DrawMoneyLine;
 
 import com.dukascopy.api.*;
 import com.dukascopy.api.system.ISystemListener;

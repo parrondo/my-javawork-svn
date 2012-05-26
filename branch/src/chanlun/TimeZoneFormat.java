@@ -1,4 +1,4 @@
-package singlejartest;
+package chanlun;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
