@@ -40,12 +40,14 @@ public class MAInfo {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(MAInfo.class);
 
-	public MAInfo(IContext context) {
+	public MAInfo(IContext context,Period period, int fastline,int slowline) {
 		this.context = context;
 		this.engine = context.getEngine();
 		this.console = context.getConsole();
 		this.history = context.getHistory();
 		this.indicators = context.getIndicators();
+		
+		
 	}
 
 	public void initSMMA1030Cross(Instrument instrument, Period period,
