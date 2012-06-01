@@ -143,7 +143,7 @@ public class SMAStrategy implements IStrategy {
 			throws JFException {
 		trendInfo.findTrend(instrument, period, TrendInfo.TrendLength,
 				bar.getTime());
-		maInfo.updateSMMA1030Cross(instrument, period, bar);
+		maInfo.updateCP(instrument, period, bar);
 		maInfo.updateSMA510CPList(instrument, period, bar);
 	}
 	
