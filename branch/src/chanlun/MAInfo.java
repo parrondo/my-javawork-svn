@@ -55,49 +55,63 @@ public class MAInfo {
 		this.maType = maType;
 	}
 
-
-	public CrossPoint updateLastCP(int numberOfCandlesBefore, long time, int numberOfCandlesAfter) 
-					throws JFException {
-		double[] fastLine=null;
-		double[] slowLine=null;
-		CrossPoint crossPoint=null;
+	public CrossPoint updateLastCP(int numberOfCandlesBefore, long time,
+			int numberOfCandlesAfter) throws JFException {
+		double[] fastLine = null;
+		double[] slowLine = null;
+		CrossPoint crossPoint = null;
 		List<IBar> barsList = history.getBars(instrument, period,
 				OfferSide.BID, Filter.WEEKENDS, numberOfCandlesBefore, time, 0);
-		
+
 		for (IBar bar : barsList) {
-		switch(maType){
+			switch (maType) {
 			case SMA:
 				break;
-				
+
 			case SMMA:
 				fastLine = indicators.smma(instrument, period, side,
-						AppliedPrice.CLOSE, fastTimePeroid, Filter.WEEKENDS, 2,bar.getTime(), 0);
+						AppliedPrice.CLOSE, fastTimePeroid, Filter.WEEKENDS, 2,
+						bar.getTime(), 0);
 				slowLine = indicators.smma(instrument, period, side,
-						AppliedPrice.CLOSE, slowTimePeroid, Filter.WEEKENDS, 2, bar.getTime(), 0);
+						AppliedPrice.CLOSE, slowTimePeroid, Filter.WEEKENDS, 2,
+						bar.getTime(), 0);
 				break;
+			}
+
 		}
-		
-		crossPoint=findCP(fastLine, slowLine, bar);
-		
-		}	
 		return crossPoint;
 	}
 
-	protected CrossPoint findCP(double[] fast, double[] slow, IBar bar)
-			throws JFException {
+	protected CrossPoint findCP(IBar bar) throws JFException {
+		double[] fastLine = null;
+		double[] slowLine = null;
 
-		if (isUpCrossOver(fast, slow)) {
+		switch (maType) {
+		case SMA:
+			break;
+
+		case SMMA:
+			fastLine = indicators.smma(instrument, period, side,
+					AppliedPrice.CLOSE, fastTimePeroid, Filter.WEEKENDS, 2,
+					bar.getTime(), 0);
+			slowLine = indicators.smma(instrument, period, side,
+					AppliedPrice.CLOSE, slowTimePeroid, Filter.WEEKENDS, 2,
+					bar.getTime(), 0);
+			break;
+		}
+
+		if (isUpCrossOver(fastLine, slowLine)) {
 			CrossPoint crossPoint = new CrossPoint(CrossType.UpCross);
 			crossPoint.setTime(bar.getTime());
 			crossPoint.setCrossBar(bar);
-			crossPoint.setCrossPrice(slow[1]);
+			crossPoint.setCrossPrice(slowLine[1]);
 			return crossPoint;
 		}
-		if (isDownCrossOver(fast, slow)) {
+		if (isDownCrossOver(fastLine, slowLine)) {
 			CrossPoint crossPoint = new CrossPoint(CrossType.DownCross);
 			crossPoint.setTime(bar.getTime());
 			crossPoint.setCrossBar(bar);
-			crossPoint.setCrossPrice(fast[1]);
+			crossPoint.setCrossPrice(fastLine[1]);
 			return crossPoint;
 		}
 		return null;
@@ -112,11 +126,11 @@ public class MAInfo {
 
 		LOGGER.debug("SMMA1030CP:"
 				+ TimeZoneFormat.GMTFormat(lastCP.getCrossBar().getTime()));
-		LOGGER.debug("SMA510CPNUM:" + sma510CrossList.size());
-		if (sma510CrossList.size() > 0) {
+		LOGGER.debug("SMA510CPNUM:" + CPList.size());
+		if (CPList.size() > 0) {
 			LOGGER.debug("FirstSMMA5010CP:"
-					+ TimeZoneFormat.GMTFormat(sma510CrossList.get(0)
-							.getCrossBar().getTime()));
+					+ TimeZoneFormat.GMTFormat(CPList.get(0).getCrossBar()
+							.getTime()));
 		} else {
 			LOGGER.debug("FirstSMMA5010CP: NULL");
 		}
@@ -136,30 +150,21 @@ public class MAInfo {
 			if (bar.getTime() < lastCP.getCrossBar().getTime()) {
 				continue;
 			}
-			updateCPList(instrument, period, bar);
+
 		}
 	}
 
-	public void updateCPList(int numberOfCandlesBefore, long time, int numberOfCandlesAfter)
-			throws JFException {
-		double[] smma10 = indicators.smma(instrument, period, OfferSide.BID,
-				AppliedPrice.CLOSE, 10, Filter.WEEKENDS, 2, bar.getTime(), 0);
-		double[] sma5 = indicators.sma(instrument, period, OfferSide.BID,
-				AppliedPrice.CLOSE, 5, Filter.WEEKENDS, 2, bar.getTime(), 0);
+	public void updateCPList(int numberOfCandlesBefore, long time,
+			int numberOfCandlesAfter) throws JFException {
+		List<IBar> barsList = history.getBars(instrument, period,
+				OfferSide.BID, Filter.WEEKENDS, numberOfCandlesBefore, time, 0);
 
-		CrossPoint lc_sma510Cross = new CrossPoint(null);
-		if (updateLastCP(instrument, period, bar)) {
-			sma510CrossList.clear();
+		for (IBar bar : barsList) {
+			CrossPoint crossPoint = findCP(bar);
+			if (crossPoint != null)
+				CPList.add(crossPoint);
 		}
-		if (updateCrossPoint(lc_sma510Cross, sma5, smma10, bar)) {
-			sma510CrossList.add(lc_sma510Cross);
-		}
-		// 1030 510½»²æÍ¬ÏòºöÂÔ
-		if (sma510CrossList.size() > 0) {
-			if (lastCP.getCrossType() == sma510CrossList.get(0).getCrossType()) {
-				sma510CrossList.remove(0);
-			}
-		}
+
 	}
 
 	public boolean isDownCrossOver(double[] fast, double[] slow)
@@ -188,11 +193,11 @@ public class MAInfo {
 	}
 
 	public List<CrossPoint> getSma510CPList() {
-		return sma510CrossList;
+		return CPList;
 	}
 
 	public void setSma510CPList(List<CrossPoint> sma510CrossList) {
-		this.sma510CrossList = sma510CrossList;
+		this.CPList = sma510CrossList;
 	}
 
 	public MAType getMaType() {
