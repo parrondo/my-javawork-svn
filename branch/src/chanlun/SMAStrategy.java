@@ -144,7 +144,7 @@ public class SMAStrategy implements IStrategy {
 		trendInfo.findTrend(instrument, period, TrendInfo.TrendLength,
 				bar.getTime());
 		maInfo.updateCP(instrument, period, bar);
-		maInfo.updateSMA510CPList(instrument, period, bar);
+		maInfo.updateCPList(instrument, period, bar);
 	}
 	
 	public void  printChartInfo(long par_time){
