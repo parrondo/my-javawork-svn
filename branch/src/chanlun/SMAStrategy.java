@@ -46,7 +46,7 @@ public class SMAStrategy implements IStrategy {
 	private static final Logger LOGGER = LoggerFactory.getLogger("cus");
 	private static final Logger LOGGER1 = LoggerFactory
 			.getLogger(SMAStrategy.class);
-	public static final int InitBarNum = 400;
+	public static final int InitBarNum = 1000;
 	public static final int TIMEOUT = 1000;
 
 	private List<IBar> highBarList;
@@ -88,9 +88,9 @@ public class SMAStrategy implements IStrategy {
 		// selectedInstrument=context.getSubscribedInstruments();
 		// context.getSubscribedInstruments().containsAll();
 		IBar currBar = history.getBar(this.selectedInstrument,
-				Period.FIFTEEN_MINS, OfferSide.ASK, 0);
+				Period.TEN_MINS, OfferSide.BID, 0);
 		IBar prevDailyBar1 = history.getBar(this.selectedInstrument,
-				Period.FIFTEEN_MINS, OfferSide.ASK, 1);
+				Period.TEN_MINS, OfferSide.BID, 1);
 		initChart(Instrument.EURUSD, Period.TEN_MINS, SMAStrategy.InitBarNum,
 				currBar.getTime());
 		drawSignalDown(TenMinsSMMA1030.getLastCP().getCrossBar());

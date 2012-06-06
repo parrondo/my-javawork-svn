@@ -140,9 +140,9 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 	// url of the DEMO jnlp
 	private static String jnlpUrl = "https://www.dukascopy.com/client/demo/jclient/jforex.jnlp";
 	// user name
-	private static String userName = "DEMO2nwXyg";
+	private static String userName = "DEMO2JzHaG";
 	// password
-	private static String password = "nwXyg";
+	private static String password = "JzHaG";
 
 	public WorkGUI() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -162,7 +162,7 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 			feedDescriptor.setDataType(DataType.TIME_PERIOD_AGGREGATION);
 			feedDescriptor.setOfferSide(OfferSide.BID);
 			feedDescriptor.setInstrument(Instrument.EURUSD);
-			feedDescriptor.setPeriod(Period.FIFTEEN_MINS);
+			feedDescriptor.setPeriod(Period.TEN_MINS);
 			feedDescriptor.setFilter(Filter.WEEKENDS);
 			chartPanels.get(chart).getTesterChartController()
 					.setFeedDescriptor(feedDescriptor);
@@ -274,11 +274,11 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 				50000);
 
 		dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-		Date dateFrom = dateFormat.parse("2012.02.28 00:00:00");
-		Date dateTo = dateFormat.parse("2012.03.05 00:00:00");
+		Date dateFrom = dateFormat.parse("2012.02.02 00:00:00");
+		Date dateTo = dateFormat.parse("2012.02.15 00:00:00");
 		client.setDataInterval(DataLoadingMethod.ALL_TICKS, dateFrom.getTime(),
 				dateTo.getTime());
-		client.setDataInterval(Period.FIFTEEN_MINS, OfferSide.BID,
+		client.setDataInterval(Period.TEN_MINS, OfferSide.BID,
 				InterpolationMethod.FOUR_TICKS, dateFrom.getTime(),
 				dateTo.getTime());
 		// load data

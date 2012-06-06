@@ -79,7 +79,9 @@ public class MAInfo {
 				side, filter, numberOfCandlesBefore, time, 0);
 
 		for (IBar bar : barsList) {
-			lastCP=findCP(bar);
+			CrossPoint cp=findCP(bar);
+			if(cp!=null)
+				lastCP=cp;
 		}
 		return lastCP;
 	}
