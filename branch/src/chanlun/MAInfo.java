@@ -42,9 +42,8 @@ public class MAInfo {
 	private Filter filter;
 
 	private CrossPoint lastCP = new CrossPoint(null);
-
-
 	private List<CrossPoint> CPList = new ArrayList<CrossPoint>();
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(MAInfo.class);
 
 	public MAInfo(IContext context, MAType maType, int fastPeroid,
@@ -183,20 +182,6 @@ public class MAInfo {
 			return false;
 	}
 
-	
-
-	public void setSmma1030CP(CrossPoint smma1030Cross) {
-		this.lastCP = smma1030Cross;
-	}
-
-	public List<CrossPoint> getSma510CPList() {
-		return CPList;
-	}
-
-	public void setSma510CPList(List<CrossPoint> sma510CrossList) {
-		this.CPList = sma510CrossList;
-	}
-
 	public MAType getMaType() {
 		return maType;
 	}
@@ -212,5 +197,12 @@ public class MAInfo {
 	public void setLastCP(CrossPoint lastCP) {
 		this.lastCP = lastCP;
 	}
+	
+	public List<CrossPoint> getCPList() {
+		return CPList;
+	}
 
+	public void setCPList(List<CrossPoint> cPList) {
+		CPList = cPList;
+	}
 }

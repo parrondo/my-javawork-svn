@@ -93,7 +93,7 @@ public class SMAStrategy implements IStrategy {
 				Period.FIFTEEN_MINS, OfferSide.ASK, 1);
 		initChart(Instrument.EURUSD, Period.TEN_MINS,
 				SMAStrategy.InitBarNum, currBar.getTime());
-		drawSignalDown(TenMinsSMMA0510.getSmma1030CP().getCrossBar());
+		drawSignalDown(TenMinsSMMA1030.getLastCP().getCrossBar());
 //		LOGGER.info("crossBar at " + maInfo.getSmma1030CP().getCrossBar()
 //				+ " smma: " + maInfo.getSmma1030CP().getCrossPrice());
 
@@ -128,24 +128,24 @@ public class SMAStrategy implements IStrategy {
 
 	public void initChart(Instrument instrument, Period period, int initBarNum,
 			long time) throws JFException {
-		TenMinsSMMA1030 = new MAInfo(context, MAType.SMMA, 10, 5, instrument, period, OfferSide.BID, Filter.WEEKENDS, initBarNum, time, 0);
-	
+		TenMinsSMMA1030 = new MAInfo(context, MAType.SMMA, 30, 10, instrument, period, OfferSide.BID, Filter.WEEKENDS, initBarNum, time, 0);
+		TenMinsSMMA0510 = new MAInfo(context, MAType.SMMA, 10, 5, instrument, period, OfferSide.BID, Filter.WEEKENDS, initBarNum, time, 0);
+		
 		if (TenMinsSMMA1030.getLastCP() == null) {
 			System.out.println("bars number is not enough");
 			System.exit(0);
 		}
-		TenMinsSMMA0510.initSMA510CPList(instrument, period, initBarNum, time);
-
+	
 		trendInfo = new TrendInfo(context);
 		trendInfo.findTrend(instrument, period, TrendInfo.TrendLength, time);
 	}
 
-	public void updateChart(Instrument instrument, Period period, IBar bar)
+	public void updateChart(int numberOfCandlesBefore,long time,int numberOfCandlesAfter)
 			throws JFException {
-		trendInfo.findTrend(instrument, period, TrendInfo.TrendLength,
-				bar.getTime());
-		TenMinsSMMA0510.updateCP(instrument, period, bar);
-		TenMinsSMMA0510.updateCPList(instrument, period, bar);
+//		trendInfo.findTrend(instrument, period, TrendInfo.TrendLength,
+//				bar.getTime());
+		TenMinsSMMA1030.updateLastCP(numberOfCandlesBefore, time, numberOfCandlesAfter);
+		TenMinsSMMA0510.updateCPList(numberOfCandlesBefore, time, numberOfCandlesAfter);
 	}
 	
 	public void  printChartInfo(long par_time){
@@ -161,10 +161,10 @@ public class SMAStrategy implements IStrategy {
 	public void onBar(Instrument instrument, Period period, IBar askBar,
 			IBar bidBar) throws JFException {
 		if (!instrument.equals(selectedInstrument)
-				|| !period.equals(Period.FIFTEEN_MINS)) {
+				|| !period.equals(Period.TEN_MINS)) {
 			return;
 		}
-		List<CrossPoint> lc_sma510CPList = TenMinsSMMA0510.getSma510CPList();
+		List<CrossPoint> lc_smma0510CPList = TenMinsSMMA0510.getCPList();
 		List<IBar> lc_hBarList = trendInfo.gethBarList();
 		List<IBar> lc_lBarList = trendInfo.getlBarList();
 		Date prevBarTime = new Date();
@@ -183,7 +183,7 @@ public class SMAStrategy implements IStrategy {
 		// highBarList=rtChartInfo.getHighBarList(instrument, period, 120,
 		// prevBar.getTime());
 
-		List<IBar> bars = history.getBars(instrument, Period.FIFTEEN_MINS,
+		List<IBar> bars = history.getBars(instrument, Period.TEN_MINS,
 				OfferSide.BID, indicatorFilter, 10 + 1, prevBar.getTime(), 0);
 		RetCode retCode = cdlPattern.addMarubozu(MarubozuLists, bars);
 		if (retCode != RetCode.Success) {
@@ -214,13 +214,13 @@ public class SMAStrategy implements IStrategy {
 				OfferSide.BID, AppliedPrice.CLOSE, 5, indicatorFilter, 2,
 				prevBar.getTime(), 0);
 		
-		updateChart(instrument, period, prevBar);
+		updateChart(2, currBar.getTime(), 0);
 		printChartInfo(prevBar.getTime());
 		
 
 		// *************************10日线下穿30日线*****************************
-		if (TenMinsSMMA0510.getSmma1030CP().getCrossType() == CrossType.DownCross) {
-			if (lc_sma510CPList.size() == 1
+		if (TenMinsSMMA1030.getLastCP().getCrossType() == CrossType.DownCross) {
+			if (lc_smma0510CPList.size() == 1
 					&& lc_sma510CPList.get(0).getCrossType() == CrossType.UpCross) {
 				doLong(instrument);
 
