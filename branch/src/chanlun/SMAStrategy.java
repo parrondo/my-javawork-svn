@@ -52,7 +52,8 @@ public class SMAStrategy implements IStrategy {
 	private List<IBar> highBarList;
 	// private RTChartInfo rtChartInfo;
 	private TrendInfo trendInfo = null;
-	private MAInfo maInfo = null;
+	private MAInfo TenMinsSMMA0510 = null;
+	private MAInfo TenMinsSMMA1030 = null;
 
 	@Configurable("Instrument")
 	public Instrument selectedInstrument = Instrument.EURUSD;
@@ -90,9 +91,9 @@ public class SMAStrategy implements IStrategy {
 				Period.FIFTEEN_MINS, OfferSide.ASK, 0);
 		IBar prevDailyBar1 = history.getBar(this.selectedInstrument,
 				Period.FIFTEEN_MINS, OfferSide.ASK, 1);
-		initChart(Instrument.EURUSD, Period.FIFTEEN_MINS,
+		initChart(Instrument.EURUSD, Period.TEN_MINS,
 				SMAStrategy.InitBarNum, currBar.getTime());
-		drawSignalDown(maInfo.getSmma1030CP().getCrossBar());
+		drawSignalDown(TenMinsSMMA0510.getSmma1030CP().getCrossBar());
 //		LOGGER.info("crossBar at " + maInfo.getSmma1030CP().getCrossBar()
 //				+ " smma: " + maInfo.getSmma1030CP().getCrossPrice());
 
@@ -127,13 +128,13 @@ public class SMAStrategy implements IStrategy {
 
 	public void initChart(Instrument instrument, Period period, int initBarNum,
 			long time) throws JFException {
-		maInfo = new MAInfo(context);
-		maInfo.initSMMA1030Cross(instrument, period, initBarNum, time);
-		if (maInfo.getSmma1030CP().getCrossType() == null) {
+		TenMinsSMMA1030 = new MAInfo(context, MAType.SMMA, 10, 5, instrument, period, OfferSide.BID, Filter.WEEKENDS, initBarNum, time, 0);
+	
+		if (TenMinsSMMA1030.getLastCP() == null) {
 			System.out.println("bars number is not enough");
 			System.exit(0);
 		}
-		maInfo.initSMA510CPList(instrument, period, initBarNum, time);
+		TenMinsSMMA0510.initSMA510CPList(instrument, period, initBarNum, time);
 
 		trendInfo = new TrendInfo(context);
 		trendInfo.findTrend(instrument, period, TrendInfo.TrendLength, time);
@@ -143,8 +144,8 @@ public class SMAStrategy implements IStrategy {
 			throws JFException {
 		trendInfo.findTrend(instrument, period, TrendInfo.TrendLength,
 				bar.getTime());
-		maInfo.updateCP(instrument, period, bar);
-		maInfo.updateCPList(instrument, period, bar);
+		TenMinsSMMA0510.updateCP(instrument, period, bar);
+		TenMinsSMMA0510.updateCPList(instrument, period, bar);
 	}
 	
 	public void  printChartInfo(long par_time){
@@ -153,7 +154,7 @@ public class SMAStrategy implements IStrategy {
 //		List<CrossPoint> lc_sma510CPList = maInfo.getSma510CPList();
 		LOGGER.debug("//------------------"+TimeZoneFormat.GMTFormat(par_time)+"--------------//");
 		trendInfo.printTrendInfo();
-		maInfo.printMAInfo();
+		TenMinsSMMA0510.printMAInfo();
 		
 	}
 
@@ -163,7 +164,7 @@ public class SMAStrategy implements IStrategy {
 				|| !period.equals(Period.FIFTEEN_MINS)) {
 			return;
 		}
-		List<CrossPoint> lc_sma510CPList = maInfo.getSma510CPList();
+		List<CrossPoint> lc_sma510CPList = TenMinsSMMA0510.getSma510CPList();
 		List<IBar> lc_hBarList = trendInfo.gethBarList();
 		List<IBar> lc_lBarList = trendInfo.getlBarList();
 		Date prevBarTime = new Date();
@@ -218,7 +219,7 @@ public class SMAStrategy implements IStrategy {
 		
 
 		// *************************10日线下穿30日线*****************************
-		if (maInfo.getSmma1030CP().getCrossType() == CrossType.DownCross) {
+		if (TenMinsSMMA0510.getSmma1030CP().getCrossType() == CrossType.DownCross) {
 			if (lc_sma510CPList.size() == 1
 					&& lc_sma510CPList.get(0).getCrossType() == CrossType.UpCross) {
 				doLong(instrument);
@@ -226,13 +227,13 @@ public class SMAStrategy implements IStrategy {
 			} else if (lc_sma510CPList.size() > 1) {
 				if (currBar.getClose() < lc_lBarList.get(0).getClose()) {
 					doShort(instrument);
-					LOGGER1.info(maInfo.getSmma1030CP().getCrossType() + " "
-							+ maInfo.getSma510CPList().size());
+					LOGGER1.info(TenMinsSMMA0510.getSmma1030CP().getCrossType() + " "
+							+ TenMinsSMMA0510.getSma510CPList().size());
 				}
 			}
 		}
 		// ***********************10日线上穿30日线**************************
-		if (maInfo.getSmma1030CP().getCrossType() == CrossType.UpCross) {
+		if (TenMinsSMMA0510.getSmma1030CP().getCrossType() == CrossType.UpCross) {
 			if (lc_sma510CPList.size() == 1
 					&& lc_sma510CPList.get(0).getCrossType() == CrossType.DownCross) {
 				doShort(instrument);
@@ -240,8 +241,8 @@ public class SMAStrategy implements IStrategy {
 			else if (lc_sma510CPList.size() > 1) {
 				if (currBar.getClose() > lc_hBarList.get(0).getClose()) {
 					doLong(instrument);
-					LOGGER1.info(maInfo.getSmma1030CP().getCrossType() + " "
-							+ maInfo.getSma510CPList().size());
+					LOGGER1.info(TenMinsSMMA0510.getSmma1030CP().getCrossType() + " "
+							+ TenMinsSMMA0510.getSma510CPList().size());
 				}
 			}
 		}

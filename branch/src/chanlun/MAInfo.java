@@ -42,6 +42,8 @@ public class MAInfo {
 	private Filter filter;
 
 	private CrossPoint lastCP = new CrossPoint(null);
+
+
 	private List<CrossPoint> CPList = new ArrayList<CrossPoint>();
 	private static final Logger LOGGER = LoggerFactory.getLogger(MAInfo.class);
 
@@ -75,7 +77,7 @@ public class MAInfo {
 		double[] slowLine = null;
 	
 		List<IBar> barsList = history.getBars(instrument, period,
-				OfferSide.BID, Filter.WEEKENDS, numberOfCandlesBefore, time, 0);
+				side, filter, numberOfCandlesBefore, time, 0);
 
 		for (IBar bar : barsList) {
 			lastCP=findCP(bar);
@@ -86,7 +88,7 @@ public class MAInfo {
 	public void updateCPList(int numberOfCandlesBefore, long time,
 			int numberOfCandlesAfter) throws JFException {
 		List<IBar> barsList = history.getBars(instrument, period,
-				OfferSide.BID, Filter.WEEKENDS, numberOfCandlesBefore, time, 0);
+				side, filter, numberOfCandlesBefore, time, 0);
 
 		for (IBar bar : barsList) {
 			CrossPoint crossPoint = findCP(bar);
@@ -181,9 +183,7 @@ public class MAInfo {
 			return false;
 	}
 
-	public CrossPoint getSmma1030CP() {
-		return lastCP;
-	}
+	
 
 	public void setSmma1030CP(CrossPoint smma1030Cross) {
 		this.lastCP = smma1030Cross;
@@ -203,6 +203,14 @@ public class MAInfo {
 
 	public void setMaType(MAType maType) {
 		this.maType = maType;
+	}
+	
+	public CrossPoint getLastCP() {
+		return lastCP;
+	}
+
+	public void setLastCP(CrossPoint lastCP) {
+		this.lastCP = lastCP;
 	}
 
 }
