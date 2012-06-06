@@ -2,7 +2,9 @@ package chanlun;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import javax.lang.model.type.NullType;
 
+import org.eclipse.jdt.internal.compiler.ast.ThrowStatement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,42 +48,53 @@ public class MAInfo {
 	public MAInfo(IContext context, MAType maType, int fastPeroid,
 			int slowPeroid, Instrument instrument, Period period,
 			OfferSide side, Filter filter, int numberOfCandlesBefore,
-			long time, int numberOfCandlesAfter) {
+			long time, int numberOfCandlesAfter) throws JFException {
 		this.context = context;
 		this.engine = context.getEngine();
 		this.console = context.getConsole();
 		this.history = context.getHistory();
 		this.indicators = context.getIndicators();
+		
+		this.instrument=instrument;
+		this.period=period;
+		this.side=side;
+		this.filter=filter;
 		this.maType = maType;
+		this.fastTimePeroid=fastPeroid;
+		this.slowTimePeroid=slowPeroid;
+		
+		lastCP=updateLastCP(numberOfCandlesBefore, time, numberOfCandlesAfter);
+		if(lastCP==null)
+			throw new JFException("the init bar numbers is not enough!");
+		updateCPList(numberOfCandlesBefore, time, numberOfCandlesAfter);
 	}
 
 	public CrossPoint updateLastCP(int numberOfCandlesBefore, long time,
 			int numberOfCandlesAfter) throws JFException {
 		double[] fastLine = null;
 		double[] slowLine = null;
-		CrossPoint crossPoint = null;
+	
 		List<IBar> barsList = history.getBars(instrument, period,
 				OfferSide.BID, Filter.WEEKENDS, numberOfCandlesBefore, time, 0);
 
 		for (IBar bar : barsList) {
-			switch (maType) {
-			case SMA:
-				break;
-
-			case SMMA:
-				fastLine = indicators.smma(instrument, period, side,
-						AppliedPrice.CLOSE, fastTimePeroid, Filter.WEEKENDS, 2,
-						bar.getTime(), 0);
-				slowLine = indicators.smma(instrument, period, side,
-						AppliedPrice.CLOSE, slowTimePeroid, Filter.WEEKENDS, 2,
-						bar.getTime(), 0);
-				break;
-			}
-
+			lastCP=findCP(bar);
 		}
-		return crossPoint;
+		return lastCP;
 	}
+	
+	public void updateCPList(int numberOfCandlesBefore, long time,
+			int numberOfCandlesAfter) throws JFException {
+		List<IBar> barsList = history.getBars(instrument, period,
+				OfferSide.BID, Filter.WEEKENDS, numberOfCandlesBefore, time, 0);
 
+		for (IBar bar : barsList) {
+			CrossPoint crossPoint = findCP(bar);
+			if (crossPoint != null)
+				CPList.add(crossPoint);
+		}
+	}
+	
 	protected CrossPoint findCP(IBar bar) throws JFException {
 		double[] fastLine = null;
 		double[] slowLine = null;
@@ -117,11 +130,6 @@ public class MAInfo {
 		return null;
 	}
 
-	public void initSMMA1030Cross(Instrument instrument, Period period,
-			int initBarNum, long time) throws JFException {
-
-	}
-
 	public void printMAInfo() {
 
 		LOGGER.debug("SMMA1030CP:"
@@ -154,18 +162,7 @@ public class MAInfo {
 		}
 	}
 
-	public void updateCPList(int numberOfCandlesBefore, long time,
-			int numberOfCandlesAfter) throws JFException {
-		List<IBar> barsList = history.getBars(instrument, period,
-				OfferSide.BID, Filter.WEEKENDS, numberOfCandlesBefore, time, 0);
 
-		for (IBar bar : barsList) {
-			CrossPoint crossPoint = findCP(bar);
-			if (crossPoint != null)
-				CPList.add(crossPoint);
-		}
-
-	}
 
 	public boolean isDownCrossOver(double[] fast, double[] slow)
 			throws JFException {

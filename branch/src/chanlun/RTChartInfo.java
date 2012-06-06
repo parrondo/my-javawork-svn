@@ -37,8 +37,8 @@ public class RTChartInfo {
 	public void initChart(Instrument instrument, Period period,
 			int initBarNum, long time) throws JFException {
 		crossPoint=new CrossPoint(null);
-		maInfo=new MAInfo(context);
-		maInfo.initSMMA1030Cross(instrument, period, initBarNum, time);
+//		maInfo=new MAInfo(context);
+//		maInfo.initSMMA1030Cross(instrument, period, initBarNum, time);
 		if(crossPoint.getCrossType()==null){
 			System.out.println("bars number is not enough");
 			System.exit(0);
