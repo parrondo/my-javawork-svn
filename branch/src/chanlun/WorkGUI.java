@@ -276,7 +276,7 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 				50000);
 
 		dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-		Date dateFrom = dateFormat.parse("2012.06.08 00:00:00");
+		Date dateFrom = dateFormat.parse("2012.06.07 23:00:00");
 		Date dateTo = dateFormat.parse("2012.06.12 00:00:00");
 		client.setDataInterval(DataLoadingMethod.ALL_TICKS, dateFrom.getTime(),
 				dateTo.getTime());
@@ -621,7 +621,7 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 				if (context == null)
 					return;
 				IIndicators indicators = context.getIndicators();
-				IIndicator sma5 = indicators.getIndicator("SMA");
+				IIndicator sma5 = indicators.getIndicator("SMMA");
 				IIndicator smma10 = indicators.getIndicator("SMMA");
 				IIndicator smma30 = indicators.getIndicator("SMMA");
 

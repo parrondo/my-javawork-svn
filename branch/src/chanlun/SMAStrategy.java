@@ -175,7 +175,7 @@ public class SMAStrategy implements IStrategy {
 		IBar currBar = history.getBar(instrument, selectedPeriod,
 				OfferSide.BID, 0);
 		updateChart(2, currBar.getTime(), 0);
-		printChartInfo(prevBar.getTime());
+//		printChartInfo(prevBar.getTime());
 
 		List<CrossPoint> lc_smma0510CPList = TenMinsSMMA0510.getCPList();
 		List<IBar> lc_hBarList = trendInfo.gethBarList();
@@ -221,7 +221,7 @@ public class SMAStrategy implements IStrategy {
 		filteredSmma10 = indicators.smma(instrument, selectedPeriod,
 				OfferSide.BID, AppliedPrice.CLOSE, 10, indicatorFilter, 2,
 				prevBar.getTime(), 0);
-		filteredSma5 = indicators.sma(instrument, selectedPeriod,
+		filteredSma5 = indicators.smma(instrument, selectedPeriod,
 				OfferSide.BID, AppliedPrice.CLOSE, 5, indicatorFilter, 2,
 				prevBar.getTime(), 0);
 
