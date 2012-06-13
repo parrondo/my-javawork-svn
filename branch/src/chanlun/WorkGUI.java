@@ -128,6 +128,7 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 	private JButton continueButton = null;
 	private JButton cancelButton = null;
 
+	private SMAStrategy stragegy=null;
 	private CustomCL CLoaderStrategy = null;
 	private Class ClassStrategy = null;
 	private IStrategy strategy = null;
@@ -140,9 +141,9 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 	// url of the DEMO jnlp
 	private static String jnlpUrl = "https://www.dukascopy.com/client/demo/jclient/jforex.jnlp";
 	// user name
-	private static String userName = "DEMO2JzHaG";
+	private static String userName = "DEMO2vYlwe";
 	// password
-	private static String password = "JzHaG";
+	private static String password = "vYlwe";
 
 	public WorkGUI() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -198,6 +199,7 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 			@Override
 			public void onStop(long processId) {
 				LOGGER.info("Strategy stopped: " + processId);
+				context=stragegy.getContext();
 				/*
 				Method method = null;
 				try {
@@ -274,8 +276,8 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 				50000);
 
 		dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-		Date dateFrom = dateFormat.parse("2012.05.25 00:00:00");
-		Date dateTo = dateFormat.parse("2012.06.08 00:00:00");
+		Date dateFrom = dateFormat.parse("2012.06.08 00:00:00");
+		Date dateTo = dateFormat.parse("2012.06.12 00:00:00");
 		client.setDataInterval(DataLoadingMethod.ALL_TICKS, dateFrom.getTime(),
 				dateTo.getTime());
 		client.setDataInterval(Period.TEN_MINS, OfferSide.BID,
@@ -348,8 +350,7 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 		}
 */
 
-		SMAStrategy stragegy=new SMAStrategy();
-		context=stragegy.getContext();
+		this.stragegy=new SMAStrategy();
 		Thread.sleep(3000);
 		client.startStrategy(stragegy, new LoadingProgressListener() {
 			@Override
@@ -368,7 +369,7 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 				return false;
 			}
 		}, visualModeParametersBean, this, this);
-
+	
 		// now it's running
 
 	}

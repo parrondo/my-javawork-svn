@@ -46,7 +46,7 @@ public class SMAStrategy implements IStrategy {
 	private static final Logger LOGGER = LoggerFactory.getLogger("cus");
 	private static final Logger LOGGER1 = LoggerFactory
 			.getLogger(SMAStrategy.class);
-	public static final int InitBarNum = 1000;
+	public static final int InitBarNum = 60;
 	public static final int TIMEOUT = 1000;
 
 	private List<IBar> highBarList;
@@ -58,7 +58,7 @@ public class SMAStrategy implements IStrategy {
 	@Configurable("Instrument")
 	public Instrument selectedInstrument = Instrument.EURUSD;
 	@Configurable("Period")
-	public Period selectedPeriod = Period.FIFTEEN_MINS;
+	public Period selectedPeriod = Period.TEN_MINS;
 	@Configurable("SMA filter")
 	public Filter indicatorFilter = Filter.WEEKENDS;
 
@@ -128,9 +128,9 @@ public class SMAStrategy implements IStrategy {
 
 	public void initChart(Instrument instrument, Period period, int initBarNum,
 			long time) throws JFException {
-		TenMinsSMMA1030 = new MAInfo(context, MAType.SMMA, 30, 10, instrument,
+		TenMinsSMMA1030 = new MAInfo(context, MAType.SMMA, 10, 30, instrument,
 				period, OfferSide.BID, Filter.WEEKENDS, initBarNum, time, 0);
-		TenMinsSMMA0510 = new MAInfo(context, MAType.SMMA, 10, 5, instrument,
+		TenMinsSMMA0510 = new MAInfo(context, MAType.SMMA, 5, 10, instrument,
 				period, OfferSide.BID, Filter.WEEKENDS, initBarNum, time, 0);
 
 		if (TenMinsSMMA1030.getLastCP() == null) {
@@ -184,7 +184,7 @@ public class SMAStrategy implements IStrategy {
 				TenMinsSMMA1030.getLastCP().getTime());
 		Date prevBarTime = new Date();
 		Date currBarTime = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
 		sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 		DateFormat fmt = DateFormat.getDateTimeInstance();
 

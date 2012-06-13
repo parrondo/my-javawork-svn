@@ -115,7 +115,7 @@ public class MAInfo {
 					bar.getTime(), 0);
 			break;
 		}
-
+//		Debug.stop(bar.getTime(), "2012.06.07 15:30:00");
 		if (isUpCrossOver(fastLine, slowLine)) {
 			CrossPoint crossPoint = new CrossPoint(CrossType.UpCross);
 			crossPoint.setTime(bar.getTime());
