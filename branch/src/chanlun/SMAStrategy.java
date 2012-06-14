@@ -28,9 +28,9 @@ public class SMAStrategy implements IStrategy {
 	private IChart chart;
 	private IIndicators indicators;
 	private int counter = 0;
-	private double[] filteredSmma30;
-	private double[] filteredSmma10;
-	private double[] filteredSma5;
+	private double[] smma30;
+	private double[] smma10;
+	private double[] smma5;
 	private IOrder order = null;
 	private IVerticalLineChartObject VLine;
 	private IShortLineChartObject shortLine;
@@ -46,7 +46,7 @@ public class SMAStrategy implements IStrategy {
 	private static final Logger LOGGER = LoggerFactory.getLogger("cus");
 	private static final Logger LOGGER1 = LoggerFactory
 			.getLogger(SMAStrategy.class);
-	public static final int InitBarNum = 60;
+	public static final int InitBarNum = 500;
 	public static final int TIMEOUT = 1000;
 
 	private List<IBar> highBarList;
@@ -54,6 +54,8 @@ public class SMAStrategy implements IStrategy {
 	private TrendInfo trendInfo = null;
 	private MAInfo TenMinsSMMA0510 = null;
 	private MAInfo TenMinsSMMA1030 = null;
+	private MAState maState;
+	private boolean firstRun = true;
 
 	@Configurable("Instrument")
 	public Instrument selectedInstrument = Instrument.EURUSD;
@@ -87,8 +89,8 @@ public class SMAStrategy implements IStrategy {
 		// rtChartInfo = new RTChartInfo(context);
 		// selectedInstrument=context.getSubscribedInstruments();
 		// context.getSubscribedInstruments().containsAll();
-		IBar currBar = history.getBar(this.selectedInstrument,
-				Period.TEN_MINS, OfferSide.BID, 0);
+		IBar currBar = history.getBar(this.selectedInstrument, Period.TEN_MINS,
+				OfferSide.BID, 0);
 		IBar prevDailyBar1 = history.getBar(this.selectedInstrument,
 				Period.TEN_MINS, OfferSide.BID, 1);
 		initChart(Instrument.EURUSD, Period.TEN_MINS, SMAStrategy.InitBarNum,
@@ -175,7 +177,7 @@ public class SMAStrategy implements IStrategy {
 		IBar currBar = history.getBar(instrument, selectedPeriod,
 				OfferSide.BID, 0);
 		updateChart(2, currBar.getTime(), 0);
-//		printChartInfo(prevBar.getTime());
+		// printChartInfo(prevBar.getTime());
 
 		List<CrossPoint> lc_smma0510CPList = TenMinsSMMA0510.getCPList();
 		List<IBar> lc_hBarList = trendInfo.gethBarList();
@@ -215,32 +217,106 @@ public class SMAStrategy implements IStrategy {
 		MInteger outNbElement = new MInteger();
 		int[] output = new int[100];
 
-		filteredSmma30 = indicators.smma(instrument, selectedPeriod,
+		smma30 = indicators.smma(instrument, selectedPeriod,
 				OfferSide.BID, AppliedPrice.CLOSE, 30, indicatorFilter, 2,
 				prevBar.getTime(), 0);
-		filteredSmma10 = indicators.smma(instrument, selectedPeriod,
+		smma10 = indicators.smma(instrument, selectedPeriod,
 				OfferSide.BID, AppliedPrice.CLOSE, 10, indicatorFilter, 2,
 				prevBar.getTime(), 0);
-		filteredSma5 = indicators.smma(instrument, selectedPeriod,
+		smma5 = indicators.smma(instrument, selectedPeriod,
 				OfferSide.BID, AppliedPrice.CLOSE, 5, indicatorFilter, 2,
 				prevBar.getTime(), 0);
-
-		// *************************10日线下穿30日线*****************************
-		if (TenMinsSMMA1030.getLastCP().getCrossType() == CrossType.DownCross) {
-			if (smma0510FirstCP != null
-					&& smma0510FirstCP.getCrossType() == CrossType.UpCross) {
-				doLong(instrument);
-				LOGGER1.info(smma0510FirstCP.getCrossType() + "");
-			}
-		}
-		// ***********************10日线上穿30日线**************************
-		if (TenMinsSMMA1030.getLastCP().getCrossType() == CrossType.UpCross) {
-			if (smma0510FirstCP != null
-					&& smma0510FirstCP.getCrossType() == CrossType.DownCross) {
+		
+		if (firstRun == true) {
+			// *************************10日线下穿30日线*****************************
+			if (TenMinsSMMA1030.getLastCP().getCrossType() == CrossType.DownCross) {
+				// if (smma0510FirstCP != null
+				// && smma0510FirstCP.getCrossType() == CrossType.UpCross) {
+				// LOGGER1.info(smma0510FirstCP.getCrossType() + "");
+				// }
+				maState = MAState.STATE_10DOWN30;
 				doShort(instrument);
-				LOGGER1.info(smma0510FirstCP.getCrossType() + "");
 
 			}
+			// ***********************10日线上穿30日线**************************
+			if (TenMinsSMMA1030.getLastCP().getCrossType() == CrossType.UpCross) {
+				maState = MAState.STATE_10UP30;
+				doLong(instrument);
+			}
+			firstRun = false;
+		}
+		
+		switch (maState) {
+		case STATE_10DOWN30:
+			if(MAInfo.isUpCrossOver(smma5, smma10)){
+				doLong(instrument);
+				maState=MAState.STATE_10SMALL30_5UP10;
+			}
+			break;
+
+		case STATE_10SMALL30_5UP10:
+			if(MAInfo.isUpCrossOver(smma5, smma30)){
+				maState=MAState.STATE_10SMALL30_5UP30;
+			}
+			if(MAInfo.isDownCrossOver(smma5, smma10)){
+				doShort(instrument);
+				maState=MAState.STATE_10SMALL30_5DOWN10;
+			}
+			break;
+			
+		case STATE_10SMALL30_5UP30:
+			if(MAInfo.isUpCrossOver(smma10, smma30)){
+				maState=MAState.STATE_10UP30;
+			}
+			if(MAInfo.isDownCrossOver(smma5, smma10)){
+				doShort(instrument);
+				maState=MAState.STATE_10SMALL30_5DOWN10;
+			}
+			break;
+			
+		case STATE_10SMALL30_5DOWN10:
+			if(MAInfo.isUpCrossOver(smma5, smma30)){
+				doLong(instrument);
+				maState=MAState.STATE_10SMALL30_5UP30;
+			}
+			break;
+			
+		case STATE_10UP30:
+			if(MAInfo.isDownCrossOver(smma5, smma10)){
+				doShort(instrument);
+				maState=MAState.STATE_10BIG30_5DOWN10;
+			}
+			break;
+		
+		case STATE_10BIG30_5DOWN10:
+			if(MAInfo.isDownCrossOver(smma5, smma30)){
+				maState=MAState.STATE_10BIG30_5DOWN30;
+			}
+			if(MAInfo.isUpCrossOver(smma5, smma10)){
+				doLong(instrument);
+				maState=MAState.STATE_10BIG30_5UP10;
+			}
+			break;
+			
+		case STATE_10BIG30_5UP10:
+			if(MAInfo.isDownCrossOver(smma5, smma30)){
+				doShort(instrument);
+				maState=MAState.STATE_10BIG30_5DOWN30;
+			}
+			break;
+		
+		case STATE_10BIG30_5DOWN30:
+			if(MAInfo.isDownCrossOver(smma10, smma30)){
+				maState=MAState.STATE_10DOWN30;
+			}
+			if(MAInfo.isUpCrossOver(smma5, smma10)){
+				doLong(instrument);
+				maState=MAState.STATE_10BIG30_5UP10;
+			}
+			break;
+			
+		default:
+			break;
 		}
 
 	}

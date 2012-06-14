@@ -167,7 +167,7 @@ public class MAInfo {
 
 
 
-	public boolean isDownCrossOver(double[] fast, double[] slow)
+	public static boolean isDownCrossOver(double[] fast, double[] slow)
 			throws JFException {
 		if ((fast[1] < fast[0]) && (fast[1] < slow[1]) && (fast[0] >= slow[0])) {
 			return true;
@@ -176,7 +176,7 @@ public class MAInfo {
 		}
 	}
 
-	public boolean isUpCrossOver(double[] fast, double[] slow)
+	public static boolean isUpCrossOver(double[] fast, double[] slow)
 			throws JFException {
 		if ((fast[1] > fast[0]) && (fast[1] > slow[1]) && (fast[0] <= slow[0])) {
 			return true;
