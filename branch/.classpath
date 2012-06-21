@@ -7,6 +7,7 @@
 	<classpathentry kind="src" path="JFUtil/test"/>
 	<classpathentry excluding="src/|test/" kind="src" path="JFUtil"/>
 	<classpathentry kind="src" path="Jfreechart"/>
+	<classpathentry kind="src" path="JForex-API-2.6.69-sources"/>
 	<classpathentry kind="lib" path="libs"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
