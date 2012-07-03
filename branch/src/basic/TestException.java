@@ -7,7 +7,7 @@ public class TestException {
 	public TestException() throws Exception{
 		System.out.println("构造开始 ");
 		System.out.print("\007"); 
-		System.out.println("/7"); 
+		System.out.println("\7"); 
 	
 			throw new Exception("构造出现异常 ");
 	}
