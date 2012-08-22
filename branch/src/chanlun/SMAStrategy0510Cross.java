@@ -190,9 +190,16 @@ public class SMAStrategy0510Cross implements IStrategy {
 		sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 		DateFormat fmt = DateFormat.getDateTimeInstance();
 
+		if (engine.getOrders().size() == 0) {
+			if (filterAsiaTime(currBar.getTime())) {
+				return;
+			}
+		}
+
 		if (isFilterhey(currBar.getTime())) {
 			return;
 		}
+
 		// highBarList=rtChartInfo.getHighBarList(instrument, period, 120,
 		// prevBar.getTime());
 
@@ -217,108 +224,72 @@ public class SMAStrategy0510Cross implements IStrategy {
 		MInteger outNbElement = new MInteger();
 		int[] output = new int[100];
 
-		smma30 = indicators.smma(instrument, selectedPeriod,
-				OfferSide.BID, AppliedPrice.CLOSE, 30, indicatorFilter, 2,
-				prevBar.getTime(), 0);
-		smma10 = indicators.smma(instrument, selectedPeriod,
-				OfferSide.BID, AppliedPrice.CLOSE, 10, indicatorFilter, 2,
-				prevBar.getTime(), 0);
-		smma5 = indicators.smma(instrument, selectedPeriod,
-				OfferSide.BID, AppliedPrice.CLOSE, 5, indicatorFilter, 2,
-				prevBar.getTime(), 0);
-		
-		if (firstRun == true) {
-			// *************************10日线下穿30日线*****************************
-			if (TenMinsSMMA1030.getLastCP().getCrossType() == CrossType.DownCross) {
-				// if (smma0510FirstCP != null
-				// && smma0510FirstCP.getCrossType() == CrossType.UpCross) {
-				// LOGGER1.info(smma0510FirstCP.getCrossType() + "");
-				// }
-				maState = MAState.STATE_10DOWN30;
-				doShort(instrument);
+		smma30 = indicators.smma(instrument, selectedPeriod, OfferSide.BID,
+				AppliedPrice.CLOSE, 30, indicatorFilter, 2, prevBar.getTime(),
+				0);
+		smma10 = indicators.smma(instrument, selectedPeriod, OfferSide.BID,
+				AppliedPrice.CLOSE, 10, indicatorFilter, 2, prevBar.getTime(),
+				0);
+		smma5 = indicators
+				.smma(instrument, selectedPeriod, OfferSide.BID,
+						AppliedPrice.CLOSE, 5, indicatorFilter, 2,
+						prevBar.getTime(), 0);
 
+		if (engine.getOrders().size() > 0) {
+			if (MAInfo.isUpCrossOver(smma5, smma10)) {
+				if (filterAsiaTime(currBar.getTime())) {
+					doClose(instrument);
+				} else
+					doLong(instrument);
 			}
-			// ***********************10日线上穿30日线**************************
-			if (TenMinsSMMA1030.getLastCP().getCrossType() == CrossType.UpCross) {
-				maState = MAState.STATE_10UP30;
+			if (MAInfo.isDownCrossOver(smma5, smma10)) {
+				if (filterAsiaTime(currBar.getTime())) {
+					doClose(instrument);
+				} else
+					doShort(instrument);
+			}
+		} else {
+			if (filterAsiaTime(currBar.getTime())) {
+				return;
+			}
+			if (smma5[0] > smma10[0])
 				doLong(instrument);
-			}
-			firstRun = false;
+			if (smma5[0] < smma10[0])
+				doShort(instrument);
 		}
-		
-		switch (maState) {
-		case STATE_10DOWN30:
-			if(MAInfo.isUpCrossOver(smma5, smma10)){
-				doLong(instrument);
-				maState=MAState.STATE_10SMALL30_5UP10;
-			}
-			break;
+	}
 
-		case STATE_10SMALL30_5UP10:
-			if(MAInfo.isUpCrossOver(smma5, smma30)){
-				maState=MAState.STATE_10SMALL30_5UP30;
+	protected boolean doClose(Instrument instrument) throws JFException {
+		print("do Close");
+		if (engine.getOrders().size() > 0) {
+			for (IOrder orderInMarket : engine.getOrders()) {
+				if (orderInMarket.isLong()) {
+					print("Closing Long position");
+					orderInMarket.close();
+					orderInMarket.waitForUpdate(TIMEOUT);
+					print("the order state is " + orderInMarket.getState() + "");
+					if (!orderInMarket.getState().equals(IOrder.State.CLOSED)) {
+						throw new JFException("order state is not correct!"
+								+ " the order state is "
+								+ orderInMarket.getState() + "");
+					}
+				}
+
+				if (!orderInMarket.isLong()) {
+					print("Closing Short position");
+					orderInMarket.close();
+					orderInMarket.waitForUpdate(TIMEOUT);
+					print("the order state is " + orderInMarket.getState() + "");
+					if (!orderInMarket.getState().equals(IOrder.State.CLOSED)) {
+						throw new JFException("order state is not correct!"
+								+ " the order state is "
+								+ orderInMarket.getState() + "");
+					}
+				}
+
 			}
-			if(MAInfo.isDownCrossOver(smma5, smma10)){
-				doShort(instrument);
-				maState=MAState.STATE_10SMALL30_5DOWN10;
-			}
-			break;
-			
-		case STATE_10SMALL30_5UP30:
-			if(MAInfo.isUpCrossOver(smma10, smma30)){
-				maState=MAState.STATE_10UP30;
-			}
-			if(MAInfo.isDownCrossOver(smma5, smma10)){
-				doShort(instrument);
-				maState=MAState.STATE_10SMALL30_5DOWN10;
-			}
-			break;
-			
-		case STATE_10SMALL30_5DOWN10:
-			if(MAInfo.isUpCrossOver(smma5, smma30)){
-				doLong(instrument);
-				maState=MAState.STATE_10SMALL30_5UP30;
-			}
-			break;
-			
-		case STATE_10UP30:
-			if(MAInfo.isDownCrossOver(smma5, smma10)){
-				doShort(instrument);
-				maState=MAState.STATE_10BIG30_5DOWN10;
-			}
-			break;
-		
-		case STATE_10BIG30_5DOWN10:
-			if(MAInfo.isDownCrossOver(smma5, smma30)){
-				maState=MAState.STATE_10BIG30_5DOWN30;
-			}
-			if(MAInfo.isUpCrossOver(smma5, smma10)){
-				doLong(instrument);
-				maState=MAState.STATE_10BIG30_5UP10;
-			}
-			break;
-			
-		case STATE_10BIG30_5UP10:
-			if(MAInfo.isDownCrossOver(smma5, smma30)){
-				doShort(instrument);
-				maState=MAState.STATE_10BIG30_5DOWN30;
-			}
-			break;
-		
-		case STATE_10BIG30_5DOWN30:
-			if(MAInfo.isDownCrossOver(smma10, smma30)){
-				maState=MAState.STATE_10DOWN30;
-			}
-			if(MAInfo.isUpCrossOver(smma5, smma10)){
-				doLong(instrument);
-				maState=MAState.STATE_10BIG30_5UP10;
-			}
-			break;
-			
-		default:
-			break;
 		}
-
+		return true;
 	}
 
 	protected boolean doShort(Instrument instrument) throws JFException {
@@ -462,6 +433,25 @@ public class SMAStrategy0510Cross implements IStrategy {
 		for (IBar bar : MarubozuLists) {
 			print("The Marub is at:" + bar.getTime());
 		}
+	}
+
+	protected boolean filterAsiaTime(long time) {
+		int hour, mins;
+		GregorianCalendar cal = new GregorianCalendar();
+		Date currBarTime = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat();
+		cal.setTimeInMillis(time);
+		cal.setTimeZone(TimeZone.getTimeZone("GMT"));
+		currBarTime.setTime(time);
+
+		hour = cal.get(GregorianCalendar.HOUR_OF_DAY);
+		mins = cal.get(GregorianCalendar.MINUTE);
+
+		if ((hour <= 6) || (hour >= 20))
+			// print(sdf.format(currBarTime) + " filterd OK");
+			return true;
+		else
+			return false;
 	}
 
 	protected boolean isFilterhey(long time) {
