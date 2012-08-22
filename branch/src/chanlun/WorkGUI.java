@@ -128,7 +128,7 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 	private JButton continueButton = null;
 	private JButton cancelButton = null;
 
-	private SMAStrategy stragegy=null;
+	private SMAStrategy0510Cross stragegy=null;
 	private CustomCL CLoaderStrategy = null;
 	private Class ClassStrategy = null;
 	private IStrategy strategy = null;
@@ -350,7 +350,7 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 		}
 */
 
-		this.stragegy=new SMAStrategy();
+		this.stragegy=new SMAStrategy0510Cross();
 		Thread.sleep(3000);
 		client.startStrategy(stragegy, new LoadingProgressListener() {
 			@Override
