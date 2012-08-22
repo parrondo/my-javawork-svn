@@ -141,9 +141,9 @@ public class WorkGUI extends JFrame implements ITesterUserInterface,
 	// url of the DEMO jnlp
 	private static String jnlpUrl = "https://www.dukascopy.com/client/demo/jclient/jforex.jnlp";
 	// user name
-	private static String userName = "DEMO2vYlwe";
+	private static String userName = "DEMO2uOXYv";
 	// password
-	private static String password = "vYlwe";
+	private static String password = "uOXYv";
 
 	public WorkGUI() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
